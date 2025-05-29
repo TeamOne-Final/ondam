@@ -3,12 +3,12 @@
 멤버 : 강인환, 김상범, 김지호, 김태민, 이학현   
 기간 : 2025.06.03 ~ 2025.06.17   
    
-- Subject: 술집 제품 판매 (프랜차이즈 & 가맹점)   
-- Language: Dart   
-- Framework: Flutter   
-- State Management : Get X   
-- DBMS : MySQL, Firebase   
-- App Title : 온담포차   
+##- Subject: 술집 제품 판매 (프랜차이즈 & 가맹점)   
+##- Language: Dart   
+##- Framework: Flutter   
+##- State Management : Get X   
+##- DBMS : MySQL, Firebase   
+##- App Title : 온담포차   
    
    
    
