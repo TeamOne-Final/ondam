@@ -10,6 +10,11 @@
 - DBMS : MySQL, Firebase
 - App Title : 온담포차
 
+
+
+
+
+    
 1. 본사 메인 페이지
 - 대리점 별 매출 확인( 년,월별 / 일별)
 - 대리점의 재료 Order 목록
