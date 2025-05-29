@@ -1,19 +1,19 @@
 # ondam
-작성일 : 2025.05.29
-멤버 : 강인환, 김상범, 김지호, 김태민, 이학현
-기간 : 2025.06.03 ~ 2025.06.17
-
-- Subject: 술집 제품 판매 (프랜차이즈 & 가맹점)
-- Language: Dart
-- Framework: Flutter
-- State Management : Get X
-- DBMS : MySQL, Firebase
-- App Title : 온담포차
-
-
-
-
-
+작성일 : 2025.05.29   
+멤버 : 강인환, 김상범, 김지호, 김태민, 이학현   
+기간 : 2025.06.03 ~ 2025.06.17   
+   
+- Subject: 술집 제품 판매 (프랜차이즈 & 가맹점)   
+- Language: Dart   
+- Framework: Flutter   
+- State Management : Get X   
+- DBMS : MySQL, Firebase   
+- App Title : 온담포차   
+   
+   
+   
+   
+   
     
 1. 본사 메인 페이지
 - 대리점 별 매출 확인( 년,월별 / 일별)
