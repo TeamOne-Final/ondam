@@ -2,10 +2,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class GpsController extends GetxController{
-  //
+  // 위치 정보
   final latitude = ''.obs;
   final longitude = ''.obs;
 
+  // GPS
   Future<void> checkLocationPermission() async{
     LocationPermission permission = await Geolocator.checkPermission();
 
