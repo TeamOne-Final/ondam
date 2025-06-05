@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ondam_app/firebase_options.dart';
 import 'package:ondam_app/view/login.dart';
+import 'package:ondam_app/vm/vm_handler_temp.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Get.put(VmHandlerTemp());
   runApp(const MyApp());
 }
 
