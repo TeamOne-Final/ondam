@@ -1,11 +1,10 @@
-// 공지사항 추가
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 import 'package:ondam_app/widget/company_side_menu.dart';
 
-class CompanyNoticeAdd extends StatelessWidget {
-  CompanyNoticeAdd({super.key});
+class CompanyEmployee extends StatelessWidget {
+  CompanyEmployee({super.key});
   final VmHandlerTemp controller = Get.find<VmHandlerTemp>();
 
   @override

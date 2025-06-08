@@ -3,11 +3,18 @@
 */
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/view/company/company_employee.dart';
+import 'package:ondam_app/view/company/company_item.dart';
+import 'package:ondam_app/view/company/company_main.dart';
+import 'package:ondam_app/view/company/company_notice.dart';
+import 'package:ondam_app/view/company/company_order.dart';
+import 'package:ondam_app/view/company/company_sales.dart';
+import 'package:ondam_app/view/login.dart';
 import 'package:ondam_app/vm/side_menu_controller.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 
-class AdminSideMenu extends StatelessWidget {
-  const AdminSideMenu({super.key});
+class CompanySideMenu extends StatelessWidget {
+  const CompanySideMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +31,13 @@ class AdminSideMenu extends StatelessWidget {
           Expanded(
             child: ListView(
               children: [
-                _buildTile(vmHandler, 0, Icons.store, '가맹점 관리'),
-                _buildTile(vmHandler, 1, Icons.restaurant, '메뉴 관리'),
-                _buildTile(vmHandler, 2, Icons.approval, '주문/계약'),
-                _buildTile(vmHandler, 3, Icons.how_to_reg, '전자 결재'),
-                _buildTile(vmHandler, 4, Icons.notifications, '공지 사항'),
-                _buildTile(vmHandler, 5, Icons.manage_accounts, '직원 관리'),
-                _buildTile(vmHandler, 6, Icons.bar_chart, '매출 관리'),
-                _buildTile(vmHandler, 7, Icons.logout, '로그아웃'),
+                _buildTile(vmHandler, 0, Icons.store, '가맹점 관리', () => CompanyMain()),
+                _buildTile(vmHandler, 1, Icons.restaurant, '메뉴 관리', () => CompanyItem()),
+                _buildTile(vmHandler, 2, Icons.approval, '주문/계약', () => CompanyOrder()),
+                _buildTile(vmHandler, 4, Icons.notifications, '공지 사항', () => CompanyNotice()),
+                _buildTile(vmHandler, 5, Icons.manage_accounts, '직원 관리', () => CompanyEmployee()),
+                _buildTile(vmHandler, 6, Icons.bar_chart, '매출 관리', () => CompanySales()),
+                _buildTile(vmHandler, 7, Icons.logout, '로그아웃', () => Login()),
               ],
             ),
           )
@@ -41,7 +47,7 @@ class AdminSideMenu extends StatelessWidget {
   } // build
 
   // Widgets
-  Widget _buildTile(SideMenuController vmHandler, int index, IconData icon, String title){
+  Widget _buildTile(SideMenuController vmHandler, int index, IconData icon, String title, Widget Function() page){
     return Obx(() {
       final isSelected = vmHandler.selectedIndex.value == index;
 
@@ -50,7 +56,7 @@ class AdminSideMenu extends StatelessWidget {
         child: ListTile(
           onTap: () {
             vmHandler.select(index);
-            // 페이지 이동하는 거 추가해야함
+            Get.to(page,transition: Transition.noTransition,);
           },
           leading: Icon(icon, color: isSelected ? Colors.black : Colors.white,size: 32),
           title: Text(
