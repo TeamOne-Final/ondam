@@ -9,9 +9,8 @@ import 'package:ondam_app/vm/vm_handler_temp.dart';
 void main() async{
   Get.put(VmHandlerTemp());
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Get.put(VmHandlerTemp());
   runApp(const MyApp());
 }
 
