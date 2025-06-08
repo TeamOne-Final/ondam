@@ -2,9 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ondam_app/firebase_options.dart';
-import 'package:ondam_app/view/company/company_main.dart';
-import 'package:ondam_app/view/login.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
+import 'package:ondam_app/view/home.dart';
 
 void main() async{
   Get.put(VmHandlerTemp());
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: CompanyMain(),
+      home: Home(),
     );
   }
 }

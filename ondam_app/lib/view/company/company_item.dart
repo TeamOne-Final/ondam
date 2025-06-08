@@ -1,9 +1,10 @@
 // 본사 메뉴 관리
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
-import 'package:ondam_app/widget/company_side_menu.dart';
 
 class CompanyItem extends StatelessWidget {
   CompanyItem({super.key});
@@ -11,12 +12,15 @@ class CompanyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController itemNameController = TextEditingController();
+    TextEditingController itemDescriptionController = TextEditingController();
+    TextEditingController itemPriceController = TextEditingController();
     return Obx(() => 
     Scaffold(
       backgroundColor: Color(0xFFF6F7FB),
       body: Row(
         children: [
-          CompanySideMenu(),
+          // CompanySideMenu(),
           Expanded(child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -27,8 +31,88 @@ class CompanyItem extends StatelessWidget {
                     child: Text('메뉴관리', style: TextStyle(fontSize: 40),),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      //
+                    onPressed: () async{
+                      final image = controller.imageFile.value;
+                      itemNameController.clear();
+                      itemDescriptionController.clear();
+                      itemPriceController.clear();
+                      await Get.defaultDialog(
+                        title: '메뉴 추가',
+                        content: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  print('탭됨');
+                                  controller.getImageFromGallery(ImageSource.gallery);
+                                },
+                                child: Container(
+                                  child: image == null
+                                    ? Icon(Icons.image_not_supported, size: 80)
+                                    : Image.file(File(image.path)),
+                                    ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('메뉴 이름 : ', style: TextStyle(fontSize: 20),),
+                                  SizedBox(
+                                    width: 200,
+                                    child: TextField(
+                                      controller: itemNameController,
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('메뉴 설명 : ', style: TextStyle(fontSize: 20),),
+                                  SizedBox(
+                                    width: 200,
+                                    child: TextField(
+                                      minLines: 1,
+                                      maxLines: 10,
+                                      controller: itemDescriptionController,
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('메뉴 가격 : ', style: TextStyle(fontSize: 20),),
+                                  SizedBox(
+                                    width: 200,
+                                    child: TextField(
+                                      controller: itemPriceController,
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      //
+                                    }, 
+                                    child: Text('수정'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () => Get.back(), 
+                                    child: Text('취소'),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      );
                     }, 
                     child: Text('추가'),
                   ),
@@ -79,7 +163,9 @@ class CompanyItem extends StatelessWidget {
                                 children: [
                                   Text(item['menuName'], style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
                                   SizedBox(height: 4),
-                                  Text("₩${item['menuPrice']}", style: TextStyle(fontSize: 22, color: Colors.black54)),
+                                  Text(item['description'], style: TextStyle(fontSize: 22, color: Colors.black54, fontWeight: FontWeight.w600)),
+                                  SizedBox(height: 4),
+                                  Text("₩${item['menuPrice']}", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
                                 ],
                               ),
                             ),
@@ -87,8 +173,83 @@ class CompanyItem extends StatelessWidget {
                             Row(
                               children: [
                                 ElevatedButton(
-                                  onPressed: () {
-                                    // 수정 기능
+                                  onPressed: () async{
+                                    itemNameController.text = item['menuName'];
+                                    itemDescriptionController.text = item['description'];
+                                    itemPriceController.text = item['menuPrice'].toString();
+                                    await Get.defaultDialog(
+                                      title: '메뉴 수정',
+                                      content: Padding(
+                                        padding: const EdgeInsets.all(20.0),
+                                        child: Column(
+                                          children: [
+                                            item['menuImage'] != null && item['menuImage'].toString().isNotEmpty
+                                              ? Image.memory(
+                                                  base64Decode(item['menuImage']),
+                                                  width: 80,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Icon(Icons.image_not_supported, size: 80),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text('메뉴 이름 : ', style: TextStyle(fontSize: 20),),
+                                                SizedBox(
+                                                  width: 200,
+                                                  child: TextField(
+                                                    controller: itemNameController,
+                                                    style: TextStyle(fontSize: 20),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text('메뉴 설명 : ', style: TextStyle(fontSize: 20),),
+                                                SizedBox(
+                                                  width: 200,
+                                                  child: TextField(
+                                                    minLines: 1,
+                                                    maxLines: 10,
+                                                    controller: itemDescriptionController,
+                                                    style: TextStyle(fontSize: 20),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text('메뉴 가격 : ', style: TextStyle(fontSize: 20),),
+                                                SizedBox(
+                                                  width: 200,
+                                                  child: TextField(
+                                                    controller: itemPriceController,
+                                                    style: TextStyle(fontSize: 20),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    //
+                                                  }, 
+                                                  child: Text('수정'),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () => Get.back(), 
+                                                  child: Text('취소'),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.grey.shade300,

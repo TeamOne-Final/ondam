@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
-import 'package:ondam_app/widget/company_side_menu.dart';
 
 class CompanyMain extends StatelessWidget {
   CompanyMain({super.key});
@@ -10,11 +9,12 @@ class CompanyMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(() => 
+    Scaffold(
       backgroundColor: Color(0xFFF6F7FB),
       body: Row(
         children: [
-          CompanySideMenu(),
+          // CompanySideMenu(),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,7 +23,6 @@ class CompanyMain extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(40, 40, 20, 20),
                   child: Text('본사 사장', style: TextStyle(fontSize: 40),),
                 ),
-                Obx(() => 
                 Row(
                   children: [
                     _buildContainer(context, '총 매장 수', '${controller.storeCount.value}개'),
@@ -31,7 +30,6 @@ class CompanyMain extends StatelessWidget {
                     _buildContainer(context, '오늘 주문', '${controller.todayOrderCount.value}건'),
                     _buildContainer(context, '이슈', '${controller.storeCount.value}건'),
                   ],
-                ),
                 ),
                 Row(
                   children: [
@@ -70,24 +68,23 @@ class CompanyMain extends StatelessWidget {
                               DataColumn(label: Text('운영상태')),
                               DataColumn(label: Text('')),
                             ],
-                            rows: [
-                              DataRow(cells: [
-                                DataCell(Text('홍길동')),
-                                DataCell(Text('개발팀')),
-                                DataCell(Text('개발팀')),
-                                DataCell(Text('개발팀')),
-                                DataCell(Text('개발팀')),
-                                DataCell(ElevatedButton(onPressed: () {}, child: Text('Edit'))),
-                              ]),
-                              DataRow(cells: [
-                                DataCell(Text('홍길동')),
-                                DataCell(Text('개발팀')),
-                                DataCell(Text('개발팀')),
-                                DataCell(Text('개발팀')),
-                                DataCell(Text('개발팀')),
-                                DataCell(ElevatedButton(onPressed: () {}, child: Text('Edit'))),
-                              ]),
-                            ],
+                            rows: controller.storeList.map((store) {
+                              return DataRow(cells: [
+                                DataCell(Text(store['companyCode'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      //
+                                    },
+                                    child: Text("상세보기"),
+                                  ),
+                                ),
+                              ]);
+                            }).toList(),
                           )
                         )
                       ),
@@ -97,8 +94,9 @@ class CompanyMain extends StatelessWidget {
           )
         ],
       )
-    );
-  } // build
+    )
+  ); 
+} // build
 
   // --- Widgets ---
   _buildContainer(BuildContext context, String title, String content){

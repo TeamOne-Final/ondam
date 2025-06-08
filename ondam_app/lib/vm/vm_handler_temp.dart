@@ -1,5 +1,5 @@
-import 'package:ondam_app/vm/side_menu_controller.dart';
+import 'package:ondam_app/vm/image_controller.dart';
 
-class VmHandlerTemp extends SideMenuController{
+class VmHandlerTemp extends ImageController{
   //
 }

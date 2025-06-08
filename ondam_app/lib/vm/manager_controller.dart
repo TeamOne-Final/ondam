@@ -26,9 +26,9 @@ class ManagerController extends ManagementController{
     final data1 = jsonDecode(response1.body);
     final data2 = jsonDecode(response2.body);
     final data3 = jsonDecode(response3.body);
-    storeCount.value = data0['result'];
-    todaySales.value = data1['result'];
-    todayOrderCount.value = data2['result'];
-    storeList.value = data3['result'];
+    storeCount.value = (data0['result']??0)as int;
+    todaySales.value = (data1['result']??0)as int;
+    todayOrderCount.value = (data2['result']??0)as int;
+    storeList.value = (data3['results']??[])as List;
   }
 }

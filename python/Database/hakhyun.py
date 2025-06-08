@@ -55,9 +55,9 @@ async def store_list():
         curs=conn.cursor()
         sql = "SELECT companyCode, SUBSTRING(location, 1, 2) FROM manager WHERE managerId != 'M000'"
         curs.execute(sql)
-        row = curs.fetchall()
+        rows = curs.fetchall()
         conn.close()
-        result = [{'companyCode':row[0], 'location':row[1]}]
+        result = [{'companyCode':row[0], 'location':row[1]}for row in rows]
         return{'results':result}
 
 @router.get("/select/item_list")
@@ -79,3 +79,9 @@ async def item_list():
         for row in rows
         ]
         return{'results':result}
+
+@router.post("/update/item")
+async def update_item():
+        conn=connect()
+        curs=conn.cursor()
+        sql = "UPDATE product SET menuName=?, menuPrice=?, description=?"
