@@ -1,18 +1,20 @@
 // 본사 메인
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ondam_app/widget/admin_side_menu.dart';
+import 'package:ondam_app/vm/vm_handler_temp.dart';
 
 class CompanyMain extends StatelessWidget {
-  const CompanyMain({super.key});
+  CompanyMain({super.key});
+  final VmHandlerTemp controller = Get.find<VmHandlerTemp>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(() => 
+    Scaffold(
       backgroundColor: Color(0xFFF6F7FB),
       body: Row(
         children: [
-          AdminSideMenu(),
+          // CompanySideMenu(),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,10 +25,10 @@ class CompanyMain extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    _buildContainer(context, '총 매장 수', 'N개'),
-                    _buildContainer(context, '일자 총 매출', '1,234,000원'),
-                    _buildContainer(context, '오늘 주문', 'N건'),
-                    _buildContainer(context, '이슈', 'N건'),
+                    _buildContainer(context, '총 매장 수', '${controller.storeCount.value}개'),
+                    _buildContainer(context, '일자 총 매출', '${controller.todaySales.value}원'),
+                    _buildContainer(context, '오늘 주문', '${controller.todayOrderCount.value}건'),
+                    _buildContainer(context, '이슈', '${controller.storeCount.value}건'),
                   ],
                 ),
                 Row(
@@ -49,31 +51,52 @@ class CompanyMain extends StatelessWidget {
                     ),
                   ],
                 ),
-                    Obx(() => 
                     Padding(
                       padding: const EdgeInsets.fromLTRB(40, 15, 15, 15),
                       child: Container(
                         width: MediaQuery.sizeOf(context).width/1.37,
                         height: 250,
                         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-                        // child: DataTable(
-                        //   columns: [
-                        //     DataColumn(label: Text('매장명')),
-                        //   ], 
-                        //   rows: DataRow(cells: [
-                        //     DataCell(Text('data'))
-                        //   ]);
-                        // ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: DataTable(
+                            columns: [
+                              DataColumn(label: Text('매장명')),
+                              DataColumn(label: Text('지역')),
+                              DataColumn(label: Text('매니저')),
+                              DataColumn(label: Text('전화번호')),
+                              DataColumn(label: Text('운영상태')),
+                              DataColumn(label: Text('')),
+                            ],
+                            rows: controller.storeList.map((store) {
+                              return DataRow(cells: [
+                                DataCell(Text(store['companyCode'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      //
+                                    },
+                                    child: Text("상세보기"),
+                                  ),
+                                ),
+                              ]);
+                            }).toList(),
+                          )
+                        )
                       ),
                     ),
-                    ) 
               ],
             ),
           )
         ],
       )
-    );
-  } // build
+    )
+  ); 
+} // build
 
   // --- Widgets ---
   _buildContainer(BuildContext context, String title, String content){

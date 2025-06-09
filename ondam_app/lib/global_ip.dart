@@ -1,1 +1,1 @@
-final String globalIP = '192.168.50.8:8000';
+final String globalIP = '127.0.0.1:8000';
