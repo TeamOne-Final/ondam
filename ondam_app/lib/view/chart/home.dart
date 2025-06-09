@@ -1,4 +1,3 @@
-// 매출관리
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ondam_app/view/chart/admin_day_price.dart';
@@ -8,9 +7,10 @@ import 'package:ondam_app/view/chart/ondam_store_price_page.dart';
 import 'package:ondam_app/view/chart/ondam_total_price_page.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 
-class CompanySales extends StatelessWidget {
-  CompanySales({super.key});
+class Home extends StatelessWidget {
   final VmHandlerTemp controller = Get.find<VmHandlerTemp>();
+
+  Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +20,7 @@ class CompanySales extends StatelessWidget {
         children: [FirstPage(), SecondPage(), ThirdPage(), FourthPage(), SixthPage()]
         ),
         bottomNavigationBar: Obx(
-          () => 
-          BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
+          () => BottomNavigationBar(
             currentIndex: controller.currentIndex.value,
             onTap: (index) {
               controller.tabController.index = index;
