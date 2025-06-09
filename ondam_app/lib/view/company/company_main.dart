@@ -70,11 +70,11 @@ class CompanyMain extends StatelessWidget {
                             ],
                             rows: controller.storeList.map((store) {
                               return DataRow(cells: [
-                                DataCell(Text(store['companyCode'])),
-                                DataCell(Text(store['location'])),
-                                DataCell(Text(store['location'])),
-                                DataCell(Text(store['location'])),
-                                DataCell(Text(store['location'])),
+                                DataCell(Text(store)),
+                                DataCell(Text(store)),
+                                DataCell(Text(store)),
+                                DataCell(Text(store)),
+                                DataCell(Text(store)),
                                 DataCell(
                                   ElevatedButton(
                                     onPressed: () {
