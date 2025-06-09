@@ -36,7 +36,7 @@ class CompanyMain extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(40, 20, 10, 20),
                       child: Container(
-                        width: MediaQuery.sizeOf(context).width/2.8,
+                        width: MediaQuery.sizeOf(context).width/2.9,
                         height: 250,
                         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
                       ),
@@ -44,7 +44,7 @@ class CompanyMain extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        width: MediaQuery.sizeOf(context).width/2.8,
+                        width: MediaQuery.sizeOf(context).width/2.9,
                         height: 250,
                         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
                       ),
@@ -103,7 +103,7 @@ class CompanyMain extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 20, 0, 20),
       child: Container(
-        width: MediaQuery.sizeOf(context).width/6,
+        width: MediaQuery.sizeOf(context).width/6.2,
         height: MediaQuery.sizeOf(context).height/10,
         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
         child: Column(

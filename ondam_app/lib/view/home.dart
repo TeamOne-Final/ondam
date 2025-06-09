@@ -29,7 +29,7 @@ class Home extends StatelessWidget {
             child: 
                 ListView(
                   children: [
-                    Text('DASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
+                    Text('          DASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
                     _buildTile(vmHandler, 0, Icons.store, '가맹점 관리'),
                     _buildTile(vmHandler, 1, Icons.restaurant, '메뉴 관리'),
                     _buildTile(vmHandler, 2, Icons.approval, '주문/계약'),

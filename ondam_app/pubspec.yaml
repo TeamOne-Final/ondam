@@ -39,12 +39,12 @@ dependencies:
   get: ^4.7.2
   # GetStorage
   get_storage: ^2.1.1
-  # Firebase
-  firebase_core: ^3.13.1
-  cloud_firestore: ^5.6.8
-  firebase_analytics: ^11.4.6
-  firebase_database: ^11.3.6
-  firebase_storage: ^12.4.6
+  # # Firebase
+  # firebase_core: ^3.13.1
+  # cloud_firestore: ^5.6.8
+  # firebase_analytics: ^11.4.6
+  # firebase_database: ^11.3.6
+  # firebase_storage: ^12.4.6
   # Imagepicker
   image_picker: ^1.1.2
   # syncfusion chart

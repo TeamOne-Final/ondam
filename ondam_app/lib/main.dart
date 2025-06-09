@@ -1,15 +1,14 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ondam_app/firebase_options.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 import 'package:ondam_app/view/home.dart';
 
-void main() async{
+void main() {
   Get.put(VmHandlerTemp());
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  Get.put(VmHandlerTemp());
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Get.put(VmHandlerTemp());
   runApp(const MyApp());
 }
 
