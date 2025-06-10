@@ -34,7 +34,7 @@ class PurchaseController extends ProductController{
   }
 
   // purchase 데이터 update
-  Future<String> updateStudent(
+  Future<String> updatePurchase(
     int quantity,
     int cartNum,
     String menuCode,
@@ -48,7 +48,7 @@ class PurchaseController extends ProductController{
   }
 
   // purchase 데이터 delete
-  Future<String> deleteStudent(int cartNum, String menuCode) async {
+  Future<String> deletePurchase(int cartNum, String menuCode) async {
     final uri = Uri.parse('$baseUrl/taemin/delete/purchase?cartNum=$cartNum&menuCode=$menuCode');
     final res = await http.get(uri);
     final result = json.decode(utf8.decode(res.bodyBytes))['result'];
