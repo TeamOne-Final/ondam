@@ -9,7 +9,7 @@ class ManagerController extends ManagementController{
   RxInt storeCount = 0.obs;
   RxInt todaySales = 0.obs;
   RxInt todayOrderCount = 0.obs;
-  RxList<dynamic> storeList1 = <dynamic>[].obs;
+  RxList storeList1 = [].obs;
 
   @override
   void onInit() {
@@ -29,6 +29,6 @@ class ManagerController extends ManagementController{
     storeCount.value = (data0['result']??0)as int;
     todaySales.value = (data1['result']??0)as int;
     todayOrderCount.value = (data2['result']??0)as int;
-    storeList1.value = (data3['results']?? []) as List;
+    storeList1.value = (data3['results']??[])as List;
   }
 }
