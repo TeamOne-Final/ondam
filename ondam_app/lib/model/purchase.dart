@@ -5,9 +5,9 @@ class Purchase {
   final String companyCode;
   final String menuCode;
   final String tranDate;
-  final int tranPrice;
   final int femaleNum;
   final int maleNum;
+  final int quantity;
 
   Purchase({
     this.purchaseNum,
@@ -16,9 +16,9 @@ class Purchase {
     required this.companyCode,
     required this.menuCode,
     required this.tranDate,
-    required this.tranPrice,
     required this.femaleNum,
     required this.maleNum,
+    required this.quantity
   });
 
 

@@ -50,7 +50,7 @@ class CompanyItem extends StatelessWidget {
                                 child: Container(
                                   child: image == null
                                     ? Icon(Icons.image_not_supported, size: 80)
-                                    : Image.file(File(image.path)),
+                                    : Image.file(File(image.path),height: 100,width: 100,),
                                     ),
                               ),
                               Row(
