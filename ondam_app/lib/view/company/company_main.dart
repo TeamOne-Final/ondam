@@ -68,13 +68,13 @@ class CompanyMain extends StatelessWidget {
                               DataColumn(label: Text('운영상태')),
                               DataColumn(label: Text('')),
                             ],
-                            rows: controller.storeList.map((store) {
+                            rows: controller.storeList1.map((store) {
                               return DataRow(cells: [
-                                DataCell(Text(store)),
-                                DataCell(Text(store)),
-                                DataCell(Text(store)),
-                                DataCell(Text(store)),
-                                DataCell(Text(store)),
+                                DataCell(Text("${store['companyCode']}점")),
+                                DataCell(Text(store['location'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(Text(store['location'])),
+                                DataCell(Text(store['location'])),
                                 DataCell(
                                   ElevatedButton(
                                     onPressed: () {
