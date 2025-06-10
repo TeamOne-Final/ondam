@@ -1,4 +1,6 @@
-// 본사 메뉴 관리
+/* 본사 메뉴 관리
+2025.06.10 11:52 이학현 | 메뉴 추가&수정 기능 추가
+*/
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -12,15 +14,15 @@ class CompanyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController itemCodeController = TextEditingController();
     TextEditingController itemNameController = TextEditingController();
     TextEditingController itemDescriptionController = TextEditingController();
     TextEditingController itemPriceController = TextEditingController();
-    return Obx(() => 
-    Scaffold(
+    return Scaffold(
       backgroundColor: Color(0xFFF6F7FB),
       body: Row(
         children: [
-          // CompanySideMenu(),
+          // CompanySideMenu(), // 화면 구조 변경으로 안 씀
           Expanded(child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -30,12 +32,16 @@ class CompanyItem extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(40, 40, 20, 20),
                     child: Text('메뉴관리', style: TextStyle(fontSize: 40),),
                   ),
+
+                  // ######## 메뉴 추가 ########
                   ElevatedButton(
                     onPressed: () async{
-                      final image = controller.imageFile.value;
+                      // final image = controller.imageFile.value; // obx 때문에 안 쓰게 됨
+                      itemCodeController.clear();
                       itemNameController.clear();
                       itemDescriptionController.clear();
                       itemPriceController.clear();
+
                       await Get.defaultDialog(
                         title: '메뉴 추가',
                         content: Padding(
@@ -44,14 +50,29 @@ class CompanyItem extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  print('탭됨');
+                                  // print('탭됨'); // 테스트용
                                   controller.getImageFromGallery(ImageSource.gallery);
                                 },
-                                child: Container(
-                                  child: image == null
+                                child: Obx(() => 
+                                Container(
+                                  child: controller.firstDisp.value == 0
                                     ? Icon(Icons.image_not_supported, size: 80)
-                                    : Image.file(File(image.path)),
+                                    : Image.file(File(controller.imageFile.value!.path), width: 100,),
+                                  )
+                                ,) 
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('메뉴 코드 : ', style: TextStyle(fontSize: 20),),
+                                  SizedBox(
+                                    width: 200,
+                                    child: TextField(
+                                      controller: itemNameController,
+                                      style: TextStyle(fontSize: 20),
                                     ),
+                                  )
+                                ],
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -101,10 +122,13 @@ class CompanyItem extends StatelessWidget {
                                     onPressed: () {
                                       //
                                     }, 
-                                    child: Text('수정'),
+                                    child: Text('추가'),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () => Get.back(), 
+                                    onPressed: () {
+                                      Get.back();
+                                      controller.firstDisp.value = 0;
+                                    },
                                     child: Text('취소'),
                                   ),
                                 ],
@@ -118,6 +142,9 @@ class CompanyItem extends StatelessWidget {
                   ),
                 ],
               ),
+
+              // ######## 메뉴 리스트 뷰 ########
+              Obx(() => 
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
@@ -172,24 +199,46 @@ class CompanyItem extends StatelessWidget {
                             // 버튼들
                             Row(
                               children: [
+
+                                // ######## 메뉴 수정 ########
                                 ElevatedButton(
                                   onPressed: () async{
                                     itemNameController.text = item['menuName'];
                                     itemDescriptionController.text = item['description'];
                                     itemPriceController.text = item['menuPrice'].toString();
+
                                     await Get.defaultDialog(
                                       title: '메뉴 수정',
                                       content: Padding(
                                         padding: const EdgeInsets.all(20.0),
                                         child: Column(
                                           children: [
-                                            item['menuImage'] != null && item['menuImage'].toString().isNotEmpty
-                                              ? Image.memory(
-                                                  base64Decode(item['menuImage']),
-                                                  width: 80,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Icon(Icons.image_not_supported, size: 80),
+                                            // item['menuImage'] != null && item['menuImage'].toString().isNotEmpty
+                                              // ? Image.memory(
+                                              //     base64Decode(item['menuImage']),
+                                              //     width: 80,
+                                              //     fit: BoxFit.cover,
+                                              //   )
+                                            //   : Icon(Icons.image_not_supported, size: 80),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  print('탭됨');
+                                                  controller.getImageFromGallery(ImageSource.gallery);
+                                                },
+                                                child: Obx(() => 
+                                                Container(
+                                                  child: controller.firstDisp.value == 0? 
+                                                    controller.itemList[index]['menuImage'] == null ?
+                                                    Icon(Icons.image_not_supported, size: 80):
+                                                    Image.memory(
+                                                        base64Decode(controller.itemList[index]['menuImage']),
+                                                        width: 80,
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : Image.file(File(controller.imageFile.value!.path), width: 100,),
+                                                  )
+                                                ,) 
+                                              ),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
@@ -241,7 +290,10 @@ class CompanyItem extends StatelessWidget {
                                                   child: Text('수정'),
                                                 ),
                                                 ElevatedButton(
-                                                  onPressed: () => Get.back(), 
+                                                  onPressed: () {
+                                                    Get.back();
+                                                    controller.firstDisp.value = 0;
+                                                  },
                                                   child: Text('취소'),
                                                 ),
                                               ],
@@ -260,6 +312,8 @@ class CompanyItem extends StatelessWidget {
                                   child: Text('수정', style: TextStyle(fontSize: 20),),
                                 ),
                                 SizedBox(width: 8),
+
+                                // ######## 메뉴 삭제 ########
                                 ElevatedButton(
                                   onPressed: () {
                                     // 삭제 기능
@@ -281,10 +335,11 @@ class CompanyItem extends StatelessWidget {
                   },
                 ),
               ),
+              ) 
             ],
           ))
         ],
       ),
-    ),
-  );}
+    );
+  }
 }
