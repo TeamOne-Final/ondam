@@ -1,8 +1,7 @@
-// 테이블 선택해주는 페이지
 import 'package:flutter/material.dart';
 
-class TableSelect extends StatelessWidget {
-  const TableSelect({super.key});
+class AdditionalMenu extends StatelessWidget {
+  const AdditionalMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
