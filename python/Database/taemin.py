@@ -140,3 +140,69 @@ async def select(year : str = '____', month : str = '__', comCode : str = None):
     
     result = [{'total_price' : row[0], 'tran_date' : row[1]}for row in rows]
     return {'results' : result}
+
+#------- 본사 메인 상위 매출 3개 매장
+@router.get('/select/day_top3_retailer')
+async def select():
+    # Connection
+    conn = connect()
+    curs = conn.cursor()
+
+    # SQL
+    sql = f'''
+    select sum(pd.menuPrice) as total_price, ph.userTable_CompanyCode as companyCode
+    from product as pd, purchase as ph
+    where ph.tranDate like '2025-05%' and ph.product_MenuCode = pd.menuCode
+    group by ph.userTable_CompanyCode;
+    '''
+    curs.execute(sql)
+    rows = curs.fetchall()
+    conn.close()
+    
+    result = [{'total_price' : row[0], 'companyCode' : row[1]}for row in rows]
+    return {'results' : result}
+
+# 직원 리스트
+@router.get('/select/employee')
+async def selectCompanyCodewithTotalPrice():
+    conn = connect()
+    curs = conn.cursor()
+
+    sql = f'''
+        select *
+        from manager
+    '''
+    curs.execute(sql)
+    rows = curs.fetchall()
+    conn.close()
+    result = [{'managerId': row[0], 'companyCode': row[1], 'managerPassword': row[2], 'location' : row[3]}for row in rows]
+    return {'results': result}
+
+#------- 본사 메인 금월 매출
+@router.get('/select/main_month_day/total/date=')
+async def select(year : str = '____', month : str = '__'):
+    # Connection
+    conn = connect()
+    curs = conn.cursor()
+
+    # SQL
+    sql = f'''
+    select sum(b.total_price) as total_price, b.tranDate
+    from (
+        select
+            substring(ph.tranDate,1,10) as tranDate,
+            sum(pd.menuPrice * ph.quantity) as total_price,
+            ph.userTable_CompanyCode as companyCode
+        from ondam.purchase as ph, ondam.product as pd 
+        where ph.product_MenuCode = pd.menuCode and ph.tranDate Like "{year}-{month}-%"
+        GROUP BY ph.tranDate, ph.userTable_CompanyCode
+        ORDER BY ph.tranDate
+        ) as b 
+    group by b.tranDate;
+    '''
+    curs.execute(sql)
+    rows = curs.fetchall()
+    conn.close()
+    
+    result = [{'total_price' : row[0], 'tran_date' : row[1]}for row in rows]
+    return {'results' : result}

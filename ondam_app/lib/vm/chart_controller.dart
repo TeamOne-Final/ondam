@@ -12,6 +12,8 @@ class ChartController extends UsertableController{
   final RxList<Chart> monthMenu = <Chart>[].obs; // menuMonthTotalPrice
   final RxList<Chart> selectRetailerMonthList = <Chart>[].obs; // selectRetailerMonth
   final RxList<Chart> selectRetailerDayList = <Chart>[].obs; // selectRetailerDay
+  final RxList<Chart> selectDayTop3RetailerList = <Chart>[].obs; // storeMainRightGraph
+  final RxList<Chart> mainTotalPriceList = <Chart>[].obs; // storeMainLeftGraph
   final RxList<String> yearList = ['2024년' ,'2025년','2026년'].obs;
   final RxList<String> monthList = ['01월', '02월', '03월', '04월', '05월', '06월', '07월', '08월', '09월', '10월', '11월', '12월'].obs;
   final RxList<String> storeList = ['강남점','서초점','역삼점'].obs;
@@ -27,6 +29,7 @@ class ChartController extends UsertableController{
     selectedYear.value = yearList[0];
     selectedMonth.value = monthList[0];
     selectedStore.value = storeList[0];
+    selectDayTop3Retailer();
   }
 
   // ondam_total_price_page
@@ -154,6 +157,46 @@ class ChartController extends UsertableController{
                       );
                   }).toList();
       selectRetailerDayList.value = returnResult;
+    } catch(e){
+      //
+    } 
+  }
+  // ------ 본사 메인 상위 top3 매출 매장 
+  Future<void> selectDayTop3Retailer() async {
+    try{
+    selectRetailerDayList.clear();
+    var url =  Uri.parse('$baseUrl/taemin/select/day_top3_retailer');
+    var response = await http.get(url);
+    var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
+    List results = dataConvertedJDON['results'];
+  List<Chart> returnResult = 
+                  results.map((data) {
+                    return Chart(
+                      companyCode: data['companyCode'],
+                      totalPrice: data['total_price']
+                      );
+                  }).toList();
+      selectDayTop3RetailerList.value = returnResult;
+    } catch(e){
+      //
+    } 
+  }
+  // ----- 본사 메인 금월 매출 라인 그래프
+  Future<void> mainTotalPrice() async {
+    try{
+    selectRetailerDayList.clear();
+    var url =  Uri.parse('$baseUrl/taemin/select/main_month_day/total/date=?year=2025&month=05');
+    var response = await http.get(url);
+    var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
+    List results = dataConvertedJDON['results'];
+  List<Chart> returnResult = 
+                  results.map((data) {
+                    return Chart(
+                      tranDate: data['tran_date'],
+                      totalPrice: data['total_price']
+                      );
+                  }).toList();
+      mainTotalPriceList.value = returnResult;
     } catch(e){
       //
     } 
