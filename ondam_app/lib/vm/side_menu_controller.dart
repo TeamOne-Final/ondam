@@ -3,7 +3,7 @@ import 'package:ondam_app/vm/chart_controller.dart';
 
 class SideMenuController extends ChartController{
   final selectedIndex = 0.obs;
-  final selectedStoreProductIndex = 0.obs;
+  final selectedStoreReportProductIndex = 0.obs;
   
 
   void select(int index) {
@@ -11,7 +11,7 @@ class SideMenuController extends ChartController{
   }
 
   void selectProductIdex(int index) {
-    selectedStoreProductIndex.value = index;
+    selectedStoreReportProductIndex.value = index;
   }
 
 }

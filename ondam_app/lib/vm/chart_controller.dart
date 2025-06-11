@@ -193,8 +193,8 @@ class ChartController extends UsertableController{
                   results.map((data) {
                     return Chart(
                       tranDate: data['tran_date'],
-                      totalPrice: data['total_price']
-                      );
+                      totalPrice: data['total_price'],
+                    );
                   }).toList();
       mainTotalPriceList.value = returnResult;
     } catch(e){
