@@ -1,11 +1,11 @@
-// 공지사항 메인
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ondam_app/view/company/company_notice2.dart';
-import 'package:ondam_app/vm/notice_controller_firebase.dart';
+import 'package:ondam_chat/view/noticedetailview.dart';
+import 'package:ondam_chat/vm/noticecontroller.dart';
 
-class CompanyNotice extends StatelessWidget {
-  CompanyNotice({super.key});
+class Noticeview extends StatelessWidget {
+  Noticeview({super.key});
+
   final noticecontroller = Get.find<Noticecontroller>();
   final titleTextController = TextEditingController();
   final contentTextController = TextEditingController();
@@ -16,6 +16,7 @@ class CompanyNotice extends StatelessWidget {
     return Scaffold(
       backgroundColor:  Color(0xFFF7F7F9),
       appBar: AppBar(
+        backgroundColor:  Color.fromARGB(255, 59, 133, 230),
         elevation: 0.5,
         title:  Text("공지사항", style: TextStyle(color: Colors.black)),
         actions: [
@@ -38,7 +39,7 @@ class CompanyNotice extends StatelessWidget {
               child: ListTile(
                 contentPadding:  EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 onTap: () => Get.to(
-                  () =>CompanyNotice2(),
+                  () => Noticedetailview(),
                   arguments: [notice.title, notice.content],
                 ),
                 title: Text(
