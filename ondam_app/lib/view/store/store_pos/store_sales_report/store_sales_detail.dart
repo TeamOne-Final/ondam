@@ -78,6 +78,36 @@ class StoreSalesDetail extends StatelessWidget {
                   },
                 ),
               ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('매출'),
+                      Text('0원')
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('주문 건수'),
+                      Text('0건')
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('환불'),
+                      Text('0월')
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('환불 건수'),
+                      Text('0건'),
+                    ],
+                  )
+
                 ],
               ),
               SizedBox(
