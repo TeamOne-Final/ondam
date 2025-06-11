@@ -19,4 +19,6 @@ class ProductController extends ManagerController{
     final data0 = jsonDecode(response0.body);
     itemList.value = List<Map<String, dynamic>>.from(data0['results']);
   }
+
+  
 }
