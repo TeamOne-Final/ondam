@@ -1,5 +1,5 @@
 import base64
-from fastapi import APIRouter
+from fastapi import APIRouter, File, Form, UploadFile
 import pymysql
 
 
@@ -80,8 +80,45 @@ async def item_list():
         ]
         return{'results':result}
 
-@router.post("/update/item")
-async def update_item():
+@router.post("/insert/item")
+async def insert_item(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), file: UploadFile = File(...), description: str=Form(...)):
+        menuImage = await file.read()
         conn=connect()
         curs=conn.cursor()
-        sql = "UPDATE product SET menuName=?, menuPrice=?, description=?"
+        sql = """
+        INSERT INTO product (menuCode, menuName, menuPrice, menuImage, description)
+        VALUES (%s, %s, %s, %s, %s)
+        """
+        curs.execute(sql, (menuCode, menuName, menuPrice, menuImage, description))
+        conn.commit()
+        conn.close()
+        return{'result':'OK'}
+
+@router.post("/update/item")
+async def update(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), description: str=Form(...)):
+        try:
+                conn=connect()
+                curs=conn.cursor()
+                sql = "UPDATE product SET menuName=%s, menuPrice=%s, description=%s WHERE menuCode=%s"
+                curs.execute(sql, (menuName, menuPrice, description, menuCode))
+                conn.commit()
+                conn.close()
+                return {'result' : 'OK'}
+        except Exception as e:
+                print("Error :", e)
+                return {'result' : 'Error'}
+
+@router.post("/update/item_with_image") #(...)은 required
+async def update_with_image(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), description: str=Form(...), file: UploadFile = File(...)):
+        try:
+                menuImage = await file.read()
+                conn = connect()
+                curs = conn.cursor()
+                sql = "UPDATE product SET menuName=%s, menuPrice=%s, description=%s, menuImage=%s WHERE menuCode=%s"
+                curs.execute(sql, (menuName, menuPrice, description, menuImage, menuCode))
+                conn.commit()
+                conn.close()
+                return {'result':'OK'}
+        except Exception as e:
+                print("Error:", e)
+                return{"result":"Error"}

@@ -32,113 +32,123 @@ class CompanyItem extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(40, 40, 20, 20),
                     child: Text('메뉴관리', style: TextStyle(fontSize: 40),),
                   ),
+                  Spacer(),
 
                   // ######## 메뉴 추가 ########
-                  ElevatedButton(
-                    onPressed: () async{
-                      // final image = controller.imageFile.value; // obx 때문에 안 쓰게 됨
-                      itemCodeController.clear();
-                      itemNameController.clear();
-                      itemDescriptionController.clear();
-                      itemPriceController.clear();
-
-                      await Get.defaultDialog(
-                        title: '메뉴 추가',
-                        content: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  // print('탭됨'); // 테스트용
-                                  controller.getImageFromGallery(ImageSource.gallery);
-                                },
-                                child: Obx(() => 
-                                Container(
-                                  child: controller.firstDisp.value == 0
-                                    ? Icon(Icons.image_not_supported, size: 80)
-                                    : Image.file(File(controller.imageFile.value!.path), width: 100,),
-                                  )
-                                ,) 
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('메뉴 코드 : ', style: TextStyle(fontSize: 20),),
-                                  SizedBox(
-                                    width: 200,
-                                    child: TextField(
-                                      controller: itemNameController,
-                                      style: TextStyle(fontSize: 20),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 220, 0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 56, 122, 255)),
+                      onPressed: () async{
+                        // final image = controller.imageFile.value; // obx 때문에 안 쓰게 됨
+                        itemCodeController.clear();
+                        itemNameController.clear();
+                        itemDescriptionController.clear();
+                        itemPriceController.clear();
+                    
+                        await Get.defaultDialog(
+                          barrierDismissible: false,
+                          title: '메뉴 추가',
+                          content: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    // print('탭됨'); // 테스트용
+                                    controller.getImageFromGallery(ImageSource.gallery);
+                                  },
+                                  child: Obx(() => 
+                                  Container(
+                                    child: controller.firstDisp.value == 0
+                                      ? Icon(Icons.image_not_supported, size: 80)
+                                      : Image.file(File(controller.imageFile.value!.path), width: 100,),
+                                    )
+                                  ,) 
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('메뉴 코드 : ', style: TextStyle(fontSize: 20),),
+                                    SizedBox(
+                                      width: 200,
+                                      child: TextField(
+                                        controller: itemCodeController,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('메뉴 이름 : ', style: TextStyle(fontSize: 20),),
+                                    SizedBox(
+                                      width: 200,
+                                      child: TextField(
+                                        controller: itemNameController,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('메뉴 설명 : ', style: TextStyle(fontSize: 20),),
+                                    SizedBox(
+                                      width: 200,
+                                      child: TextField(
+                                        minLines: 1,
+                                        maxLines: 10,
+                                        controller: itemDescriptionController,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('메뉴 가격 : ', style: TextStyle(fontSize: 20),),
+                                    SizedBox(
+                                      width: 200,
+                                      child: TextField(
+                                        controller: itemPriceController,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        String code = itemCodeController.text;
+                                        String name = itemNameController.text;
+                                        String description = itemDescriptionController.text;
+                                        String price = itemPriceController.text;
+                                        if (controller.firstDisp > 0){controller.insertItem(code, name, description, price, controller.imageFile.value!.path, controller.firstDisp.value);}
+                                      }, 
+                                      child: Text('추가'),
                                     ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('메뉴 이름 : ', style: TextStyle(fontSize: 20),),
-                                  SizedBox(
-                                    width: 200,
-                                    child: TextField(
-                                      controller: itemNameController,
-                                      style: TextStyle(fontSize: 20),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        controller.firstDisp.value = 0;
+                                      },
+                                      child: Text('취소'),
                                     ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('메뉴 설명 : ', style: TextStyle(fontSize: 20),),
-                                  SizedBox(
-                                    width: 200,
-                                    child: TextField(
-                                      minLines: 1,
-                                      maxLines: 10,
-                                      controller: itemDescriptionController,
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('메뉴 가격 : ', style: TextStyle(fontSize: 20),),
-                                  SizedBox(
-                                    width: 200,
-                                    child: TextField(
-                                      controller: itemPriceController,
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      //
-                                    }, 
-                                    child: Text('추가'),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Get.back();
-                                      controller.firstDisp.value = 0;
-                                    },
-                                    child: Text('취소'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      );
-                    }, 
-                    child: Text('추가'),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        );
+                      }, 
+                      child: Text('메뉴 추가', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),),
+                    ),
                   ),
                 ],
               ),
@@ -208,6 +218,7 @@ class CompanyItem extends StatelessWidget {
                                     itemPriceController.text = item['menuPrice'].toString();
 
                                     await Get.defaultDialog(
+                                      barrierDismissible: false,
                                       title: '메뉴 수정',
                                       content: Padding(
                                         padding: const EdgeInsets.all(20.0),
@@ -222,7 +233,7 @@ class CompanyItem extends StatelessWidget {
                                             //   : Icon(Icons.image_not_supported, size: 80),
                                               GestureDetector(
                                                 onTap: () {
-                                                  print('탭됨');
+                                                  // print('탭됨');
                                                   controller.getImageFromGallery(ImageSource.gallery);
                                                 },
                                                 child: Obx(() => 
@@ -285,7 +296,11 @@ class CompanyItem extends StatelessWidget {
                                               children: [
                                                 ElevatedButton(
                                                   onPressed: () {
-                                                    //
+                                                    String code = item['menuCode'];
+                                                    String name = itemNameController.text;
+                                                    String description = itemDescriptionController.text;
+                                                    String price = itemPriceController.text;
+                                                    controller.updateItem(code, name, description, price, controller.imageFile.value!.path, controller.firstDisp.value);
                                                   }, 
                                                   child: Text('수정'),
                                                 ),
