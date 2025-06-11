@@ -337,3 +337,57 @@ async def deleteSelect(menuCode : str, companyId : str):
         conn.close()
         print("Error :", e)
         return {'result':'Error'}
+    
+#-- 상품 분석 페이지 데이터
+@router.get('/select/product_anal/total')
+async def select(tranDate : str, 
+                #companyCode : str
+                ):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        select sum(ph.quantity) as total_quantity, sum(pd.menuPrice) as total_price
+        from purchase as ph, product as pd
+        where ph.product_menuCode = pd.menuCode and Date(ph.tranDate) = '{tranDate}' and ph.userTable_CompanyCode = '강남';
+        '''
+
+        curs.execute(sql)
+        row = curs.fetchone()
+        conn.close()
+    
+        result = [{'total_quantity' : row[0], 'total_price' : row[1]}]
+        return {'results' : result}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+    
+#-- 상품 분석 페이지 데이터
+@router.get('/select/product_anal/chart')
+async def select(tranDate : str, 
+                #companyCode : str
+                ):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        select pd.menuName, sum(ph.quantity) as total_quantity, sum(pd.menuPrice) as total_price
+        from purchase as ph, product as pd
+        where ph.product_menuCode = pd.menuCode and Date(ph.tranDate) = '{tranDate}' and ph.userTable_CompanyCode = '강남'
+        group by pd.menuName
+        order by total_price desc;
+        '''
+
+        curs.execute(sql)
+        rows = curs.fetchall()
+        conn.close()
+    
+        result = [{'menuName' : row[0], 'total_quantity' : row[1], 'total_price' : row[2]}for row in rows]
+        return {'results' : result}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
