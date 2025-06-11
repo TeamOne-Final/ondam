@@ -206,3 +206,134 @@ async def select(year : str = '____', month : str = '__'):
     
     result = [{'total_price' : row[0], 'tran_date' : row[1]}for row in rows]
     return {'results' : result}
+
+#------- cartNum 최댓값 구하기 
+@router.get('/select/max_cartNum')
+async def getMaxCartNum():
+    # Connection
+    conn = connect()
+    curs = conn.cursor()
+
+    # SQL
+    sql = f'''
+    select max(cartNum) from purchase;
+    '''
+    curs.execute(sql)
+    row = curs.fetchone()
+    conn.close()
+    
+    result = [{'max_cartNum' : row[0]}]
+    return {'results' : result}
+
+#------- purcahse 추가 
+@router.post('/insert/purchase')
+async def insertPurcha(cartNum : int, tableNum : int, companyCode : str, menuCode : str, femaleNum:int,maleNum:int,quantity:int):
+    # Connection
+    conn = connect()
+    curs = conn.cursor()
+
+    # SQL
+    sql = f'''
+    insert into purchase (
+    userTable_TableNum, userTable_CompanyCode, product_MenuCode,
+    cartNum, tranDate,femaleNum,
+    maleNum, quantity
+    ) 
+    values 
+    ({tableNum}, '{companyCode}', '{menuCode}', {cartNum}, now(), {femaleNum}, {maleNum}, {quantity});
+    '''
+    try:
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+
+        return {'results' : 'OK'}
+    except Exception as e:
+        conn.close()
+        print('Error : ', e)
+        return{'result' : 'Error'}
+
+#---- purchase 데이터 갱신
+@router.post("/update/purchase")
+async def updatePurchase(quantity : int, cartNum : int, menuCode : str):
+    # Connection으로 부터 Cursor 생성
+    conn = connect()
+    curs = conn.cursor()
+
+    # SQL 문장
+    try:
+        sql = f"""
+        update purchase set quantity = {quantity} where cartnum = {cartNum} and product_menuCode = '{menuCode}'
+        """
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+        return {'result':'OK'}  
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+
+#---- purchase 데이터 삭제
+@router.delete("/delete/purchase")
+async def deletePurchase(cartNum: int, menuCode : str):
+    # Connection으로 부터 Cursor 생성
+    conn = connect()
+    curs = conn.cursor()
+
+    # SQL 문장
+    try:
+        sql = f"""
+        delete from purchase where cartNum = {cartNum}  and product_menuCode = '{menuCode}'
+        """
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+        return {'result':'OK'}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+    
+#-- 대리점 메뉴 선택
+@router.post('/insert/select')
+async def insertSelect(menuCode : str, companyId : str):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        insert into ondam.select 
+        (product_MenuCode, manager_CompanyId, date)
+        values ('{menuCode}','{companyId}',now())
+        '''
+
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+        return {'result':'OK'}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+
+#-- 대리점 메뉴 삭제
+@router.delete('/delete/select')
+async def deleteSelect(menuCode : str, companyId : str):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        delete from ondam.select 
+        where product_MenuCode = '{menuCode}' and manager_CompanyId = '{companyId}'
+        '''
+
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+        return {'result':'OK'}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
