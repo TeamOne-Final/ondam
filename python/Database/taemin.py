@@ -294,3 +294,46 @@ async def deletePurchase(cartNum: int, menuCode : str):
         conn.close()
         print("Error :", e)
         return {'result':'Error'}
+    
+#-- 대리점 메뉴 선택
+@router.post('/insert/select')
+async def insertSelect(menuCode : str, companyId : str):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        insert into ondam.select 
+        (product_MenuCode, manager_CompanyId, date)
+        values ('{menuCode}','{companyId}',now())
+        '''
+
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+        return {'result':'OK'}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+
+#-- 대리점 메뉴 삭제
+@router.delete('/delete/select')
+async def deleteSelect(menuCode : str, companyId : str):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        delete from ondam.select 
+        where product_MenuCode = '{menuCode}' and manager_CompanyId = '{companyId}'
+        '''
+
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+        return {'result':'OK'}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
