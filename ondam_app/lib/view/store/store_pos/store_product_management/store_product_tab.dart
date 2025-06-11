@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:ondam_app/view/store/store_pos/store_product_management/store_product.dart';
 import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_category.dart';
 import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_option.dart';
+import 'package:ondam_app/view/store/store_pos/store_sales_report/store_product_analysis.dart';
+import 'package:ondam_app/view/store/store_pos/store_sales_report/store_sales_detail.dart';
+import 'package:ondam_app/view/store/store_pos/store_sales_report/store_sales_status.dart';
 import 'package:ondam_app/vm/side_menu_controller.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 
@@ -23,14 +26,26 @@ class StoreProductTab extends StatelessWidget {
             child: 
                 ListView(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('상품관리', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)]
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('상품관리', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)]
+                        ),
+                    ),
                     _buildTile(vmHandler, 0, Icons.store, '상품'),
-                    _buildTile(vmHandler, 1, Icons.restaurant, '옵션'),
-                    _buildTile(vmHandler, 2, Icons.approval, '카테고리'),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('매출 리포트', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)]
+                        ),
+                    ),
+                    _buildTile(vmHandler, 1, Icons.store, '매출 현황'),
+                    _buildTile(vmHandler, 2, Icons.store, '매출 상세'),
+                    _buildTile(vmHandler, 3, Icons.store, '상품 분석'),
                   ],
                 ),
           ),
@@ -38,13 +53,15 @@ class StoreProductTab extends StatelessWidget {
         Expanded(
           flex: 3,
           child: Obx(() {
-            switch (vmHandler.selectedStoreProductIndex.value){
+            switch (vmHandler.selectedStoreReportProductIndex.value){
               case 0:
                 return StoreProduct();
               case 1:
-                return StoreProductOption();
+                return StoreSalesStatus();
               case 2:
-                return StoreProductCategory();
+                return StoreSalesDetail();
+              case 3:
+                return StoreProductAnalysis();
               default:
                 return Center(child: Text('페이지를 선택해 주세요'),);
             }
@@ -58,7 +75,7 @@ class StoreProductTab extends StatelessWidget {
 
   Widget _buildTile(SideMenuController vmHandler, int index, IconData icon, String title){
     return Obx(() {
-      final isSelected = vmHandler.selectedStoreProductIndex.value == index;
+      final isSelected = vmHandler.selectedStoreReportProductIndex.value == index;
 
       return Container(
         color: isSelected ? Color(0xFFF6F7FB) : Colors.transparent,
