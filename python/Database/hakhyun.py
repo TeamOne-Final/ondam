@@ -122,3 +122,16 @@ async def update_with_image(menuCode: str=Form(...), menuName: str=Form(...), me
         except Exception as e:
                 print("Error:", e)
                 return{"result":"Error"}
+        
+@router.delete("/delete/item/{code}")
+async def delete_item(code: str):
+        try:
+                conn=connect()
+                curs=conn.cursor()
+                curs.execute("DELETE FROM product where menuCode = %s", (code,))
+                conn.commit()
+                conn.close()
+                return {'result':'OK'}
+        except Exception as e:
+                print("Error:", e)
+                return {"result":"Error"}
