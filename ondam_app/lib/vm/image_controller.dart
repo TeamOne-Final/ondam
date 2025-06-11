@@ -6,11 +6,13 @@ class ImageController extends SideMenuController{
   //
   final imageFile = Rx<XFile?>(null); // null을 허용하면 .obs를 못 써서 대신에 Rx를 붙임
   final ImagePicker picker = ImagePicker();
+  var firstDisp = 0.obs;
 
   Future<void> getImageFromGallery(ImageSource source)async{
     final XFile? pickedFile = await picker.pickImage(source: source);
     if(pickedFile != null){
       imageFile.value = pickedFile;
+      firstDisp ++;
     }
   }
 }

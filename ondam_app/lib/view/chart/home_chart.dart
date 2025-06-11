@@ -7,10 +7,10 @@ import 'package:ondam_app/view/chart/ondam_store_price_page.dart';
 import 'package:ondam_app/view/chart/ondam_total_price_page.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 
-class Home extends StatelessWidget {
+class HomeChart extends StatelessWidget {
   final VmHandlerTemp controller = Get.find<VmHandlerTemp>();
 
-  Home({super.key});
+  HomeChart({super.key});
 
   @override
   Widget build(BuildContext context) {
