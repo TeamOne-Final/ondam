@@ -97,7 +97,10 @@ class PurchaseController extends ProductController{
                     );
                   }).toList();
       curToInternalList.value = returnResult;
-
+    }catch(e){
+      //
+    }
+  }
   // pos상품 분석 페이지 total
   Future<void> productAnalysisTotal(String date) async {
     try{
@@ -138,6 +141,10 @@ class PurchaseController extends ProductController{
                     );
                   }).toList();
       firstToFinalList.value = returnResult;
+    }catch(e){
+      //
+    }
+  }
   // pos상품 분석 페이지 DataTable & PieChart select
   Future<void> productAnalysisChart(String date) async {
     try{

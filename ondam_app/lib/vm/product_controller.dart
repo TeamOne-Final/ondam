@@ -33,9 +33,8 @@ class ProductController extends ManagerController{
     request.files.add(await http.MultipartFile.fromPath('file', imageFile!));
     var res = await request.send();
     if(res.statusCode == 200){
-      firstDisp.value = 0;
       fetchItemList();
-      showDialog();
+      showDialog('추가가');
     }else{
       errorSnackBar();
     }
@@ -58,18 +57,28 @@ class ProductController extends ManagerController{
     }
     var res = await request.send();
     if(res.statusCode == 200){
-      firstDisp = 0;
       fetchItemList();
-      showDialog();
+      showDialog('수정이');
     }else{
       errorSnackBar();
+    }
+  }
+
+    void deleteItem(String code)async{
+    var response = await http.delete(Uri.parse("http://$globalIP/hakhyun/delete/item/$code"));
+    var result = json.decode(utf8.decode(response.bodyBytes))['result'];
+    if(result != "OK"){
+      errorSnackBar();
+    }else{
+      fetchItemList();
+      showDialog('삭제가');
     }
   }
 
     void errorSnackBar(){
     Get.snackbar(
       "경고", 
-      "입력 중 문제가 발생했습니다",
+      "실행 중 문제가 발생했습니다",
       snackPosition: SnackPosition.TOP,
       duration: Duration(seconds: 2),
       colorText: Colors.white,
@@ -77,10 +86,12 @@ class ProductController extends ManagerController{
       );
   }
 
-  showDialog(){
+  showDialog(String action){
     Get.defaultDialog(
-      title: '입력 결과',
-      middleText: '입력이 완료되었습니다.',
+      title: '실행 결과',
+      middleText: '$action 완료되었습니다.',
+      titleStyle: TextStyle(fontSize: 24),
+      middleTextStyle: TextStyle(fontSize: 20),
       backgroundColor: Colors.white,
       barrierDismissible: false,
       actions: [
@@ -89,7 +100,7 @@ class ProductController extends ManagerController{
             Get.back();
             Get.back();
           }, 
-          child: Text('나가기'),
+          child: Text('나가기',style: TextStyle(fontSize: 18),),
         ),
       ]
     );
