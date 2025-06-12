@@ -41,10 +41,11 @@ class ThirdPage extends StatelessWidget {
                 ),
             ],
             primaryXAxis: CategoryAxis(
-              title: AxisTitle(text: '매장 명'),
+              title: AxisTitle(text: '매장 명',textStyle: TextStyle(color: Colors.red)),
             ),
-            primaryYAxis: CategoryAxis(
-              title: AxisTitle(text: '매출 액'),
+            primaryYAxis: NumericAxis(
+              plotOffset: 0,
+              title: AxisTitle(text: '매출 액',textStyle: TextStyle(color: Colors.blue)),
             ),
           ),
         );

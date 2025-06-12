@@ -5,6 +5,9 @@ class PurchaseWithProductDate {
   int? cumulativeTotalPrice;
   int? salesCount;
   int? cumulativeSalesCount;
+  int? countCartNum;
+  int? refundCount;
+  int? refundPrice;
 
   PurchaseWithProductDate(
     {
@@ -13,7 +16,10 @@ class PurchaseWithProductDate {
       this.totalPrice,
       this.cumulativeTotalPrice,
       this.salesCount,
-      this.cumulativeSalesCount
+      this.cumulativeSalesCount,
+      this.countCartNum,
+      this.refundCount,
+      this.refundPrice,
     }
     );
 }

@@ -7,11 +7,11 @@ ip = "192.168.50.8"
 
 def connect():
         return pymysql.connect(
-            host=ip,
-            user="root",
-            password="qwer1234", 
-            db="ondam",           
-            charset="utf8",
+                host=ip,
+                user="root",
+                password="qwer1234", 
+                db="ondam",           
+                charset="utf8",
         )
 
 @router.get('/select/eachstore/curTointernal29')
@@ -71,3 +71,28 @@ async def selectEachStoreFirstDatetoFinalDate(storeCode: str = None, firstDate: 
         conn.close()
         result = [{'companyCode': row[0], 'tranDate': row[1], 'totalPrice': row[2], 'cumulativeTotalPrice': row[3], 'salesCount': row[4],'cumulativeSalesCount':row[5]}for row in rows]
         return {'results': result}
+
+
+@router.get('/select/sales/counts')
+async def selectTotalSalesCounts(storeCode : str = None, firstDate : str = None, finalDate : str = None):
+        conn = connect()
+        curs = conn.cursor()
+        sql = f'''
+                select sum(pd.menuPrice * ph.quantity) as total_prices,
+                (count(distinct(ph.cartNum))) as count_cartNum,
+                (select count(*) from purchase as ph where ph.quantity < 0 and ph.tranDate >= '{firstDate}'
+                and ph.tranDate < '{finalDate}') as refundcount,
+                (select abs(sum(ph.quantity * pd.menuPrice)) from purchase as ph, product as pd where ph.product_MenuCode = pd.menuCode and ph.quantity < 0 and ph.tranDate >= '{firstDate}'
+                and ph.tranDate < '{finalDate}') as refundPrice
+                from ondam.purchase as ph, ondam.product as pd
+                where ph.product_MenuCode = pd.menuCode
+                and ph.tranDate >= '{firstDate}'
+                and ph.tranDate < '{finalDate}'
+                and ph.userTable_CompanyCode like '{storeCode}';
+
+        '''
+        curs.execute(sql)
+        row = curs.fetchone()
+        conn.close()
+        result = {'totalPrices':row[0], 'countCartNum': row[1], 'refundCount': row[2], 'refundPrice': 0 if row[3] == None else row[3]}
+        return{'results':[result]}
