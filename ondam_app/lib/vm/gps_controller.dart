@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ondam_app/vm/moving_handler.dart';
 
 class GpsController extends  MovingController{
+
   // 위치 정보
   final latitude = ''.obs;
   final longitude = ''.obs;
