@@ -113,7 +113,8 @@ class FirstPage extends StatelessWidget {
               primaryXAxis: CategoryAxis(
                 title: AxisTitle(text: '날짜(일)',textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
               ),
-              primaryYAxis: CategoryAxis(
+              primaryYAxis: NumericAxis(
+                plotOffset: 0,
               title: AxisTitle(text: '매출 액',textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
             ),
             ),

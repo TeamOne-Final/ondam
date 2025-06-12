@@ -12,6 +12,7 @@ class PurchaseController extends ProductController{
 
   final RxList<PurchaseWithProductDate> curToInternalList = <PurchaseWithProductDate>[].obs;
   final RxList<PurchaseWithProductDate> firstToFinalList = <PurchaseWithProductDate>[].obs;
+  final RxList<PurchaseWithProductDate> selectOne = <PurchaseWithProductDate>[].obs;
   var productAnalysisForTotalList = <Chart>[].obs;
   var productAnalysisForChartList = <Chart>[].obs;
   var firstDate = ''.obs;
@@ -31,6 +32,7 @@ class PurchaseController extends ProductController{
 
     // 초기 조회
     selectEachStoreFirstToFinal('강남');
+    selectTotalSalesCountsOne('강남');
   }
 
   // -- cartNum 최댓값
@@ -84,7 +86,6 @@ class PurchaseController extends ProductController{
  // 현재 일자에서 30일 동안의 매출
   Future<void> selectEachStoreCurToInternal(String storeCode) async{
     try{
-    curToInternalList.clear();
     var url =  Uri.parse('$baseUrl/sangbeom/select/eachstore/curTointernal29?storeCode=강남');
     var response = await http.get(url);
     var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
@@ -126,7 +127,6 @@ class PurchaseController extends ProductController{
     // 선택한 날짜부터 마지막 날짜까지 기간을 직접 지정(사이 일자 별 매출)
   Future<void> selectEachStoreFirstToFinal(String storeCode) async{
     try{
-    firstToFinalList.clear();
     var url =  Uri.parse('$baseUrl/sangbeom/select/eachstore/firstDatetofinalDate?storeCode=강남&firstDate=${firstDate.value}&finalDate=${finalDate.value}');
     var response = await http.get(url);
     var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
@@ -134,10 +134,10 @@ class PurchaseController extends ProductController{
     List<PurchaseWithProductDate> returnResult = 
                   results.map((data) {
                     return PurchaseWithProductDate(
-                      totalPrice: data['totalPrice'],
-                      tranDate: data['tranDate'],
-                      cumulativeSalesCount: data['cumulativeSalesCount'],
-                      cumulativeTotalPrice: data['cumulativeTotalPrice']
+                      totalPrice: data['totalPrice'] ?? 0,
+                      tranDate: data['tranDate'] ?? 0,
+                      cumulativeSalesCount: data['cumulativeSalesCount'] ?? 0,
+                      cumulativeTotalPrice: data['cumulativeTotalPrice'] ?? 0,
                     );
                   }).toList();
       firstToFinalList.value = returnResult;
@@ -166,5 +166,30 @@ class PurchaseController extends ProductController{
       //
     } 
   }
+  // 현황의 값들을 불러오는 것
+    Future<void> selectTotalSalesCountsOne(String storeCode) async{
+    try{
+    var url =  Uri.parse('$baseUrl/sangbeom/select/sales/counts?storeCode=$storeCode&firstDate=${firstDate.value}&finalDate=${finalDate.value}');
+    var response = await http.get(url);
+    var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
+    List results = dataConvertedJSON['results'];
+    List<PurchaseWithProductDate> returnResult = 
+                  results.map((data) {
+                    return PurchaseWithProductDate(
+                      totalPrice: data['totalPrices'] ?? 0,
+                      countCartNum: data['countCartNum'] ?? 0,
+                      refundCount: data['refundCount'] ?? 0,
+                      refundPrice: data['refundPrice'] ?? 0
+                    );
+                  }).toList();
+      selectOne.value = returnResult;
+      // selectOne[0]['totalPrices'];
+    }catch(e){
+      //
+    }
+  }
+
+
+
 
 }
