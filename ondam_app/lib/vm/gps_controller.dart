@@ -1,7 +1,8 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/vm/moving_handler.dart';
 
-class GpsController extends GetxController{
+class GpsController extends  MovingController{
   // 위치 정보
   final latitude = ''.obs;
   final longitude = ''.obs;

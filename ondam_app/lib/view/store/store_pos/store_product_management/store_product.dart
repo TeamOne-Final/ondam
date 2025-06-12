@@ -24,15 +24,13 @@ class StoreProduct extends StatelessWidget {
                     
                   }, icon: Icon(Icons.search)),
                   ElevatedButton(onPressed: () {
-                    vmHandler.purchaseSituationChart('강남');
-                    print(vmHandler.purchaseSituationChartNowList); 
+                    
                   }, child: Text('순서 편집')),
                   ElevatedButton(onPressed: () {
                     
                   }, child: Row(children: [Icon(Icons.add), Text('상품 추가')],)),
                 ],
               ),
-              
               Row(
                 children: [
                   SizedBox(
@@ -46,6 +44,7 @@ class StoreProduct extends StatelessWidget {
                           width: 100,
                           child: ElevatedButton(
                             onPressed:() {
+                              
                             }, child: Text('$index')),
                         );
                       },

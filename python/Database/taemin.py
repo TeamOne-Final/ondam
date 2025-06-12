@@ -363,7 +363,7 @@ async def select(firstDate : str,finalDate : str,companyCode : str
         print("Error :", e)
         return {'result':'Error'}
     
-#-- 상품 분석 페이지 차트
+#-- 상품 분석 페이지 차트 데이터
 @router.get('/select/product_anal/chart')
 async def select(firstDate : str,finalDate : str,companyCode : str 
                 ):
@@ -390,7 +390,6 @@ async def select(firstDate : str,finalDate : str,companyCode : str
         print("Error :", e)
         return {'result':'Error'}
     
-
 #-- 매출 현황 페이지 데이터
 @router.get('/select/purchase/data')
 async def select(storeCode: str = None, firstDate: str = None, finalDate: str = None):

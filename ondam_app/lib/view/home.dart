@@ -27,20 +27,25 @@ class Home extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(color: const Color.fromRGBO(46, 61, 83, 1)),
             child: 
-                ListView(
+                Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('DASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)]
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 60, 0, 30),
+                      child: Text('DASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
+                    ),
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          _buildTile(vmHandler, 0, Icons.store, '가맹점 관리'),
+                          _buildTile(vmHandler, 1, Icons.restaurant, '메뉴 관리'),
+                          _buildTile(vmHandler, 2, Icons.approval, '주문/계약'),
+                          _buildTile(vmHandler, 3, Icons.notifications, '공지 사항'),
+                          _buildTile(vmHandler, 4, Icons.manage_accounts, '직원 관리'),
+                          _buildTile(vmHandler, 5, Icons.bar_chart, '매출 관리'),
+                          _buildTile(vmHandler, 6, Icons.logout, '로그아웃'),
+                        ],
                       ),
-                    _buildTile(vmHandler, 0, Icons.store, '가맹점 관리'),
-                    _buildTile(vmHandler, 1, Icons.restaurant, '메뉴 관리'),
-                    _buildTile(vmHandler, 2, Icons.approval, '주문/계약'),
-                    _buildTile(vmHandler, 3, Icons.notifications, '공지 사항'),
-                    _buildTile(vmHandler, 4, Icons.manage_accounts, '직원 관리'),
-                    _buildTile(vmHandler, 5, Icons.bar_chart, '매출 관리'),
-                    _buildTile(vmHandler, 6, Icons.logout, '로그아웃'),
+                    ),
                   ],
                 ),
           ),
@@ -81,14 +86,17 @@ class Home extends StatelessWidget {
 
       return Container(
         color: isSelected ? Color(0xFFF6F7FB) : Colors.transparent,
-        child: ListTile(
-          onTap: () {
-            vmHandler.select(index);
-          },
-          leading: Icon(icon, color: isSelected ? Colors.black : Colors.white,size: 32),
-          title: Text(
-            title,
-            style: TextStyle(color: isSelected ? Colors.black : Colors.white, fontWeight: FontWeight.bold, fontSize: 28),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+          child: ListTile(
+            onTap: () {
+              vmHandler.select(index);
+            },
+            leading: Icon(icon, color: isSelected ? Colors.black : Colors.white,size: 32),
+            title: Text(
+              title,
+              style: TextStyle(color: isSelected ? Colors.black : Colors.white, fontWeight: FontWeight.bold, fontSize: 28),
+            ),
           ),
         ),
       );

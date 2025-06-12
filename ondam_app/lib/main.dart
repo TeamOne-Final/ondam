@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:ondam_app/firebase_options.dart';
+import 'package:ondam_app/view/home.dart';
 import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_tab.dart';
 import 'package:ondam_app/vm/notice_controller_firebase.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
-import 'package:ondam_app/view/home.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-            locale: Locale('ko','KR'),
+      locale: Locale('ko','KR'),
       supportedLocales: [
         Locale('ko','KR'),
       ],
@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      // home: Home(),
-      home: StoreProductTab(),
+      home: Home(),
+      // home: StoreProductTab(),
     );
   }
 }
