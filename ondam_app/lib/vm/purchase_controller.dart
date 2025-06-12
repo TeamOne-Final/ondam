@@ -12,9 +12,11 @@ class PurchaseController extends ProductController{
 
   final RxList<PurchaseWithProductDate> curToInternalList = <PurchaseWithProductDate>[].obs;
   final RxList<PurchaseWithProductDate> firstToFinalList = <PurchaseWithProductDate>[].obs;
-  final RxList<PurchaseWithProductDate> selectOne = <PurchaseWithProductDate>[].obs;
   var productAnalysisForTotalList = <Chart>[].obs;
   var productAnalysisForChartList = <Chart>[].obs;
+  var purchaseSituationDataList = <Chart>[].obs;
+  var purchaseSituationChartNowList = <Chart>[].obs;
+  var purchaseSituationChartPreList = <Chart>[].obs;
   var firstDate = ''.obs;
   var finalDate = ''.obs;
 
@@ -27,12 +29,13 @@ class PurchaseController extends ProductController{
     final today = DateTime.now();
     finalDate.value = _formatter.format(today);
     firstDate.value = _formatter.format(today.subtract(Duration(days: 29)));
-    productAnalysisChart('2025-05-05');
-    productAnalysisTotal('2025-05-05');
+    productAnalysisChart('강남');
+    productAnalysisTotal('강남');
 
     // 초기 조회
     selectEachStoreFirstToFinal('강남');
-    selectTotalSalesCountsOne('강남');
+    purchaseSituationData('강남');
+    purchaseSituationChart('강남');
   }
 
   // -- cartNum 최댓값
@@ -86,6 +89,7 @@ class PurchaseController extends ProductController{
  // 현재 일자에서 30일 동안의 매출
   Future<void> selectEachStoreCurToInternal(String storeCode) async{
     try{
+    curToInternalList.clear();
     var url =  Uri.parse('$baseUrl/sangbeom/select/eachstore/curTointernal29?storeCode=강남');
     var response = await http.get(url);
     var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
@@ -103,9 +107,9 @@ class PurchaseController extends ProductController{
     }
   }
   // pos상품 분석 페이지 total
-  Future<void> productAnalysisTotal(String date) async {
+  Future<void> productAnalysisTotal(String storecode) async {
     try{
-    var url =  Uri.parse('$baseUrl/taemin/select/product_anal/total?tranDate=$date');
+    var url =  Uri.parse('$baseUrl/taemin/select/product_anal/total?firstDate=$firstDate&finalDate=$finalDate&companyCode=$storecode');
     var response = await http.get(url);
     var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
     List results = dataConvertedJDON['results'];
@@ -127,6 +131,7 @@ class PurchaseController extends ProductController{
     // 선택한 날짜부터 마지막 날짜까지 기간을 직접 지정(사이 일자 별 매출)
   Future<void> selectEachStoreFirstToFinal(String storeCode) async{
     try{
+    firstToFinalList.clear();
     var url =  Uri.parse('$baseUrl/sangbeom/select/eachstore/firstDatetofinalDate?storeCode=강남&firstDate=${firstDate.value}&finalDate=${finalDate.value}');
     var response = await http.get(url);
     var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
@@ -134,10 +139,10 @@ class PurchaseController extends ProductController{
     List<PurchaseWithProductDate> returnResult = 
                   results.map((data) {
                     return PurchaseWithProductDate(
-                      totalPrice: data['totalPrice'] ?? 0,
-                      tranDate: data['tranDate'] ?? 0,
-                      cumulativeSalesCount: data['cumulativeSalesCount'] ?? 0,
-                      cumulativeTotalPrice: data['cumulativeTotalPrice'] ?? 0,
+                      totalPrice: data['totalPrice'],
+                      tranDate: data['tranDate'],
+                      cumulativeSalesCount: data['cumulativeSalesCount'],
+                      cumulativeTotalPrice: data['cumulativeTotalPrice']
                     );
                   }).toList();
       firstToFinalList.value = returnResult;
@@ -146,9 +151,9 @@ class PurchaseController extends ProductController{
     }
   }
   // pos상품 분석 페이지 DataTable & PieChart select
-  Future<void> productAnalysisChart(String date) async {
+  Future<void> productAnalysisChart(String storecode) async {
     try{
-    var url =  Uri.parse('$baseUrl/taemin/select/product_anal/chart?tranDate=$date');
+    var url =  Uri.parse('$baseUrl/taemin/select/product_anal/chart?firstDate=$firstDate&finalDate=$finalDate&companyCode=$storecode');
     var response = await http.get(url);
     var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
     List results = dataConvertedJDON['results'];
@@ -161,35 +166,62 @@ class PurchaseController extends ProductController{
                     );
                   }).toList();
     productAnalysisForChartList.value = returnResult;
-
     } catch(e){
       //
     } 
   }
-  // 현황의 값들을 불러오는 것
-    Future<void> selectTotalSalesCountsOne(String storeCode) async{
+  // 매출 현황에 필요한 데이터 불러오는 용도
+  Future<void> purchaseSituationData(String storeCode) async {
     try{
-    var url =  Uri.parse('$baseUrl/sangbeom/select/sales/counts?storeCode=$storeCode&firstDate=${firstDate.value}&finalDate=${finalDate.value}');
+    var url =  Uri.parse('$baseUrl/taemin/select/purchase/data?storeCode=$storeCode&firstDate=$firstDate&finalDate=$finalDate');
     var response = await http.get(url);
-    var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
-    List results = dataConvertedJSON['results'];
-    List<PurchaseWithProductDate> returnResult = 
+    var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
+    List results = dataConvertedJDON['results'];
+    List<Chart> returnResult = 
                   results.map((data) {
-                    return PurchaseWithProductDate(
-                      totalPrice: data['totalPrices'] ?? 0,
-                      countCartNum: data['countCartNum'] ?? 0,
-                      refundCount: data['refundCount'] ?? 0,
-                      refundPrice: data['refundPrice'] ?? 0
+                    return Chart(
+                      totalPrice: data['total_price'] ?? 0,
+                      quantity: data['purchase_count'] ?? 0,
+                      femaleNum: data['refund_count'] ?? 0,
+                      maleNum: data['refund_price'] ?? 0
                     );
                   }).toList();
-      selectOne.value = returnResult;
-      // selectOne[0]['totalPrices'];
-    }catch(e){
+    purchaseSituationDataList.value = returnResult;
+    // print(response.body); // 원본 응답
+    // print(dataConvertedJDON); // 디코딩 결과
+    // print(results);
+    } catch(e){
       //
-    }
+    } 
   }
-
-
-
+  // --- 매출 현황 아래 차트 그리는 용도
+  Future<void> purchaseSituationChart(String storeCode) async {
+    try{
+    var url =  Uri.parse('$baseUrl/taemin/select/purchase/chart?storeCode=$storeCode&firstDate=$firstDate&finalDate=$finalDate');
+    var response = await http.get(url);
+    var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
+    List results = dataConvertedJDON['results'];
+    List nowdata = results[0];
+    List predata = results[1];
+    List<Chart> returnNowResult = 
+                  nowdata.map((data) {
+                    return Chart(
+                      totalPrice: data['now_total_price'] ?? 0,
+                      tranDate: data['nowdate'] ?? ''
+                    );
+                  }).toList();
+    List<Chart> returnPreResult = 
+                  predata.map((data) {
+                    return Chart(
+                      totalPrice: data['pre_total_price'] ?? 0,
+                      tranDate: data['predate'] ?? ''
+                    );
+                  }).toList();
+    purchaseSituationChartPreList.value = returnPreResult;
+    purchaseSituationChartNowList.value = returnNowResult;
+    } catch(e){
+      //
+    } 
+  }
 
 }

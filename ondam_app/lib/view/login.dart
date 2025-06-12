@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ondam_app/global_ip.dart';
-import 'package:ondam_app/view/home.dart';
+import 'package:ondam_app/view/company/company_main.dart';
 import 'package:ondam_app/view/store/store_main.dart';
 import 'package:ondam_app/widget/custom_text_field.dart';
 import 'package:http/http.dart' as http;
@@ -94,7 +94,7 @@ class Login extends StatelessWidget {
       Get.snackbar('로그인 성공', '환영합니다');
       if (companyCode == '본사') {
         saveStorage(companyCode);
-        Get.to(() => Home());
+        Get.to(() => CompanyMain());
       } else {
         saveStorage(companyCode);
         Get.to(() => StoreMain());

@@ -53,25 +53,12 @@ async def today_order_count():
 async def store_list():
         conn=connect()
         curs=conn.cursor()
-        sql = """
-        SELECT companyCode, SUBSTRING(location, 1, 2), managerId, COUNT(purchaseNum) FROM manager LEFT JOIN purchase ON userTable_CompanyCode = companyCode AND SUBSTRING(tranDate, 1,10) = CURDATE() WHERE managerId != 'M000' GROUP BY companyCode, SUBSTRING(location, 1, 2), managerId;
-        """
+        sql = "SELECT companyCode, SUBSTRING(location, 1, 2) FROM manager WHERE managerId != 'M000'"
         curs.execute(sql)
         rows = curs.fetchall()
         conn.close()
-        result = [{'companyCode':row[0], 'location':row[1], 'managerId':row[2], 'purchase':row[3]}for row in rows]
+        result = [{'companyCode':row[0], 'location':row[1]}for row in rows]
         return{'results':result}
-
-# 가맹점별 손님이 금일 주문한 횟수 (임시)
-@router.get("/select/daily_purchase_count")
-async def daily_purchase_count():
-        conn=connect()
-        curs=conn.cursor()
-        sql = "SELECT COUNT(purchaseNum) FROM purchase, manager WHERE SUBSTRING(tranDate, 1, 10) = CURDATE() AND userTable_CompanyCode = companyCode"
-        curs.execute(sql)
-        row = curs.fetchone()
-        conn.close()
-        return{'results':row[0]}
 
 @router.get("/select/item_list")
 async def item_list():
@@ -93,7 +80,6 @@ async def item_list():
         ]
         return{'results':result}
 
-# 메뉴 추가
 @router.post("/insert/item")
 async def insert_item(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), file: UploadFile = File(...), description: str=Form(...)):
         menuImage = await file.read()
@@ -108,7 +94,6 @@ async def insert_item(menuCode: str=Form(...), menuName: str=Form(...), menuPric
         conn.close()
         return{'result':'OK'}
 
-# 메뉴 수정 이미지 제외
 @router.post("/update/item")
 async def update(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), description: str=Form(...)):
         try:
@@ -123,8 +108,7 @@ async def update(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: st
                 print("Error :", e)
                 return {'result' : 'Error'}
 
-# 메뉴 수정 이미지 포함
-@router.post("/update/item_with_image")
+@router.post("/update/item_with_image") #(...)은 required
 async def update_with_image(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), description: str=Form(...), file: UploadFile = File(...)):
         try:
                 menuImage = await file.read()
@@ -139,7 +123,6 @@ async def update_with_image(menuCode: str=Form(...), menuName: str=Form(...), me
                 print("Error:", e)
                 return{"result":"Error"}
         
-# 메뉴 삭제
 @router.delete("/delete/item/{code}")
 async def delete_item(code: str):
         try:
