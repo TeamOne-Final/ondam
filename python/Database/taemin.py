@@ -340,17 +340,16 @@ async def deleteSelect(menuCode : str, companyId : str):
     
 #-- 상품 분석 페이지 데이터
 @router.get('/select/product_anal/total')
-async def select(tranDate : str, 
-                #companyCode : str
+async def select(firstDate : str,finalDate : str,companyCode : str
                 ):
     conn = connect()
     curs = conn.cursor()
 
     try:
         sql = f'''
-        select sum(ph.quantity) as total_quantity, sum(pd.menuPrice) as total_price
+        select sum(ph.quantity) as total_quantity, sum(pd.menuPrice * ph.quantity) as total_price
         from purchase as ph, product as pd
-        where ph.product_menuCode = pd.menuCode and Date(ph.tranDate) = '{tranDate}' and ph.userTable_CompanyCode = '강남';
+        where ph.product_menuCode = pd.menuCode and Date(ph.tranDate) >= '{firstDate}' and Date(ph.tranDate) < '{finalDate}' and ph.userTable_CompanyCode = '{companyCode}';
         '''
 
         curs.execute(sql)
@@ -364,19 +363,18 @@ async def select(tranDate : str,
         print("Error :", e)
         return {'result':'Error'}
     
-#-- 상품 분석 페이지 데이터
+#-- 상품 분석 페이지 차트 데이터
 @router.get('/select/product_anal/chart')
-async def select(tranDate : str, 
-                #companyCode : str
+async def select(firstDate : str,finalDate : str,companyCode : str 
                 ):
     conn = connect()
     curs = conn.cursor()
 
     try:
         sql = f'''
-        select pd.menuName, sum(ph.quantity) as total_quantity, sum(pd.menuPrice) as total_price
+        select pd.menuName, sum(ph.quantity) as total_quantity, sum(pd.menuPrice * ph.quantity) as total_price
         from purchase as ph, product as pd
-        where ph.product_menuCode = pd.menuCode and Date(ph.tranDate) = '{tranDate}' and ph.userTable_CompanyCode = '강남'
+        where ph.product_menuCode = pd.menuCode and Date(ph.tranDate) >= '{firstDate}' and Date(ph.tranDate) < '{finalDate}' and ph.userTable_CompanyCode = '{companyCode}'
         group by pd.menuName
         order by total_price desc;
         '''
@@ -387,6 +385,96 @@ async def select(tranDate : str,
     
         result = [{'menuName' : row[0], 'total_quantity' : row[1], 'total_price' : row[2]}for row in rows]
         return {'results' : result}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+    
+#-- 매출 현황 페이지 데이터
+@router.get('/select/purchase/data')
+async def select(storeCode: str = None, firstDate: str = None, finalDate: str = None):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        select sum(b.total_price) as total_price, count(b.purchase_count) as purchase_count,
+        (select count(*) from purchase as ph where ph.quantity < 0 and ph.tranDate >= '{firstDate}' and ph.tranDate < '{finalDate}') as refund_count, 
+        (select abs(sum(ph.quantity * pd.menuPrice)) from purchase as ph, product as pd where ph.product_MenuCode = pd.menuCode and ph.quantity < 0 and ph.tranDate >= '{firstDate}' and ph.tranDate < '{finalDate}') as refund_price
+        from(select sum(ph.quantity * pd.menuPrice) as total_price, count(*) as purchase_count
+	    from purchase as ph, product as pd
+	    where ph.product_menuCode = pd.menuCode
+        and ph.tranDate >= '{firstDate}'
+	    and ph.tranDate < '{finalDate}'
+        and ph.userTable_CompanyCode like '{storeCode}%'
+	    group by ph.cartNum) as b;
+        '''
+
+        curs.execute(sql)
+        rows = curs.fetchall()
+        conn.close()
+    
+        result = [{'total_price' : row[0], 'purchase_count' : row[1], 'refund_count' : row[2], 'refund_price' : row[3]}for row in rows]
+        return {'results' : result}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+    
+#-- 매출 현황 페이지 기간 비교 그래프
+@router.get('/select/purchase/chart')
+async def select(storeCode: str = None, firstDate: str = None, finalDate: str = None):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        select_period_sql = f'''
+        select sum(b.price), 
+        CONCAT(
+            Date('{firstDate}'),
+            ' ~ ',
+            Date('{finalDate}')
+        ) AS date
+        from (
+        select Date(ph.trandate) as date, sum(pd.menuprice) as price
+		    from purchase as ph, product as pd
+		    where ph.product_menucode = pd.menucode
+		    and ph.usertable_companyCode = '{storeCode}'
+            and ph.trandate < '{finalDate}'
+            and ph.trandate >= '{firstDate}'
+            group by Date(ph.trandate)
+	    ) as b;
+        '''
+
+        pre_preiod_sql = f'''
+        SELECT 
+        SUM(b.price), 
+        CONCAT(
+            DATE_FORMAT(DATE_SUB(DATE_SUB('{firstDate}', INTERVAL 1 DAY), INTERVAL DATEDIFF('{finalDate}', '{firstDate}') DAY), '%Y-%m-%d'),
+            ' ~ ',
+            DATE_FORMAT(DATE_SUB('{firstDate}', INTERVAL 1 DAY), '%Y-%m-%d')
+        ) AS date
+        FROM (
+	        SELECT DATE(ph.trandate) AS date, SUM(pd.menuprice) AS price
+	        FROM purchase AS ph
+	        JOIN product AS pd ON ph.product_menucode = pd.menucode
+	        WHERE ph.usertable_companyCode = '{storeCode}'
+	        and ph.trandate < '{firstDate}' - interval 1 day
+	        and ph.trandate >= ('{firstDate}' - interval 1 day) - INTERVAL datediff('{finalDate}', '{firstDate}') day
+            GROUP BY DATE(ph.trandate)
+        ) AS b;
+        '''
+
+        curs.execute(select_period_sql)
+        datenow = curs.fetchone()
+        nowresult = [{'now_total_price' : datenow[0], 'nowdate' : datenow[1]if datenow else []}]
+
+        curs.execute(pre_preiod_sql)
+        datebefore = curs.fetchone()
+        preresult = [{'pre_total_price' : datebefore[0], 'predate' : datebefore[1] if datebefore else []}]
+        conn.close()
+    
+        return {'results' : [nowresult, preresult]}
     except Exception as e:
         conn.close()
         print("Error :", e)

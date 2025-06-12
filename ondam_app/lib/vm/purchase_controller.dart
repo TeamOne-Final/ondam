@@ -15,6 +15,9 @@ class PurchaseController extends ProductController{
   final RxList<PurchaseWithProductDate> selectOne = <PurchaseWithProductDate>[].obs;
   var productAnalysisForTotalList = <Chart>[].obs;
   var productAnalysisForChartList = <Chart>[].obs;
+  var purchaseSituationDataList = <Chart>[].obs;
+  var purchaseSituationChartNowList = <Chart>[].obs;
+  var purchaseSituationChartPreList = <Chart>[].obs;
   var firstDate = ''.obs;
   var finalDate = ''.obs;
 
@@ -27,8 +30,8 @@ class PurchaseController extends ProductController{
     final today = DateTime.now();
     finalDate.value = _formatter.format(today);
     firstDate.value = _formatter.format(today.subtract(Duration(days: 29)));
-    productAnalysisChart('2025-05-05');
-    productAnalysisTotal('2025-05-05');
+    productAnalysisChart('강남');
+    productAnalysisTotal('강남');
 
     // 초기 조회
     selectEachStoreFirstToFinal('강남');
@@ -103,9 +106,9 @@ class PurchaseController extends ProductController{
     }
   }
   // pos상품 분석 페이지 total
-  Future<void> productAnalysisTotal(String date) async {
+  Future<void> productAnalysisTotal(String storecode) async {
     try{
-    var url =  Uri.parse('$baseUrl/taemin/select/product_anal/total?tranDate=$date');
+    var url =  Uri.parse('$baseUrl/taemin/select/product_anal/total?firstDate=$firstDate&finalDate=$finalDate&companyCode=$storecode');
     var response = await http.get(url);
     var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
     List results = dataConvertedJDON['results'];
@@ -146,9 +149,9 @@ class PurchaseController extends ProductController{
     }
   }
   // pos상품 분석 페이지 DataTable & PieChart select
-  Future<void> productAnalysisChart(String date) async {
+  Future<void> productAnalysisChart(String storecode) async {
     try{
-    var url =  Uri.parse('$baseUrl/taemin/select/product_anal/chart?tranDate=$date');
+    var url =  Uri.parse('$baseUrl/taemin/select/product_anal/chart?firstDate=$firstDate&finalDate=$finalDate&companyCode=$storecode');
     var response = await http.get(url);
     var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
     List results = dataConvertedJDON['results'];
@@ -161,7 +164,6 @@ class PurchaseController extends ProductController{
                     );
                   }).toList();
     productAnalysisForChartList.value = returnResult;
-
     } catch(e){
       //
     } 
@@ -187,6 +189,59 @@ class PurchaseController extends ProductController{
     }catch(e){
       //
     }
+  }
+  // 매출 현황에 필요한 데이터 불러오는 용도
+  Future<void> purchaseSituationData(String storeCode) async {
+    try{
+    var url =  Uri.parse('$baseUrl/taemin/select/purchase/data?storeCode=$storeCode&firstDate=$firstDate&finalDate=$finalDate');
+    var response = await http.get(url);
+    var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
+    List results = dataConvertedJDON['results'];
+    List<Chart> returnResult = 
+                  results.map((data) {
+                    return Chart(
+                      totalPrice: data['total_price'] ?? 0,
+                      quantity: data['purchase_count'] ?? 0,
+                      femaleNum: data['refund_count'] ?? 0,
+                      maleNum: data['refund_price'] ?? 0
+                    );
+                  }).toList();
+    purchaseSituationDataList.value = returnResult;
+    // print(response.body); // 원본 응답
+    // print(dataConvertedJDON); // 디코딩 결과
+    // print(results);
+    } catch(e){
+      //
+    } 
+  }
+  // --- 매출 현황 아래 차트 그리는 용도
+  Future<void> purchaseSituationChart(String storeCode) async {
+    try{
+    var url =  Uri.parse('$baseUrl/taemin/select/purchase/chart?storeCode=$storeCode&firstDate=$firstDate&finalDate=$finalDate');
+    var response = await http.get(url);
+    var dataConvertedJDON = json.decode(utf8.decode(response.bodyBytes));
+    List results = dataConvertedJDON['results'];
+    List nowdata = results[0];
+    List predata = results[1];
+    List<Chart> returnNowResult = 
+                  nowdata.map((data) {
+                    return Chart(
+                      totalPrice: data['now_total_price'] ?? 0,
+                      tranDate: data['nowdate'] ?? ''
+                    );
+                  }).toList();
+    List<Chart> returnPreResult = 
+                  predata.map((data) {
+                    return Chart(
+                      totalPrice: data['pre_total_price'] ?? 0,
+                      tranDate: data['predate'] ?? ''
+                    );
+                  }).toList();
+    purchaseSituationChartPreList.value = returnPreResult;
+    purchaseSituationChartNowList.value = returnNowResult;
+    } catch(e){
+      //
+    } 
   }
 
 
