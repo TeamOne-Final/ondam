@@ -41,6 +41,8 @@ class PurchaseController extends ProductController{
     // 초기 조회
     selectEachStoreFirstToFinal('강남');
     selectTotalSalesCountsOne('강남');
+    purchaseSituationData('강남');
+    purchaseSituationChart('강남');
     loadPurchase();
   }
 
