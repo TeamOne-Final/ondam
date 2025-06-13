@@ -1,11 +1,16 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:ondam_app/model/purchase.dart';
+import 'package:ondam_app/model/purchase_poduct.dart';
 import 'package:ondam_app/vm/product_controller.dart';
 
 class PurchaseController extends ProductController{
   final String baseUrl = 'http://127.0.0.1:8000';
+  RxList<PurchasePoduct> purchase = <PurchasePoduct>[].obs;
+  var purchases = <Purchase>[].obs;
+  var selectedPurchase = Rxn<Purchase>(); // nullable
 
 
   // -- cartNum 최댓값
@@ -55,4 +60,30 @@ class PurchaseController extends ProductController{
     return result;
   }
 
+  // purchase 데이터 load
+  Future<void>loadPurchase()async{
+    final res = await http.get(Uri.parse("$baseUrl/giho/select/purchase"));
+    final data = json.decode(utf8.decode(res.bodyBytes));
+    final List results = data["results"];
+
+    final List<PurchasePoduct>returnResult =
+      results.map((data) {
+        return PurchasePoduct(
+          cartNum: data["cartNum"], 
+          menuName: data["menuName"], 
+          tranDate: data["tranDate"], 
+          userTableCompanyCode: data["userTable_CompanyCode"], 
+          cartNumTotalPrice: data["cartNum_total_price"]
+        );
+      },).toList();
+
+    purchase.value = returnResult;
+  }
+
+
+@override
+void onInit() {
+  super.onInit();
+  loadPurchase(); 
+}
 }

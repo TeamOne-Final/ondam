@@ -2,11 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ondam_app/firebase_options.dart';
-import 'package:ondam_app/view/store/store_pos/store_product_management/store_product.dart';
-import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_tab.dart';
+import 'package:ondam_app/view/store/pos_orderhistory.dart';
 import 'package:ondam_app/vm/notice_controller_firebase.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
-import 'package:ondam_app/view/home.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +25,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       // home: Home(),
-      home: Home(),
+      home: Posorderhistory()
     );
   }
 }

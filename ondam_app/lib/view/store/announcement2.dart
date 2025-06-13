@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ondam_chat/vm/noticecontroller.dart';
+import 'package:ondam_app/vm/notice_controller_firebase.dart';
 
-class Noticedetailview extends StatelessWidget {
-  Noticedetailview({super.key});
+class Announcement2 extends StatelessWidget {
+  Announcement2({super.key});
 
   final noticedetailview = Get.find<Noticecontroller>();
 
