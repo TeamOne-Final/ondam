@@ -4,8 +4,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:ondam_app/model/loaded_object.dart';
+import 'package:ondam_app/vm/gender_ratio_controller.dart';
 
-class LoadController extends GetxController {
+class LoadController extends GenderRatioController {
   // 불러온 객체 목록을 담을 Observable 리스트
   var loadedObjects = <LoadedObject>[].obs;
   // 데이터 로딩 중인지 나타내는 Observable 변수

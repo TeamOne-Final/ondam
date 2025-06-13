@@ -52,8 +52,10 @@ class CompanyMain extends StatelessWidget {
                         ),
                         _buildContainer(
                           context,
-                          '오늘 주문(수정 필요)',
-                          '${controller.todayOrderCount.value}건',
+                          '당월 방문 고객 성비',
+                          (controller.maleCount.value + controller.femaleCount.value) == 0?
+                          '방문 고객이 없습니다.'
+                          :'남 ${((controller.maleCount.value / (controller.maleCount.value + controller.femaleCount.value))*10).toStringAsFixed(0)} : 여 ${(controller.femaleCount.value / ((controller.maleCount.value + controller.femaleCount.value))*10).toStringAsFixed(0)}',
                         ),
                         _buildContainer(
                           context,
@@ -227,7 +229,7 @@ class CompanyMain extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(30, 20, 0, 20),
       child: Container(
         width: MediaQuery.sizeOf(context).width / 6.2,
-        height: MediaQuery.sizeOf(context).height / 10,
+        height: MediaQuery.sizeOf(context).height / 9.5,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -237,13 +239,13 @@ class CompanyMain extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 8, 0),
-              child: Text(title, style: TextStyle(fontSize: 19)),
+              child: Text(title, style: TextStyle(fontSize: 20)),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 8, 8),
               child: Text(
                 content,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: content == '방문 고객이 없습니다.'? 20 : 30,),
               ),
             ),
           ],
