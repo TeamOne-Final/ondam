@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:ondam_app/model/purchase.dart';
+import 'package:ondam_app/model/purchase_poduct.dart';
 import 'package:ondam_app/model/purchase_with_product.dart';
 import 'package:ondam_app/model/chart.dart';
 import 'package:ondam_app/vm/product_controller.dart';
@@ -9,6 +11,9 @@ import 'package:intl/intl.dart';
 
 class PurchaseController extends ProductController{
   final String baseUrl = 'http://127.0.0.1:8000';
+  RxList<PurchasePoduct> purchase = <PurchasePoduct>[].obs;
+  var purchases = <Purchase>[].obs;
+  var selectedPurchase = Rxn<Purchase>(); // nullable
 
   final RxList<PurchaseWithProductDate> curToInternalList = <PurchaseWithProductDate>[].obs;
   final RxList<PurchaseWithProductDate> firstToFinalList = <PurchaseWithProductDate>[].obs;
@@ -36,6 +41,9 @@ class PurchaseController extends ProductController{
     // 초기 조회
     selectEachStoreFirstToFinal('강남');
     selectTotalSalesCountsOne('강남');
+    purchaseSituationData('강남');
+    purchaseSituationChart('강남');
+    loadPurchase();
   }
 
   // -- cartNum 최댓값
@@ -83,6 +91,26 @@ class PurchaseController extends ProductController{
     final res = await http.get(uri);
     final result = json.decode(utf8.decode(res.bodyBytes))['result'];
     return result;
+  }
+
+  // purchase 데이터 load
+  Future<void>loadPurchase()async{
+    final res = await http.get(Uri.parse("$baseUrl/giho/select/purchase"));
+    final data = json.decode(utf8.decode(res.bodyBytes));
+    final List results = data["results"];
+
+    final List<PurchasePoduct>returnResult =
+      results.map((data) {
+        return PurchasePoduct(
+          cartNum: data["cartNum"], 
+          menuName: data["menuName"], 
+          tranDate: data["tranDate"], 
+          userTableCompanyCode: data["userTable_CompanyCode"], 
+          cartNumTotalPrice: data["cartNum_total_price"]
+        );
+      },).toList();
+
+    purchase.value = returnResult;
   }
 
 
@@ -243,8 +271,4 @@ class PurchaseController extends ProductController{
       //
     } 
   }
-
-
-
-
 }
