@@ -4,12 +4,15 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ondam_app/view/store/announcement.dart';
 import 'package:ondam_app/view/store/store_pos/pos_main.dart';
+import 'package:ondam_app/view/store/store_user/create_table.dart';
 import 'package:ondam_app/view/store/store_user/table_select.dart';
+import 'package:ondam_app/vm/vm_handler_temp.dart';
 
 class StoreMain extends StatelessWidget {
   StoreMain({super.key});
 
   final box = GetStorage();
+  final controller = Get.put(VmHandlerTemp());
   @override
   Widget build(BuildContext context) {
     String managerId = '';
@@ -38,15 +41,27 @@ class StoreMain extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
+                    controller.fetchObjects(companyCode);
                     Get.to(() => PosMain());
                   },
                   child: Text('포스기'),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Get.to(() => TableSelect());
-                  },
-                  child: Text('테이블 설정'),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        controller.fetchObjects(companyCode);
+                        Get.to(() => TableSelect());
+                      },
+                      child: Text('테이블 설정'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.to(() => CreateTable());
+                      },
+                      child: Text('테이블 배치'),
+                    ),
+                  ],
                 ),
                 ElevatedButton(
                   onPressed: () {
