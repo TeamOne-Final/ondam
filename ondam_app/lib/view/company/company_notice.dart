@@ -1,4 +1,3 @@
-// 공지사항 메인
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ondam_app/view/company/company_notice2.dart';
@@ -14,45 +13,66 @@ class CompanyNotice extends StatelessWidget {
   Widget build(BuildContext context) {
     noticecontroller.loadNotice();
     return Scaffold(
-      backgroundColor:  Color(0xFFF7F7F9),
+      backgroundColor:   Color(0xFFEFEFEF),
       appBar: AppBar(
-        elevation: 0.5,
-        title:  Text("공지사항", style: TextStyle(color: Colors.black)),
+        backgroundColor:   Color(0xFFEFEFEF),
+        elevation: 2,
+        title:   Text(" 공지사항", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             onPressed: () => addshow(),
-            icon:  Icon(Icons.add, color: Colors.black),
+            icon:  Icon(Icons.add_circle_rounded, color: Colors.black, size: 28),
           ),
         ],
       ),
       body: Obx(
         () => ListView.builder(
-          padding:  EdgeInsets.all(16),
+          padding:   EdgeInsets.all(16),
           itemCount: noticecontroller.notice.length,
           itemBuilder: (context, index) {
             final notice = noticecontroller.notice[index];
-            return Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 2,
-              margin:  EdgeInsets.symmetric(vertical: 8),
-              child: ListTile(
-                contentPadding:  EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                onTap: () => Get.to(
-                  () =>CompanyNotice2(),
-                  arguments: [notice.title, notice.content],
+            return Container(
+              margin:  EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                  colors: [Colors.white, Colors.grey.shade200],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade400,
+                    offset:  Offset(4, 4),
+                    blurRadius: 10,
+                  ),
+                  BoxShadow(
+                    color: Colors.white,
+                    offset:  Offset(-4, -4),
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+              child: ListTile(
+                contentPadding:  EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                onTap: () => Get.to(() => CompanyNotice2(), arguments: [notice.title, notice.content]),
                 title: Text(
-                  notice.state == 0 ? "[일반] ${notice.title}" : "[중요] ${notice.title}",
+                  notice.state == 0 ? notice.title : " [중요] ${notice.title}",
                   style: TextStyle(
-                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
                     color: notice.state == 0 ? Colors.black87 : Colors.redAccent,
                   ),
                 ),
-                subtitle: Text(
-                  "${notice.timeStamp.month}월 ${notice.timeStamp.day}일",
-                  style:  TextStyle(color: Colors.grey),
+                subtitle: Padding(
+                  padding:   EdgeInsets.only(top: 8),
+                  child: Text(
+                    "${notice.timeStamp.month}월 ${notice.timeStamp.day}일",
+                    style:   TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 trailing: PopupMenuButton<String>(
+                  icon:  Icon(Icons.more_vert),
                   onSelected: (value) {
                     if (value == 'edit') {
                       updateshow(notice);
@@ -65,24 +85,22 @@ class CompanyNotice extends StatelessWidget {
                             noticecontroller.deleteNotice(notice.noticeId);
                             Get.back();
                           },
-                          child:  Text("확인"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child:   Text("삭제", style: TextStyle(color: Colors.white)),
                         ),
                         cancel: TextButton(
                           onPressed: () => Get.back(),
-                          child:  Text("취소"),
+                          child:   Text("취소"),
                         ),
                       );
                     }
                   },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 'edit',
-                      child: Text('수정'),
-                    ),
-                    PopupMenuItem(
-                      value: 'delete',
-                      child: Text('삭제'),
-                    ),
+                  itemBuilder: (context) =>  [
+                    PopupMenuItem(value: 'edit', child: Text('✏️ 수정')),
+                    PopupMenuItem(value: 'delete', child: Text('🗑️ 삭제')),
                   ],
                 ),
               ),
@@ -93,18 +111,20 @@ class CompanyNotice extends StatelessWidget {
     );
   }
 
-  addshow() {
+  void addshow() {
     int selectedType = 0;
+    titleTextController.clear();
+    contentTextController.clear();
     Get.defaultDialog(
       title: "공지 추가",
       content: buildDialogContent(selectedType, isUpdate: false),
     );
   }
 
-  updateshow(notice) {
+  void updateshow(notice) {
     int selectedType = notice.state;
-    contentTextController.text = notice.content;
     titleTextController.text = notice.title;
+    contentTextController.text = notice.content;
     Get.defaultDialog(
       title: "공지 수정",
       content: buildDialogContent(selectedType, isUpdate: true, notice: notice),
@@ -112,79 +132,115 @@ class CompanyNotice extends StatelessWidget {
   }
 
   Widget buildDialogContent(int selectedType, {required bool isUpdate, dynamic notice}) {
-    return StatefulBuilder(
+  return SingleChildScrollView(
+    scrollDirection: Axis.vertical,
+    child: StatefulBuilder(
       builder: (context, setState) {
-        return SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleTextController,
-                decoration:  InputDecoration(
-                  labelText: "제목",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: contentTextController,
-                maxLines: 6,
-                decoration:  InputDecoration(
-                  labelText: "내용",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        final double dialogWidth = 700;
+        final double dialogHeight = 600;
+    
+        return SizedBox(
+          width: dialogWidth,
+          height: dialogHeight,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Padding(
+              padding:   EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Radio<int>(
-                    value: 1,
-                    groupValue: selectedType,
-                    onChanged: (value) => setState(() => selectedType = value!),
+                  TextField(
+                    controller: titleTextController,
+                    style:   TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                      labelText: "제목",
+                      hintText: "공지 제목을 입력하세요",
+                      labelStyle:  TextStyle(fontSize: 18),
+                      hintStyle:   TextStyle(fontSize: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      contentPadding:  EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    ),
                   ),
-                  Text("중요"),
-                  Radio<int>(
-                    value: 0,
-                    groupValue: selectedType,
-                    onChanged: (value) => setState(() => selectedType = value!),
+                  SizedBox(height: 24),
+                  TextField(
+                    controller: contentTextController,
+                    style:   TextStyle(fontSize: 18),
+                    maxLines: 10,
+                    decoration: InputDecoration(
+                      labelText: "내용",
+                      hintText: "공지 내용을 입력하세요",
+                      labelStyle:  TextStyle(fontSize: 18),
+                      hintStyle:   TextStyle(fontSize: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      contentPadding:  EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    ),
+                    
                   ),
-                  Text("일반"),
+                  SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Radio<int>(
+                        value: 1,
+                        groupValue: selectedType,
+                        onChanged: (value) => setState(() => selectedType = value!),
+                      ),
+                      Text("중요", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
+                      SizedBox(width: 40),
+                      Radio<int>(
+                        value: 0,
+                        groupValue: selectedType,
+                        onChanged: (value) => setState(() => selectedType = value!),
+                      ),
+                      Text("일반", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
+                    ],
+                  ),
+                  SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (isUpdate) {
+                        noticecontroller.updateNotice(
+                          notice.noticeId,
+                          titleTextController.text,
+                          contentTextController.text,
+                          selectedType,
+                        );
+                      } else {
+                        noticecontroller.createNotice(
+                          titleTextController.text,
+                          contentTextController.text,
+                          selectedType,
+                        );
+                      }
+                      titleTextController.clear();
+                      contentTextController.clear();
+                      Get.back();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 234, 240, 236),
+                      minimumSize:   Size(200, 60),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      textStyle:   TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      elevation: 8,
+                    ),
+                    child: Text(isUpdate ? "수정하기" : "추가하기"),
+                  ),
                 ],
               ),
-              SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () {
-                  if (isUpdate) {
-                    noticecontroller.updateNotice(
-                      notice.noticeId,
-                      titleTextController.text,
-                      contentTextController.text,
-                      selectedType,
-                    );
-                  } else {
-                    noticecontroller.createNotice(
-                      titleTextController.text,
-                      contentTextController.text,
-                      selectedType,
-                    );
-                  }
-                  titleTextController.clear();
-                  contentTextController.clear();
-                  Get.back();
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding:  EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-                child: Text(isUpdate ? "수정하기" : "추가하기"),
-              ),
-            ],
+            ),
           ),
         );
       },
-    );
-  }
-} // class
+    ),
+  );
+}}

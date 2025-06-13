@@ -1,6 +1,7 @@
 // 본사 메인
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ondam_app/model/chart.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -9,6 +10,7 @@ class CompanyMain extends StatelessWidget {
   CompanyMain({super.key});
   final VmHandlerTemp controller = Get.find<VmHandlerTemp>();
   final TooltipBehavior tooltipBehavior = TooltipBehavior(enable: true);
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,13 @@ class CompanyMain extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(40, 40, 20, 20),
-                      child: Text('본사 사장', style: TextStyle(fontSize: 40)),
+                      child: Row(
+                        children: [
+                          Text('${box.read('companyCode')}', style: TextStyle(fontSize: 40)),
+                          Spacer(),
+                          Obx(() => SizedBox(width: 520, child: Text("${controller.dateTimeNow.toString().substring(0,4)}년 ${controller.dateTimeNow.toString().substring(5,7)}월 ${controller.dateTimeNow.toString().substring(8,10)}일 ${controller.dateTimeNow.toString().substring(11,19)}", style: TextStyle(fontSize: 40))),),
+                        ],
+                      ),
                     ),
                     Row(
                       children: [
@@ -44,12 +52,12 @@ class CompanyMain extends StatelessWidget {
                         ),
                         _buildContainer(
                           context,
-                          '오늘 주문',
+                          '오늘 주문(수정 필요)',
                           '${controller.todayOrderCount.value}건',
                         ),
                         _buildContainer(
                           context,
-                          '이슈',
+                          '이슈(수정 필요)',
                           '${controller.storeCount.value}건',
                         ),
                       ],
@@ -181,30 +189,21 @@ class CompanyMain extends StatelessWidget {
                           scrollDirection: Axis.vertical,
                           child: DataTable(
                             columns: [
+                              DataColumn(label: Text('ID')),
                               DataColumn(label: Text('매장명')),
                               DataColumn(label: Text('지역')),
-                              DataColumn(label: Text('매니저')),
-                              DataColumn(label: Text('전화번호')),
+                              DataColumn(label: Text('금일 결제 견수')),
                               DataColumn(label: Text('운영상태')),
-                              DataColumn(label: Text('')),
                             ],
                             rows:
-                                controller.storeList.map((store) {
+                                controller.storeList1.map((store) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Text(store)),
-                                      DataCell(Text(store)),
-                                      DataCell(Text(store)),
-                                      DataCell(Text(store)),
-                                      DataCell(Text(store)),
-                                      DataCell(
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            //
-                                          },
-                                          child: Text("상세보기"),
-                                        ),
-                                      ),
+                                      DataCell(Text(store['managerId'])),
+                                      DataCell(Text("${store['companyCode']}점")),
+                                      DataCell(Text(store['location'])),
+                                      DataCell(Text("${store['purchase']??0}건")),
+                                      DataCell(Text('운영 중')),
                                     ],
                                   );
                                 }).toList(),
