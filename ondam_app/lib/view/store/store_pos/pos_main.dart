@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ondam_app/model/movingobject.dart';
+import 'package:ondam_app/view/store/pos_orderhistory.dart';
 import 'package:ondam_app/view/store/store_main.dart';
+import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_tab.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 
 class PosMain extends StatelessWidget {
@@ -46,6 +48,7 @@ class PosMain extends StatelessWidget {
               leading: Icon(Icons.find_in_page),
               title: Text('결제 내역'),
               onTap: () {
+                Get.to(()=> Posorderhistory());
                 // 항목 탭 시 실행될 동작
                 // Navigator.pop(context); // Drawer 닫기
               },
@@ -56,6 +59,8 @@ class PosMain extends StatelessWidget {
               leading: Icon(Icons.bar_chart),
               title: Text('매출 리포트'),
               onTap: () {
+                controller.selectedStoreReportProductIndex.value=1;
+                Get.to(() => StoreProductTab());
                 // 항목 탭 시 실행될 동작
                 // Navigator.pop(context); // Drawer 닫기
               },
@@ -65,6 +70,8 @@ class PosMain extends StatelessWidget {
               leading: Icon(Icons.production_quantity_limits),
               title: Text('상품 관리'),
               onTap: () {
+                controller.selectedStoreReportProductIndex.value=0;
+                Get.to(() => StoreProductTab());
                 // 항목 탭 시 실행될 동작
                 // Navigator.pop(context); // Drawer 닫기
               },
