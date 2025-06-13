@@ -16,6 +16,10 @@ class Table(BaseModel):
      y : float
      tableId : int
 
+class Login(BaseModel):
+    managerId : str
+    managerPassword : str
+
 def connect():
         conn = pymysql.connect(
         host=ip,
@@ -26,11 +30,12 @@ def connect():
         )
         return conn
 
-@router.get("/selectUser")
-async def selectUser(managerId : str, managerPassword : str):
+@router.post("/selectUser")
+async def selectUser(login : Login):
         conn = connect()
         curs = conn.cursor()
-        curs.execute("SELECT count(*), companyCode From manager WHERE managerId =%s and managerPassword =%s", (managerId, managerPassword))
+        sql = "SELECT count(*), companyCode From manager WHERE managerId =%s and managerPassword =%s"
+        curs.execute(sql,(login.managerId, login.managerPassword,))
         rows = curs.fetchall()
         conn.close()
         result = [{"count":row[0], "companyCode":row[1]}for row in rows]

@@ -22,4 +22,16 @@ class Purchase {
   });
 
 
+factory Purchase.fromJson(List<dynamic>json){
+  return Purchase(
+    cartNum: json[0]??0, 
+    tableNum: json[1]??"", 
+    companyCode: json[2]??"", 
+    menuCode: json[3]??"", 
+    tranDate: json[4]??"", 
+    femaleNum: json[5]??0, 
+    maleNum: json[6]??0, 
+    quantity: json[7]??0
+  );
+}
 }

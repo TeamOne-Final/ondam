@@ -225,7 +225,7 @@ class CompanyNotice extends StatelessWidget {
                       Get.back();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
+                      backgroundColor: const Color.fromARGB(255, 234, 240, 236),
                       minimumSize:   Size(200, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
