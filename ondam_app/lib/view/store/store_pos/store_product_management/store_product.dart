@@ -37,7 +37,6 @@ class StoreProduct extends StatelessWidget {
                     height: 60,
                     width: 900,
                     child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
                       itemCount: 3,
                       itemBuilder: (context, index) {
                         return SizedBox(
