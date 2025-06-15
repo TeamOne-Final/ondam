@@ -152,3 +152,14 @@ async def delete_item(code: str):
         except Exception as e:
                 print("Error:", e)
                 return {"result":"Error"}
+        
+# 남녀 카운트 for 성비
+@router.get("/select/gender_count")
+async def select_gender_count():
+        conn=connect()
+        curs=conn.cursor()
+        sql = "SELECT SUM(femaleNum), SUM(maleNum) FROM purchase WHERE SUBSTRING(tranDate, 1,7) = SUBSTRING(CURDATE(), 1,7)"
+        curs.execute(sql)
+        row = curs.fetchone()
+        conn.close()
+        return{'female':row[0]or 0, 'male':row[1]or 0}
