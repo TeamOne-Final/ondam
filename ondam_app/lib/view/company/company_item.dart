@@ -11,6 +11,7 @@ import 'package:ondam_app/vm/vm_handler_temp.dart';
 class CompanyItem extends StatelessWidget {
   CompanyItem({super.key});
   final VmHandlerTemp controller = Get.find<VmHandlerTemp>();
+  final items = ['전체', '메인메뉴', '사이드메뉴', '음료', '추가옵션'];
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,21 @@ class CompanyItem extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 40, 20, 20),
                     child: Text('메뉴관리', style: TextStyle(fontSize: 40),),
+                  ),
+                  Obx(() => 
+                  DropdownButton(
+                    value: controller.selectedMenuList.value.isEmpty ? null : controller.selectedMenuList.value,
+                    hint: Text('메뉴선택', style: TextStyle(fontSize: 25),),
+                    items: items.map((String item) {
+                      return DropdownMenuItem(
+                        value: item,
+                        child: Text(item, style: TextStyle(color: Colors.black, fontSize: 25),),
+                      );
+                    },).toList(), 
+                    onChanged: (value) {
+                      controller.valueToMenuCode1(value!);
+                    },
+                  ),
                   ),
                   Spacer(),
 
@@ -150,7 +166,7 @@ class CompanyItem extends StatelessWidget {
                                           String description = itemDescriptionController.text;
                                           String price = itemPriceController.text;
                                           if (controller.firstDisp.value > 0&&name.isNotEmpty&&description.isNotEmpty&&price.isNotEmpty&&int.tryParse(price)!=null){
-                                            controller.insertItem(code, name, description, price, controller.imageFile.value!.path, controller.firstDisp.value);
+                                            controller.insertItem(code, name, description, price, controller.imageFile.value!.path, controller.firstDisp.value,);
                                             controller.firstDisp.value = 0;
                                           }else if(controller.firstDisp.value == 0){
                                             Get.snackbar('메뉴 추가 실패', '이미지를 선택해 주세요', titleText: Text('메뉴 추가 실패',style: TextStyle(fontSize: 30, color: Colors.white),), messageText: Text('이미지를 선택해 주세요', style: TextStyle(fontSize: 24, color: Colors.white),), backgroundColor: Colors.redAccent, colorText: Colors.white, maxWidth: MediaQuery.sizeOf(context).width/2, duration: Duration(seconds: 1));

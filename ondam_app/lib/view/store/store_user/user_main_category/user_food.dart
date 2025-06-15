@@ -11,7 +11,7 @@ class UserFood extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vmHandler = Get.find<VmHandlerTemp>();
-    vmHandler.fetchItemList();
+    vmHandler.fetchItemList('%');
     var filteredListbyMainMenu =
         vmHandler.itemList
             .where(
