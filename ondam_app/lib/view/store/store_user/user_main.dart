@@ -20,6 +20,8 @@ class UserMain extends StatelessWidget {
   Widget build(BuildContext context) {
     final int? tableNumberInt = Get.arguments as int?;
     final String? tableNumber = tableNumberInt?.toString();
+    final int maleNum = vmHandler2.maleNum.value;
+    final int femaleNum = vmHandler2.femaleNum.value;
 
     String companyCode = box.read('companyCode') ?? 'Unknown';
     // 페이지 로드 시 메뉴 데이터를 가져옵니다.
@@ -29,6 +31,8 @@ class UserMain extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(tableNumber != null ? '$tableNumber 번 테이블' : '테이블 선택 오류'),
+        backgroundColor: const Color.fromRGBO(22, 30, 40, 1),
+        automaticallyImplyLeading: false,
         actions: [
           Builder(
             builder: (BuildContext context) {
@@ -58,7 +62,13 @@ class UserMain extends StatelessWidget {
                   vmHandler.selectedDrawerItem.value!,
                 ),
               // 하단: 장바구니 목록 및 주문/닫기 버튼 (항상 표시)
-              _buildCartItemListSection(vmHandler, tableNumber, companyCode),
+              _buildCartItemListSection(
+                vmHandler,
+                tableNumber,
+                companyCode,
+                maleNum,
+                femaleNum,
+              ),
             ],
           );
         }),
@@ -86,40 +96,56 @@ class UserMain extends StatelessWidget {
                   _buildTile(vmHandler, 1, '사이드 메뉴'),
                   _buildTile(vmHandler, 2, '주류'),
                   _buildTile(vmHandler, 3, '추가 메뉴'),
-                  SizedBox(height: 150,),
-                  Align(
-                        alignment: Alignment.center, // 왼쪽 정렬
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size(230, 80), // 최소 가로 120, 세로 50
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
-                          ),
-                          onPressed: () {
-                            Get.to(()=> TableSelect(),arguments: tableNumberInt);
-                          },
-                          child: Text('채팅',style: TextStyle(fontSize: 20),),
-                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () => vmHandler2.upmaleNum(),
+                        icon: Icon(Icons.add),
                       ),
-                  SizedBox(height: 20,),
-                  Align(
-                        alignment: Alignment.center, // 왼쪽 정렬
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size(230, 80), // 최소 가로 120, 세로 50
-                            backgroundColor: const Color.fromARGB(255, 227, 7, 7),
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
+                      Obx(() {
+                        final String maleNumString =
+                            vmHandler2.maleNum.value.toString();
+                        return Text(
+                          '남성 \n $maleNumString',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28,
                           ),
-                          onPressed: () {},
-                          child: Text('직원호출',style: TextStyle(fontSize: 20),),
-                        ),
+                        );
+                      }),
+                      IconButton(
+                        onPressed: () => vmHandler2.downmaleNum(),
+                        icon: Icon(Icons.remove),
                       ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () => vmHandler2.upfemaleNum(),
+                        icon: Icon(Icons.add),
+                      ),
+                      Obx(() {
+                        final String femaleNumString =
+                            vmHandler2.femaleNum.value.toString();
+                        return Text(
+                          '여성 \n $femaleNumString',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28,
+                          ),
+                        );
+                      }),
+                      IconButton(
+                        onPressed: () => vmHandler2.downfemaleNum(),
+                        icon: Icon(Icons.remove),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -334,6 +360,20 @@ class UserMain extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Expanded(
+                // 이미지가 헤더 영역을 넘지 않도록 Expanded 사용
+                child:
+                    imageBytes == null
+                        ? Icon(
+                          Icons.image_not_supported,
+                          size: 60,
+                          color: Colors.white54,
+                        )
+                        : Image.memory(
+                          imageBytes,
+                          fit: BoxFit.contain,
+                        ), // contain으로 이미지 비율 유지
+              ),
               Text(
                 menuName,
                 style: TextStyle(
@@ -350,36 +390,19 @@ class UserMain extends StatelessWidget {
                 style: TextStyle(color: Colors.white70, fontSize: 18),
               ),
               SizedBox(height: 8),
-              Expanded(
-                // 이미지가 헤더 영역을 넘지 않도록 Expanded 사용
-                child:
-                    imageBytes == null
-                        ? Icon(
-                          Icons.image_not_supported,
-                          size: 60,
-                          color: Colors.white54,
-                        )
-                        : Image.memory(
-                          imageBytes,
-                          fit: BoxFit.contain,
-                        ), // contain으로 이미지 비율 유지
-              ),
             ],
           ),
         ),
         Padding(
           // 상세 설명 부분
           padding: const EdgeInsets.all(16.0),
-          child: Text(
-            menuDescription, // description 필드가 있다면 표시
-            style: TextStyle(fontSize: 16),
-          ),
+          child: Text(menuDescription, style: TextStyle(fontSize: 16)),
         ),
         Divider(), // 구분선
         ListTile(
           // '장바구니에 담기' 버튼
           leading: Icon(Icons.add_shopping_cart),
-          title: Text('장바구니에 담기'),
+          title: Text('담기'),
           onTap: () {
             vmHandler2.addToCart(item); // 장바구니에 추가
             Get.snackbar(
@@ -387,28 +410,6 @@ class UserMain extends StatelessWidget {
               '$menuName이(가) 장바구니에 담겼습니다.',
               snackPosition: SnackPosition.BOTTOM,
             );
-            // 장바구니에 담은 후 Drawer 내용 전환 (selectedDrawerItem 변경) 로직을 제거합니다.
-            // Drawer는 메뉴 상세 정보를 계속 보여줍니다.
-            // vmHandler.clearSelectedItemForDrawer(); // <-- 이 줄을 제거합니다.
-          },
-        ),
-        ListTile(
-          // '메뉴 목록으로 돌아가기' 버튼 (Drawer 닫기 역할)
-          leading: Icon(Icons.arrow_back),
-          title: Text('메뉴 목록으로 돌아가기'),
-          onTap: () {
-            Get.back(); // Drawer 닫기
-            vmHandler2
-                .clearSelectedItemForDrawer(); // Drawer 닫을 때 선택 항목 초기화 (상태 관리 목적)
-          },
-        ),
-        ListTile(
-          // 'Drawer 닫기' 버튼
-          leading: Icon(Icons.close),
-          title: Text('Drawer 닫기'),
-          onTap: () {
-            Get.back(); // Drawer 닫기
-            vmHandler2.clearSelectedItemForDrawer(); // 닫을 때 선택 항목 초기화
           },
         ),
         Divider(), // 상세 정보 섹션과 장바구니 섹션 구분선
@@ -421,6 +422,8 @@ class UserMain extends StatelessWidget {
     VmHandlerTemp vmHandler,
     String? tableNumber,
     String companyCode,
+    int maleNum,
+    int femaleNum,
   ) {
     final cartItems = vmHandler2.cartItems;
 
@@ -520,6 +523,8 @@ class UserMain extends StatelessWidget {
               vmHandler2.placeOrder(
                 tableNumber,
                 companyCode,
+                maleNum,
+                femaleNum,
               ); // VmHandlerTemp의 주문 함수 호출
               // placeOrder 함수 내에서 Drawer 닫기 및 장바구니 비우기 처리
             } else {

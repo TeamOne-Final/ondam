@@ -1,4 +1,4 @@
-// 대리점 메인 페이지
+// 대리점 메인 페이지 (디자인 개선)
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -14,76 +14,98 @@ class StoreMain extends StatelessWidget {
 
   final box = GetStorage();
   final controller = Get.put(VmHandlerTemp());
+
   @override
   Widget build(BuildContext context) {
-    String managerId = '';
-    String companyCode = '';
-    managerId = box.read('mid') ?? 'Unknown';
-    companyCode = box.read('companyCode') ?? 'Unknown';
+    String managerId = box.read('mid') ?? 'Unknown';
+    String companyCode = box.read('companyCode') ?? 'Unknown';
+
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(22, 30, 40, 1),
+      backgroundColor: const Color(0xFF161E28),
       appBar: AppBar(
+        backgroundColor: Colors.indigo,
         title: Text(
           '안녕하세요, $companyCode 대리점 $managerId 님!',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue,
         actions: [
           IconButton(
+            icon: Icon(Icons.logout, color: Colors.white),
             onPressed: () => Get.to(() => Login()),
-            icon: Icon(Icons.logout),
+            tooltip: '로그아웃',
           ),
         ],
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    controller.fetchObjects(companyCode);
-                    Get.to(() => PosMain());
-                  },
-                  child: Text('포스기'),
-                ),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Get.to(() => CreateTable());
-                      },
-                      child: Text('테이블 배치'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        controller.fetchObjects(companyCode);
-                        Get.to(() => TableSelect());
-                      },
-                      child: Text('테이블 설정'),
-                    ),
-                  ],
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Get.to(() => Announcement());
-                  },
-                  child: Text('공지 사항'),
-                ),
-              ],
-            ),
-          ],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Wrap(
+                spacing: 20,
+                runSpacing: 20,
+                alignment: WrapAlignment.center,
+                children: [
+                  _mainButton(
+                    label: '포스기',
+                    icon: Icons.point_of_sale,
+                    onPressed: () {
+                      controller.fetchObjects(companyCode);
+                      Get.to(() => PosMain());
+                    },
+                  ),
+                  _mainButton(
+                    label: '테이블 배치',
+                    icon: Icons.table_bar,
+                    onPressed: () => Get.to(() => CreateTable()),
+                  ),
+                  _mainButton(
+                    label: '테이블 설정',
+                    icon: Icons.settings,
+                    onPressed: () {
+                      controller.fetchObjects(companyCode);
+                      Get.to(() => TableSelect());
+                    },
+                  ),
+                  _mainButton(
+                    label: '공지 사항',
+                    icon: Icons.announcement,
+                    onPressed: () => Get.to(() => Announcement()),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _mainButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, size: 24),
+      label: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        child: Text(label, style: TextStyle(fontSize: 16)),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.indigoAccent,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        elevation: 4,
       ),
     );
   }
