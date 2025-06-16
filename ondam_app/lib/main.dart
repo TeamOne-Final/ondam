@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       // home: Posorderhistory()
+      // home: StoreMain()
       // home: Home(),
       home: Login(),
 
