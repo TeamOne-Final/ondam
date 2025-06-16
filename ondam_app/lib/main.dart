@@ -2,12 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:ondam_app/firebase_options.dart'
+import 'package:ondam_app/firebase_options.dart';
 import 'package:ondam_app/view/login.dart';
 import 'package:ondam_app/view/home.dart';
 import 'package:ondam_app/view/store/pos_orderhistory.dart';
 import 'package:ondam_app/view/store/store_main.dart';
 import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_tab.dart';
+import 'package:ondam_app/vm/chat_controller_firebase.dart';
+import 'package:ondam_app/vm/message_controller_firebase.dart';
 
 import 'package:ondam_app/vm/notice_controller_firebase.dart';
 import 'package:ondam_app/vm/vm2handelr.dart';
@@ -19,6 +21,8 @@ void main() async {
   Get.put(VmHandlerTemp());
   Get.put(Noticecontroller());
   Get.put(Vm2handelr());
+  Get.put(Chatcontroller());
+  Get.put(Messagecontroller());
   runApp(const MyApp());
 }
 

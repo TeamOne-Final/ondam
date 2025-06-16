@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ondam_app/view/chatting/table_select.dart';
 import 'package:ondam_app/vm/side_menu_controller.dart';
 import 'package:ondam_app/vm/vm2handelr.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
@@ -406,7 +407,7 @@ class UserMain extends StatelessWidget {
             vmHandler2.addToCart(item); // 장바구니에 추가
             Get.snackbar(
               '장바구니 추가',
-              '${menuName}이(가) 장바구니에 담겼습니다.',
+              '$menuName이(가) 장바구니에 담겼습니다.',
               snackPosition: SnackPosition.BOTTOM,
             );
           },
@@ -511,7 +512,7 @@ class UserMain extends StatelessWidget {
                 ],
               ),
             );
-          }).toList(),
+          }),
         Divider(), // 구분선
         ListTile(
           // 주문하기 버튼
