@@ -6,8 +6,8 @@ class MovingObject {
 
   final int id;
 
-  static const double objectWidth = 60;
-  static const double objectHeight = 60;
+  static const double objectWidth = 100;
+  static const double objectHeight = 100;
 
   MovingObject({required this.id, required Offset initialPosition})
     : position = initialPosition.obs;

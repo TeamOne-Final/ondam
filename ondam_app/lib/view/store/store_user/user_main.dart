@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ondam_app/view/chatting/table_select.dart';
 import 'package:ondam_app/vm/side_menu_controller.dart';
 import 'package:ondam_app/vm/vm2handelr.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
@@ -85,6 +86,40 @@ class UserMain extends StatelessWidget {
                   _buildTile(vmHandler, 1, '사이드 메뉴'),
                   _buildTile(vmHandler, 2, '주류'),
                   _buildTile(vmHandler, 3, '추가 메뉴'),
+                  SizedBox(height: 150,),
+                  Align(
+                        alignment: Alignment.center, // 왼쪽 정렬
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(230, 80), // 최소 가로 120, 세로 50
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                          ),
+                          onPressed: () {
+                            Get.to(()=> TableSelect(),arguments: tableNumberInt);
+                          },
+                          child: Text('채팅',style: TextStyle(fontSize: 20),),
+                        ),
+                      ),
+                  SizedBox(height: 20,),
+                  Align(
+                        alignment: Alignment.center, // 왼쪽 정렬
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(230, 80), // 최소 가로 120, 세로 50
+                            backgroundColor: const Color.fromARGB(255, 227, 7, 7),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                          ),
+                          onPressed: () {},
+                          child: Text('직원호출',style: TextStyle(fontSize: 20),),
+                        ),
+                      ),
                 ],
               ),
             ),
@@ -349,7 +384,7 @@ class UserMain extends StatelessWidget {
             vmHandler2.addToCart(item); // 장바구니에 추가
             Get.snackbar(
               '장바구니 추가',
-              '${menuName}이(가) 장바구니에 담겼습니다.',
+              '$menuName이(가) 장바구니에 담겼습니다.',
               snackPosition: SnackPosition.BOTTOM,
             );
             // 장바구니에 담은 후 Drawer 내용 전환 (selectedDrawerItem 변경) 로직을 제거합니다.
@@ -474,7 +509,7 @@ class UserMain extends StatelessWidget {
                 ],
               ),
             );
-          }).toList(),
+          }),
         Divider(), // 구분선
         ListTile(
           // 주문하기 버튼
