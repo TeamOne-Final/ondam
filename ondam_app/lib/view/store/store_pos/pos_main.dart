@@ -16,89 +16,63 @@ class PosMain extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<VmHandlerTemp>();
     final vmHandler = Get.find<Vm2handelr>();
-    String managerId = "";
-    String companyCode = '';
-    companyCode = box.read('companyCode') ?? 'Unknown';
-    managerId = box.read('mid') ?? '';
-    // 페이지 로드 시 테이블 위치 데이터를 가져옵니다.
+    String managerId = box.read('mid') ?? '';
+    String companyCode = box.read('companyCode') ?? 'Unknown';
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchObjects(companyCode);
     });
 
     return Scaffold(
-      appBar: AppBar(title: Text('저장된 물체 보기')),
+      backgroundColor: Colors.grey,
+      appBar: AppBar(
+        title: Text('카운터 화면'),
+        backgroundColor: Colors.teal,
+        centerTitle: true,
+        elevation: 4,
+      ),
       body: Obx(() => _buildBody(controller, vmHandler, companyCode)),
       drawer: Drawer(
-        // 왼쪽에 Drawer 추가
         child: ListView(
-          // Drawer 내부에 항목들을 배치하기 위해 ListView 사용
-          padding: EdgeInsets.zero, // 상단 패딩 제거
+          padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              // Drawer 상단 헤더
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text(
-                '$managerId님',
-                style: TextStyle(color: Colors.white, fontSize: 24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.teal, Colors.teal.shade200],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.account_circle, size: 48, color: Colors.white),
+                  SizedBox(height: 8),
+                  Text(
+                    '$managerId님',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                ],
               ),
             ),
-            ListTile(
-              // 내비게이션 항목 1
-              leading: Icon(Icons.home),
-              title: Text('카운터 홈'),
-              onTap: () {
-                Get.back();
-              },
+            _buildDrawerItem(Icons.home, '카운터 홈', () => Get.back()),
+            _buildDrawerItem(
+              Icons.find_in_page,
+              '결제 내역',
+              () => Get.to(() => Posorderhistory()),
             ),
-            ListTile(
-              // 내비게이션 항목 2
-              leading: Icon(Icons.find_in_page),
-              title: Text('결제 내역'),
-              onTap: () {
-                Get.to(() => Posorderhistory());
-                // 항목 탭 시 실행될 동작
-                // Navigator.pop(context); // Drawer 닫기
-              },
-            ),
-            Divider(), // 구분선
-            ListTile(
-              // 설정 항목
-              leading: Icon(Icons.bar_chart),
-              title: Text('매출 리포트'),
-              onTap: () {
-                controller.selectedStoreReportProductIndex.value = 1;
-                Get.to(() => StoreProductTab());
-                // 항목 탭 시 실행될 동작
-                // Navigator.pop(context); // Drawer 닫기
-              },
-            ),
-            ListTile(
-              // 설정 항목
-              leading: Icon(Icons.production_quantity_limits),
-              title: Text('상품 관리'),
-              onTap: () {
-                controller.selectedStoreReportProductIndex.value = 0;
-                Get.to(() => StoreProductTab());
-                // 항목 탭 시 실행될 동작
-                // Navigator.pop(context); // Drawer 닫기
-              },
-            ),
-            // ListTile(
-            //   // 설정 항목
-            //   leading: Icon(Icons.pin),
-            //   title: Text('재고 관리'),
-            //   onTap: () {
-            //     // 항목 탭 시 실행될 동작
-            //     // Navigator.pop(context); // Drawer 닫기
-            //   },
-            // ),
-            ListTile(
-              // 설정 항목
-              leading: Icon(Icons.logout),
-              title: Text('메인 화면'),
-              onTap: () {
-                Get.to(() => StoreMain());
-              },
+            Divider(),
+            _buildDrawerItem(Icons.bar_chart, '매출 리포트', () {
+              controller.selectedStoreReportProductIndex.value = 1;
+              Get.to(() => StoreProductTab());
+            }),
+            _buildDrawerItem(Icons.production_quantity_limits, '상품 관리', () {
+              controller.selectedStoreReportProductIndex.value = 0;
+              Get.to(() => StoreProductTab());
+            }),
+            _buildDrawerItem(
+              Icons.logout,
+              '메인 화면',
+              () => Get.to(() => StoreMain()),
             ),
           ],
         ),
@@ -116,72 +90,77 @@ class PosMain extends StatelessWidget {
     } else if (controller.loadedObjects.isEmpty) {
       return Center(child: Text('저장된 데이터가 없습니다.'));
     } else {
-      return Stack(
-        children:
-            controller.loadedObjects.map((obj) {
-              return Positioned(
-                left: obj.xCoordinate,
-                top: obj.yCoordinate,
-                child: GestureDetector(
-                  onTap: () {
-                    _showTableOrderDialog(
-                      vmHandler,
-                      obj.tableNum.toString(),
-                      companyCode,
-                    );
-                  },
-                  child: Container(
-                    width: 50.0,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      color: Colors.teal,
-                      border: Border.all(color: Colors.black, width: 1),
-                    ),
-                    child: Center(
-                      child: Text(
+      return Container(
+        color: Colors.grey.shade100,
+        child: Stack(
+          children:
+              controller.loadedObjects.map((obj) {
+                return Positioned(
+                  left: obj.xCoordinate,
+                  top: obj.yCoordinate,
+                  child: InkWell(
+                    onTap: () {
+                      _showTableOrderDialog(
+                        vmHandler,
                         obj.tableNum.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                        companyCode,
+                      );
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      color: Colors.teal,
+                      elevation: 4,
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        alignment: Alignment.center,
+                        child: Text(
+                          obj.tableNum.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+        ),
       );
     }
   }
 
-  // 테이블 주문 내역 다이얼로그를 Get.defaultDialog로 표시하는 함수
   void _showTableOrderDialog(
     Vm2handelr vmHandler,
     String tableNum,
     String companyCode,
   ) {
-    // 다이얼로그가 열릴 때 해당 테이블의 주문 내역을 가져옵니다.
-    vmHandler.fetchTableOrderItems(
-      tableNum,
-      companyCode,
-    ); // VmHandlerTemp에서 데이터 로딩 시작
+    vmHandler.fetchTableOrderItems(tableNum, companyCode);
 
     Get.defaultDialog(
       title: '$tableNum 번 테이블 주문 내역',
-      // 다이얼로그 내용: 주문 목록 및 총 금액 표시 위젯
       content: TableOrderDialogContent(
         vmHandler: vmHandler,
         tableNum: tableNum,
       ),
+      titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      backgroundColor: Colors.white,
+      radius: 8,
       actions: [
-        TextButton(
-          child: Text('결제하기'),
+        ElevatedButton.icon(
+          icon: Icon(Icons.payment),
+          label: Text('결제하기'),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
           onPressed: () {
             vmHandler.updateOrderStateToCompleted(tableNum, companyCode);
             Get.back();
           },
         ),
-        TextButton(
+        OutlinedButton(
           child: Text('닫기'),
           onPressed: () {
             Get.back();
@@ -193,6 +172,14 @@ class PosMain extends StatelessWidget {
         vmHandler.clearTableOrderItems();
         return true;
       },
+    );
+  }
+
+  Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.teal),
+      title: Text(title),
+      onTap: onTap,
     );
   }
 }
