@@ -34,7 +34,7 @@ class TableSelect extends StatelessWidget {
                     top: obj.yCoordinate,
                     child: GestureDetector(
                       onTap: () {
-                        Get.to(() => UserMain(), arguments: [obj.tableNum]);
+                        Get.to(() => UserMain(), arguments: [obj.tableNum]);//클릭시
                       },
                       child: Container(
                         // MovingObject에서 정의한 객체 크기 재사용
@@ -43,7 +43,7 @@ class TableSelect extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.teal,
                           border: Border.all(color: Colors.black, width: 1),
-                        ),
+                        ),//image 
                         child: Center(
                           // 객체 중앙에 tableNum 표시
                           child: Text(
