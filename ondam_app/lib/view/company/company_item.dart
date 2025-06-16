@@ -16,6 +16,7 @@ class CompanyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.valueToMenuCode1('전체');
     TextEditingController itemCodeController = TextEditingController();
     TextEditingController itemNameController = TextEditingController();
     TextEditingController itemDescriptionController = TextEditingController();
