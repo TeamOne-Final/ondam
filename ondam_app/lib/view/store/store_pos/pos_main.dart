@@ -4,12 +4,16 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ondam_app/view/store/pos_orderhistory.dart';
 import 'package:ondam_app/view/store/store_main.dart';
 import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_tab.dart';
+import 'package:ondam_app/vm/chat_controller_firebase.dart';
+import 'package:ondam_app/vm/message_controller_firebase.dart';
 import 'package:ondam_app/vm/vm2handelr.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 import 'package:ondam_app/widget/tableorderdialogcontent.dart';
 
 class PosMain extends StatelessWidget {
   PosMain({super.key});
+  final message = Get.find<Messagecontroller>();
+  final chatroom = Get.find<Chatcontroller>();
   final box = GetStorage();
 
   @override
@@ -155,8 +159,14 @@ class PosMain extends StatelessWidget {
           icon: Icon(Icons.payment),
           label: Text('결제하기'),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-          onPressed: () {
+          onPressed: () async{
             vmHandler.updateOrderStateToCompleted(tableNum, companyCode);
+            List<String> members = ['카운터', tableNum];
+              members.sort();
+              String roomId = members.join("과");
+
+              await message.deleteAllMessages(roomId);  // 채팅 메시지 전부 삭제
+              await chatroom.deletechatroom(roomId);    // 채팅방 삭제 
             Get.back();
           },
         ),
