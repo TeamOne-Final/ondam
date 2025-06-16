@@ -34,7 +34,7 @@ class TableSelect extends StatelessWidget {
                     top: obj.yCoordinate,
                     child: GestureDetector(
                       onTap: () {
-                        Get.to(() => UserMain(), arguments: [obj.tableNum]);
+                        Get.to(() => UserMain(), arguments: obj.tableNum);
                       },
                       child: Container(
                         // MovingObject에서 정의한 객체 크기 재사용
