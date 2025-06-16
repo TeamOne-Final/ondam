@@ -4,7 +4,7 @@ import pymysql
 
 
 router = APIRouter()
-ip = "192.168.50.8"
+ip = "127.0.0.1"
 
 class Table(BaseModel):
      
@@ -21,14 +21,13 @@ class Login(BaseModel):
     managerPassword : str
 
 def connect():
-        conn = pymysql.connect(
-        host=ip,
-        user="root",
-        password="qwer1234", 
-        db="ondam",           
-        charset="utf8",
+        return pymysql.connect(
+            host=ip,
+            user="root",
+            password="qwer1234", 
+            db="ondam",           
+            charset="utf8",
         )
-        return conn
 
 @router.post("/selectUser")
 async def selectUser(login : Login):

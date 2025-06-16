@@ -1,37 +1,39 @@
 class PurchasePoduct {
   final int cartNum;
-  final String menuName;
+  final String receiptLine;
+  final String salesMenus;
   final String tranDate;
   final String userTableCompanyCode;
-  final int cartNumTotalPrice;
+  final int totalPirce;
 
   PurchasePoduct({
     required this.cartNum,
-    required this.menuName,
+    required this.receiptLine,
+    required this.salesMenus,
     required this.tranDate,
     required this.userTableCompanyCode,
-    required this.cartNumTotalPrice,
+    required this.totalPirce,
   });
 
-  // JSON -> Dart 변환
   factory PurchasePoduct.fromJson(Map<String, dynamic> json) {
     return PurchasePoduct(
       cartNum: json['cartNum'],
-      menuName: json['menuName'],
-      tranDate: json['tranDate'],
+      receiptLine: json['receiptLine'],
+      salesMenus: json['sales_menus'],
+      tranDate:json["tranDate"],
       userTableCompanyCode: json['userTable_CompanyCode'],
-      cartNumTotalPrice: json['cartNum_total_price'],
+      totalPirce: (json['total_pirce'] as num).toInt(),
     );
   }
 
-  // Dart -> JSON (필요할 경우)
   Map<String, dynamic> toJson() {
     return {
       'cartNum': cartNum,
-      'menuName': menuName,
+      'receiptLine': receiptLine,
+      'sales_menus': salesMenus,
       'tranDate': tranDate,
       'userTable_CompanyCode': userTableCompanyCode,
-      'cartNum_total_price': cartNumTotalPrice,
+      'total_pirce': totalPirce,
     };
   }
 }

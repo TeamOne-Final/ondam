@@ -3,7 +3,7 @@ import pymysql
 
 
 router = APIRouter()
-ip = "192.168.50.8"
+ip = "127.0.0.1"
 
 def connect():
         return pymysql.connect(

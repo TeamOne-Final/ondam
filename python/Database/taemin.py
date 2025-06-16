@@ -3,7 +3,7 @@ import pymysql
 
 
 router = APIRouter()
-ip = "192.168.50.8"
+ip = "127.0.0.1"
 
 def connect():
         return pymysql.connect(
@@ -399,9 +399,9 @@ async def select(storeCode: str = None, firstDate: str = None, finalDate: str = 
     try:
         sql = f'''
         select sum(b.total_price) as total_price, count(b.purchase_count) as purchase_count,
-        (select count(*) from purchase as ph where ph.quantity < 0 and ph.tranDate >= '{firstDate}' and ph.tranDate < '{finalDate}') as refund_count, 
-        (select abs(sum(ph.quantity * pd.menuPrice)) from purchase as ph, product as pd where ph.product_MenuCode = pd.menuCode and ph.quantity < 0 and ph.tranDate >= '{firstDate}' and ph.tranDate < '{finalDate}') as refund_price
-        from(select sum(ph.quantity * pd.menuPrice) as total_price, count(*) as purchase_count
+            (select count(*) from purchase as ph where ph.quantity < 0 and ph.tranDate >= '{firstDate}' and ph.tranDate < '{finalDate}') as refund_count, 
+            (select abs(sum(ph.quantity * pd.menuPrice)) from purchase as ph, product as pd where ph.product_MenuCode = pd.menuCode and ph.quantity < 0 and ph.tranDate >= '{firstDate}' and ph.tranDate < '{finalDate}') as refund_price
+                from(select sum(ph.quantity * pd.menuPrice) as total_price, count(*) as purchase_count
 	    from purchase as ph, product as pd
 	    where ph.product_menuCode = pd.menuCode
         and ph.tranDate >= '{firstDate}'

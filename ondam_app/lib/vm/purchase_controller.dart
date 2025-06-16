@@ -23,8 +23,9 @@ class PurchaseController extends ProductController{
   var purchaseSituationDataList = <Chart>[].obs;
   var purchaseSituationChartNowList = <Chart>[].obs;
   var purchaseSituationChartPreList = <Chart>[].obs;
-  var firstDate = ''.obs;
-  var finalDate = ''.obs;
+  var firstDate = ''.obs; // 처음 date
+  var finalDate = ''.obs; // 마지막 date
+  var storeCode = "".obs;
 
   final DateFormat _formatter = DateFormat('yyyy-MM-dd');
 
@@ -41,7 +42,7 @@ class PurchaseController extends ProductController{
     // 초기 조회
     selectEachStoreFirstToFinal('강남');
     selectTotalSalesCountsOne('강남');
-    loadPurchase();
+    loadPurchase('강남','%%');
   }
 
   // -- cartNum 최댓값
@@ -92,8 +93,8 @@ class PurchaseController extends ProductController{
   }
 
   // purchase 데이터 load
-  Future<void>loadPurchase()async{
-    final res = await http.get(Uri.parse("$baseUrl/giho/select/purchase"));
+  Future<void>loadPurchase(String storeCode,String date)async{
+    final res = await http.get(Uri.parse("$baseUrl/giho/select/purchase?storeCode=$storeCode&date=$date"));
     final data = json.decode(utf8.decode(res.bodyBytes));
     final List results = data["results"];
 
@@ -101,11 +102,13 @@ class PurchaseController extends ProductController{
       results.map((data) {
         return PurchasePoduct(
           cartNum: data["cartNum"], 
-          menuName: data["menuName"], 
+          receiptLine: data["receiptLine"], 
+          salesMenus: data["sales_menus"]??"null",
           tranDate: data["tranDate"], 
           userTableCompanyCode: data["userTable_CompanyCode"], 
-          cartNumTotalPrice: data["cartNum_total_price"]
+          totalPirce: data["total_pirce"],
         );
+
       },).toList();
 
     purchase.value = returnResult;
