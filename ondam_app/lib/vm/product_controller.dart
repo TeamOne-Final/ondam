@@ -12,11 +12,11 @@ class ProductController extends ManagerController{
   @override
   void onInit() {
     super.onInit();
-    fetchItemList();
+    fetchItemList('%');
   }
 
-  void fetchItemList() async{
-    final response0 = await http.get(Uri.parse('http://$globalIP/hakhyun/select/item_list'));
+  void fetchItemList(String category) async{
+    final response0 = await http.get(Uri.parse('http://$globalIP/hakhyun/select/item_list/$category'));
     final data0 = jsonDecode(response0.body);
     itemList.value = List<Map<String, dynamic>>.from(data0['results']);
   }
@@ -30,10 +30,11 @@ class ProductController extends ManagerController{
     request.fields['menuName'] = name;
     request.fields['menuPrice'] = price;
     request.fields['description'] = description;
+    request.fields['date'] = DateTime.now().toString();
     request.files.add(await http.MultipartFile.fromPath('file', imageFile!));
     var res = await request.send();
     if(res.statusCode == 200){
-      fetchItemList();
+      fetchItemList('');
       showDialog('추가가');
     }else{
       errorSnackBar();
@@ -52,12 +53,13 @@ class ProductController extends ManagerController{
     request.fields['menuName'] = name;
     request.fields['menuPrice'] = price;
     request.fields['description'] = description;
+    request.fields['date'] = DateTime.now().toString();
     if (firstDisp != 0 && imageFile != null){
       request.files.add(await http.MultipartFile.fromPath('file', imageFile!));
     }
     var res = await request.send();
     if(res.statusCode == 200){
-      fetchItemList();
+      fetchItemList('');
       showDialog('수정이');
     }else{
       errorSnackBar();
@@ -70,7 +72,7 @@ class ProductController extends ManagerController{
     if(result != "OK"){
       errorSnackBar();
     }else{
-      fetchItemList();
+      fetchItemList('');
       showDialog('삭제가');
     }
   }

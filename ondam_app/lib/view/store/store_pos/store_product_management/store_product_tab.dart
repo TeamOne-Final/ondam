@@ -29,8 +29,12 @@ class StoreProductTab extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 58, 0),
+                            child: IconButton(onPressed: () => Get.back(), icon: Icon(Icons.arrow_back),color: Colors.white,),
+                          ),
                           Text('상품관리', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)]
                         ),
                     ),

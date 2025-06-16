@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:ondam_app/vm/tab_model.dart';
+import 'package:ondam_app/vm/order_controller.dart';
 
-class VmHandlerTemp extends TabModel {
+class VmHandlerTemp extends OrderController {
   //
   final dateTimeNow = DateTime.now().obs;
 

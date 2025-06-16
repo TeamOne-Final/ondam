@@ -479,3 +479,98 @@ async def select(storeCode: str = None, firstDate: str = None, finalDate: str = 
         conn.close()
         print("Error :", e)
         return {'result':'Error'}
+    
+#-- 주문/계약 페이지 데이터 로딩
+@router.get('/select/order')
+async def select():
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        select dv.deliverycontractnum, fc.factoryname, mng.companycode, igd.ingredientname, dv.deliveryprice, dv.deliveryquantity, dv.deliverydate, dv.contractdate
+        from delivery as dv, manager as mng, ingredient as igd, factory as fc
+        where dv.manager_managerid = mng.managerid 
+        and dv.ingredient_ingredientcode = igd.ingredientcode
+        and fc.factorycode = dv.factory_factorycode
+        order by dv.deliveryDate;
+        '''
+
+        curs.execute(sql)
+        rows = curs.fetchall()
+        conn.close()
+    
+        result = [{'contractNum' : row[0],'factoryName' : row[1], 'companyCode' : row[2], 'ingredientName' : row[3],'deliveryPrice' : row[4], 'deliveryQuantity' : row[5], 'deliveryDate' : '' if row[6] == None else row[6],'contractDate' : row[7]}for row in rows]
+        return {'results' : result}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+    
+#---- 주문 추가
+@router.post('/insert/delivery')
+async def insertSelect(factorycode : str, ingredientcode : str, managerid : str, quantity : int):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        insert into delivery 
+        (factory_factorycode, ingredient_ingredientcode, 
+        manager_managerid, deliveryprice, deliveryquantity, 
+        deliverydate, contractdate) 
+        values ('{factorycode}','{ingredientcode}','{managerid}',
+        (select igd.ingredientprice from ingredient as igd where igd.ingredientcode = "{ingredientcode}")*{quantity},
+        {quantity},null,now());
+        '''
+
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+        return {'result':'OK'}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+    
+#---- 주문 도착일 갱신
+@router.post("/update/delivery")
+async def updatePurchase(contractNum : int):
+    # Connection으로 부터 Cursor 생성
+    conn = connect()
+    curs = conn.cursor()
+
+    # SQL 문장
+    try:
+        sql = f"""
+        update delivery set deliverydate = now() where deliverycontractnum = {contractNum};
+        """
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+        return {'result':'OK'}  
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}
+
+#-- 대리점 메뉴 삭제
+@router.delete('/delete/sasda')
+async def deleteSelect(menuCode : str, companyId : str):
+    conn = connect()
+    curs = conn.cursor()
+
+    try:
+        sql = f'''
+        delete from ondam.select 
+        where product_MenuCode = '{menuCode}' and manager_CompanyId = '{companyId}'
+        '''
+
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+        return {'result':'OK'}
+    except Exception as e:
+        conn.close()
+        print("Error :", e)
+        return {'result':'Error'}

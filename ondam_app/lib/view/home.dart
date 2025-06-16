@@ -31,16 +31,16 @@ class Home extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 60, 0, 30),
-                      child: Text('DASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
+                      child: Text('ONDAM\nDASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),textAlign: TextAlign.center,),
                     ),
                     Expanded(
                       child: ListView(
                         children: [
-                          _buildTile(vmHandler, 0, Icons.store, '가맹점 관리'),
+                          _buildTile(vmHandler, 0, Icons.store, '메인'),
                           _buildTile(vmHandler, 1, Icons.restaurant, '메뉴 관리'),
                           _buildTile(vmHandler, 2, Icons.approval, '주문/계약'),
                           _buildTile(vmHandler, 3, Icons.notifications, '공지 사항'),
-                          _buildTile(vmHandler, 4, Icons.manage_accounts, '직원 관리'),
+                          _buildTile(vmHandler, 4, Icons.manage_accounts, '가맹점 목록'),
                           _buildTile(vmHandler, 5, Icons.bar_chart, '매출 관리'),
                           _buildTile(vmHandler, 6, Icons.logout, '로그아웃'),
                         ],
