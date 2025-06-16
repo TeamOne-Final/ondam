@@ -8,8 +8,8 @@ import 'package:ondam_app/view/chatting/messageview.dart';
 import 'package:ondam_app/vm/chat_controller_firebase.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 
-class TableSelect extends StatelessWidget {
-  TableSelect({super.key});
+class Tableview extends StatelessWidget {
+  Tableview({super.key});
   final tableController = Get.find<Chatcontroller>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final controller = Get.find<VmHandlerTemp>();

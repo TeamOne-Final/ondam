@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ondam_app/view/chatting/table_select.dart';
+import 'package:ondam_app/view/chatting/tableview.dart';
 import 'package:ondam_app/vm/side_menu_controller.dart';
 import 'package:ondam_app/vm/vm2handelr.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
@@ -146,6 +146,43 @@ class UserMain extends StatelessWidget {
                       ),
                     ],
                   ),
+                Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.center, // 왼쪽 정렬
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(200, 80), // 최소 가로 120, 세로 50
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                          ),
+                          onPressed: () {
+                            Get.to(()=> Tableview(),arguments: tableNumberInt); 
+                          },
+                          child: Text('채팅'),
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                Align(
+                    alignment: Alignment.center, // 왼쪽 정렬
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(200, 80), // 최소 가로 120, 세로 50
+                        backgroundColor: const Color.fromARGB(255, 243, 33, 33),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: Text('직원호출'),
+                    ),
+                  ),
+                  ],
+                ),
                 ],
               ),
             ),
