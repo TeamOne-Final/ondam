@@ -10,127 +10,170 @@ class Posorderhistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("결제내역"),
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Center(child: Text(DateTime.now().toString())),
-          ),
-        ],
+        title:  Text("결제내역", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Row(
         children: [
-          // 좌측 결제내역 리스트
+          // 좌측 리스트
           Expanded(
             flex: 2,
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text("날짜선택", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextField(
-                    controller: search,
-                    decoration: InputDecoration(
-                      hintText: '주문번호, 카드번호 앞 6자리 등',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(),
+            child: Obx(() {
+              final purchases = posOrderhistroty.purchase;
+
+              // 날짜별로 그룹화
+              final Map<String, List> groupedByDate = {};
+              for (var p in purchases) {
+                final date = p.tranDate.substring(0, 10);
+                groupedByDate.putIfAbsent(date, () => []).add(p);
+              }
+
+              final dateKeys = groupedByDate.keys.toList();
+
+              return Column(
+                children: [
+                  Padding(
+                    padding:  EdgeInsets.all(12.0),
+                    child: TextField(
+                      controller: search,
+                      decoration: InputDecoration(
+                        hintText: "YYYY-MM-DD",
+                        prefixIcon:  Icon(Icons.search),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onChanged: (value) => posOrderhistroty.loadPurchase("강남", search.text),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(child: Text(DateTime.now().toString())),
-                      Icon(Icons.calendar_today, size: 20),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Obx(() => ListView.builder(
-                        itemCount: posOrderhistroty.purchase.length,
-                        itemBuilder: (context, index) {
-                          final purchase = posOrderhistroty.purchase[index];
-                          return GestureDetector(
-                            onTap: () {
-                              posOrderhistroty.selectedIndex.value = index;
-                            },
-                            child: ListTile(
-                              title: Text(purchase.tranDate.substring(0, 10)),
-                              selected: posOrderhistroty.selectedIndex.value == index,
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: dateKeys.length,
+                      itemBuilder: (context, dateIndex) {
+                        final date = dateKeys[dateIndex];
+                        final purchaseList = groupedByDate[date]!;
+
+                        return Padding(
+                          padding:  EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          child: Card(
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            child: ExpansionTile(
+                              title: Text(
+                                date,
+                                style:  TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              children: purchaseList.map((p) {
+                                final index = purchases.indexOf(p);
+                                return ListTile(
+                                  title: Text("주문번호: ${p.cartNum}"),
+                                  trailing: Text("${p.totalPirce.toStringAsFixed(0)}원"),
+                                  selected: posOrderhistroty.selectedIndex.value == index,
+                                  selectedTileColor: Colors.indigo.shade50,
+                                  onTap: () {
+                                    posOrderhistroty.selectedIndex.value = index;
+                                  },
+                                );
+                              }).toList(),
                             ),
-                          );
-                        },
-                      )),
-                ),
-              ],
-            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }),
           ),
 
-          // 우측 상세 내역
+          // 우측 상세 정보
           Expanded(
             flex: 5,
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding:  EdgeInsets.all(24.0),
               child: Obx(() {
                 final index = posOrderhistroty.selectedIndex.value;
                 if (posOrderhistroty.purchase.isEmpty) {
-                  return Center(child: Text("결제내역이 없습니다."));
+                  return  Center(child: Text(" 결제내역이 없습니다."));
                 }
+
                 final selected = posOrderhistroty.purchase[index];
 
-                return ListView(
-                  children: [
-                    Text("${selected.userTableCompanyCode}점",style: TextStyle(
-                      fontSize: 20
-                    ),),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Text("거래번호: ${selected.cartNum}번"),
-                      ],
-                    ),
-                    Divider(height: 32),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [Text("금액"), Text("${selected.cartNumTotalPrice}원")],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [Text("결제시간"), Text(selected.tranDate.substring(0, 16))],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [Text("결제수단"), Text("카드")],
-                    ),
-                    Divider(height: 32),
-                    Text("결제내역", style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 16),
-                    Text("${selected.menuName} "), 
-                    SizedBox(height: 32),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                return Card(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  child: Padding(
+                    padding:  EdgeInsets.all(24.0),
+                    child: ListView(
                       children: [
                         Text(
-                          "${selected.cartNumTotalPrice}원",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.lineThrough,
+                          "${selected.userTableCompanyCode} 지점",
+                          style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 12),
+                        Text("거래번호: ${selected.cartNum}", style: theme.textTheme.bodyMedium),
+                        Divider(height: 32),
+
+                        _infoRow("결제시간", selected.tranDate.substring(0, 16)),
+                        _infoRow("결제수단", "카드"),
+                        _infoRow("총 금액", "${selected.totalPirce.toStringAsFixed(0)}원"),
+
+                        Divider(height: 32),
+                        Text("결제 상세", style: TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
+
+                        Container(
+                          padding:  EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.grey.shade100,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(selected.receiptLine, style:  TextStyle(fontSize: 20)),
+                                  Spacer(),
+                                  Text(selected.salesMenus, textAlign: TextAlign.right,style: TextStyle(fontSize: 20),),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        SizedBox(height: 32),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            "${selected.totalPirce.toStringAsFixed(0)}원",
+                            style:  TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.indigo,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 );
               }),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _infoRow(String label, String value) {
+    return Padding(
+      padding:  EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style:  TextStyle(color: Colors.grey)),
+          Text(value),
         ],
       ),
     );
