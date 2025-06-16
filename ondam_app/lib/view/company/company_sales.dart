@@ -1,6 +1,7 @@
 // 매출관리
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/view/chart/admin_day_price.dart';
 import 'package:ondam_app/view/chart/admin_select_store.dart';
 import 'package:ondam_app/view/chart/ondam_menu_total_month.dart';
@@ -22,12 +23,13 @@ class CompanySales extends StatelessWidget {
         bottomNavigationBar: Obx(
           () => 
           BottomNavigationBar(
+            backgroundColor: backgroundColor,
             type: BottomNavigationBarType.fixed,
             currentIndex: controller.currentIndex.value,
             onTap: (index) {
               controller.tabController.index = index;
             },
-            selectedItemColor: Colors.blue,
+            selectedItemColor: mainColor,
             unselectedItemColor: Colors.black,
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.bar_chart, ), label: '본사 일별 매출'),

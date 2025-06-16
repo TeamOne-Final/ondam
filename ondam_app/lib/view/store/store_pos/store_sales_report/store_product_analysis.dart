@@ -28,7 +28,7 @@ class StoreProductAnalysis extends StatelessWidget {
                       Text(
                         '상품 분석',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 40,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -41,11 +41,12 @@ class StoreProductAnalysis extends StatelessWidget {
                         Expanded(
                           child: Card(
                             child: ListTile(
-                              title: Text('시작 날짜'),
+                              title: Text('시작 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
                               subtitle: Text(
                                 controller.firstDate.value.isEmpty
                                     ? '선택된 날짜 없음'
                                     : controller.firstDate.value,
+                                    style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                               trailing: Icon(
                                 Icons.calendar_today,
@@ -77,11 +78,12 @@ class StoreProductAnalysis extends StatelessWidget {
                         Expanded(
                           child: Card(
                             child: ListTile(
-                              title: Text('종료 날짜'),
+                              title: Text('종료 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
                               subtitle: Text(
                                 controller.firstDate.value.isEmpty
                                     ? '선택된 날짜 없음'
                                     : controller.finalDate.value,
+                                    style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                               trailing: Icon(
                                 Icons.calendar_today,
@@ -120,44 +122,47 @@ class StoreProductAnalysis extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(40.0),
-                    child: Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('총 판매 금액 : ', style: TextStyle(fontSize: 20)),
-                                Text(
-                                  '${controller.productAnalysisForTotalList[0].totalPrice}원',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('총 판매 개수 : ', style: TextStyle(fontSize: 20)),
-                                Text(
-                                  '${controller.productAnalysisForTotalList[0].quantity}건',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ],
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width/1.3,
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('총 판매 금액 : ', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                                  Text(
+                                    '${controller.productAnalysisForTotalList[0].totalPrice}원',
+                                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('총 판매 개수 : ', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                                  Text(
+                                    '${controller.productAnalysisForTotalList[0].quantity}건',
+                                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
         
-                  Text('Best 상품', style: TextStyle(fontSize: 30)),
+                  Text('Best 상품', style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold)),
                   SfCircularChart(
                     legend: Legend(
                       isVisible: true,
@@ -191,7 +196,7 @@ class StoreProductAnalysis extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: 6),
-                            Text('$name $qty개 ($percent%)'),
+                            Text('$name $qty개 ($percent%)',style: TextStyle(fontWeight: FontWeight.w600),),
                           ],
                         );
                       },
@@ -209,10 +214,10 @@ class StoreProductAnalysis extends StatelessWidget {
                   DataTable(
                     columnSpacing: 200,
                     columns: [
-                      DataColumn(label: Text('순위')),
-                      DataColumn(label: Text('상품')),
-                      DataColumn(label: Text('판매 금액')),
-                      DataColumn(label: Text('판매 개수')),
+                      DataColumn(label: Text('순위',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      DataColumn(label: Text('상품',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      DataColumn(label: Text('판매 금액',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      DataColumn(label: Text('판매 개수',style: TextStyle(fontWeight: FontWeight.bold),)),
                     ],
                     rows: List.generate(
                       controller.productAnalysisForChartList.length,
@@ -220,10 +225,10 @@ class StoreProductAnalysis extends StatelessWidget {
                         var store = controller.productAnalysisForChartList[index];
                         return DataRow(
                           cells: [
-                            DataCell(Text('${(index + 1).toString()}위')), // 순번
-                            DataCell(Text(store.menuName!)),
-                            DataCell(Text(store.totalPrice.toString())),
-                            DataCell(Text(store.quantity.toString())),
+                            DataCell(Text('${(index + 1).toString()}위',style: TextStyle(fontWeight: FontWeight.w500),)), // 순번
+                            DataCell(Text(store.menuName!,style: TextStyle(fontWeight: FontWeight.w500),)),
+                            DataCell(Text(store.totalPrice.toString(),style: TextStyle(fontWeight: FontWeight.w500),)),
+                            DataCell(Text(store.quantity.toString(),style: TextStyle(fontWeight: FontWeight.w500),)),
                           ],
                         );
                       },

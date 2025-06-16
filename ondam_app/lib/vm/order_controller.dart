@@ -39,11 +39,8 @@ Future<void> selectorder() async {
                       ingredientCode: null 
                     );
                   }).toList();
-      print(returnResult);
-      print(returnResult.length);
       selectorderList.assignAll(returnResult);
       selectorderList.refresh();
-      print('ss1122 $selectorderList');
     } catch(e){
       //
     } 
@@ -54,8 +51,6 @@ Future<void> selectorder() async {
     final uri = Uri.parse('$baseUrl/taemin/insert/delivery?factorycode=$factoryCoed&ingredientcode=$ingredientCode&managerid=$managerId&quantity=$quantity',);
     final res = await http.post(uri);
     final result = json.decode(utf8.decode(res.bodyBytes))['result'];
-    print(res);
-    print(result);
     return result;
   }
   // 주문 데이터 도착일자 추가
@@ -63,8 +58,6 @@ Future<void> selectorder() async {
     final uri = Uri.parse('$baseUrl/taemin/update/delivery?contractNum=$contractNum',);
     final res = await http.post(uri);
     final result = json.decode(utf8.decode(res.bodyBytes))['result'];
-    print(res);
-    print(result);
     return result;
   }
 
@@ -72,8 +65,6 @@ Future<void> selectorder() async {
     final uri = Uri.parse('$baseUrl/taemin/delete/delivery?contractNum=$contractNum',);
     final res = await http.post(uri);
     final result = json.decode(utf8.decode(res.bodyBytes))['result'];
-    print(res);
-    print(result);
     return result;
   }
 

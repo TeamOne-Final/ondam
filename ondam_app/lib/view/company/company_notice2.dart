@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/vm/notice_controller_firebase.dart';
 
 class CompanyNotice2 extends StatelessWidget {
@@ -14,7 +15,9 @@ class CompanyNotice2 extends StatelessWidget {
     final String content = value[1];
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: backgroundColor,
         title: Text("공지사항", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
       ),
       body: Padding(
