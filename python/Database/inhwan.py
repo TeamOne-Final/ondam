@@ -35,14 +35,13 @@ class PurchaseItemRequest(BaseModel):
     price_at_order: float # 주문 당시 가격
 
 def connect():
-        conn = pymysql.connect(
-        host=ip,
-        user="root",
-        password="qwer1234", 
-        db="ondam",           
-        charset="utf8",
+        return pymysql.connect(
+            host=ip,
+            user="root",
+            password="qwer1234", 
+            db="ondam",           
+            charset="utf8",
         )
-        return conn
 
 @router.post("/selectUser")
 async def selectUser(login : Login):
@@ -107,6 +106,7 @@ async def get_objects(companyCode: str):
         return results
     except Exception as ex:
         conn.close()
+
         return {"result": "Error", "message": str(ex)}
     
 @router.get("/get_products")
@@ -249,3 +249,8 @@ async def update_order_state_to_completed(table_num: str, companyCode: str):
         conn.close()
         print(f"Error updating order state for table {table_num}:", ex)
         raise HTTPException(status_code=500, detail=f"주문 상태 업데이트 중 서버 오류 발생: {ex}")
+
+        print("Error fetching data:", ex)
+        # 오류 발생 시 오류 메시지 포함하여 반환
+        return {"result": "Error", "message": str(ex)}
+
