@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 
 class Posorderhistory extends StatelessWidget {
@@ -12,7 +13,9 @@ class Posorderhistory extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: backgroundColor,
         title:  Text("결제내역", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Row(
@@ -55,26 +58,35 @@ class Posorderhistory extends StatelessWidget {
 
                         return Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                          child: Card(
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            child: ExpansionTile(
-                              title: Text(
-                                date,
-                                style:  TextStyle(fontWeight: FontWeight.bold),
+                          child: Container(
+                            color: backgroundColor,
+                            child: Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              child: Container(
+                                color: backgroundColor,
+                                child: ExpansionTile(
+                                  title: Text(
+                                    date,
+                                    style:  TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  children: purchaseList.map((p) {
+                                    final index = purchases.indexOf(p);
+                                    return Container(
+                                      color: backgroundColor,
+                                      child: ListTile(
+                                        title: Text("주문번호: ${p.cartNum}"),
+                                        trailing: Text("${p.totalPirce.toStringAsFixed(0)}원"),
+                                        selected: posOrderhistroty.selectedIndex.value == index,
+                                        selectedTileColor: Colors.indigo.shade50,
+                                        onTap: () {
+                                          posOrderhistroty.selectedIndex.value = index;
+                                        },
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
-                              children: purchaseList.map((p) {
-                                final index = purchases.indexOf(p);
-                                return ListTile(
-                                  title: Text("주문번호: ${p.cartNum}"),
-                                  trailing: Text("${p.totalPirce.toStringAsFixed(0)}원"),
-                                  selected: posOrderhistroty.selectedIndex.value == index,
-                                  selectedTileColor: Colors.indigo.shade50,
-                                  onTap: () {
-                                    posOrderhistroty.selectedIndex.value = index;
-                                  },
-                                );
-                              }).toList(),
                             ),
                           ),
                         );
@@ -100,61 +112,65 @@ class Posorderhistory extends StatelessWidget {
                 final selected = posOrderhistroty.purchase[index];
 
                 return Card(
+                  color: backgroundColor,
                   elevation: 3,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   child: Padding(
                     padding:  EdgeInsets.all(24.0),
-                    child: ListView(
-                      children: [
-                        Text(
-                          "${selected.userTableCompanyCode} 지점",
-                          style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 12),
-                        Text("거래번호: ${selected.cartNum}", style: theme.textTheme.bodyMedium),
-                        Divider(height: 32),
-
-                        _infoRow("결제시간", selected.tranDate.substring(0, 16)),
-                        _infoRow("결제수단", "카드"),
-                        _infoRow("총 금액", "${selected.totalPirce.toStringAsFixed(0)}원"),
-
-                        Divider(height: 32),
-                        Text("결제 상세", style: TextStyle(fontWeight: FontWeight.bold)),
-                        SizedBox(height: 8),
-
-                        Container(
-                          padding:  EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey.shade100,
+                    child: Container(
+                      color: backgroundColor,
+                      child: ListView(
+                        children: [
+                          Text(
+                            "${selected.userTableCompanyCode} 지점",
+                            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(selected.receiptLine, style:  TextStyle(fontSize: 20)),
-                                  Spacer(),
-                                  Text(selected.salesMenus, textAlign: TextAlign.right,style: TextStyle(fontSize: 20),),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(height: 32),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "${selected.totalPirce.toStringAsFixed(0)}원",
-                            style:  TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.indigo,
+                          SizedBox(height: 12),
+                          Text("거래번호: ${selected.cartNum}", style: theme.textTheme.bodyMedium),
+                          Divider(height: 32),
+                                        
+                          _infoRow("결제시간", selected.tranDate.substring(0, 16)),
+                          _infoRow("결제수단", "카드"),
+                          _infoRow("총 금액", "${selected.totalPirce.toStringAsFixed(0)}원"),
+                                        
+                          Divider(height: 32),
+                          Text("결제 상세", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25)),
+                          SizedBox(height: 8),
+                                        
+                          Container(
+                            padding:  EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: backgroundColor,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(selected.receiptLine, style:  TextStyle(fontSize: 20,fontWeight: FontWeight.w600)),
+                                    Spacer(),
+                                    Text(selected.salesMenus, textAlign: TextAlign.right,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
+                                        
+                          SizedBox(height: 32),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "총합: ${selected.totalPirce.toStringAsFixed(0)}원",
+                              style:  TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: mainColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
