@@ -15,22 +15,6 @@ class SideMenuController extends ChartController{
     selectedStoreReportProductIndex.value = index;
   }
 
-  // void selectedMenuCategory(String value) {
-  //   selectedMenuList.value = value;
-  // }
-
-  // void valueToMenuCode(String value) {
-  //   switch (value){
-  //     case '메인메뉴':
-  //       selectedMenuList = 'M';
-  //     case '사이드메뉴':
-  //       code = 'S';
-  //     case '메인메뉴':
-  //       code = 'M';
-  //     case '메인메뉴':
-  //       code = 'M';
-  //   }
-  // }
   void valueToMenuCode1(String value) {
     selectedMenuList.value = value;
     switch(selectedMenuList.value){

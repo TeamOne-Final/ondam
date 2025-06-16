@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/model/chart.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -28,7 +29,7 @@ class StoreSalesStatus extends StatelessWidget {
                     Text(
                       '매출 현황',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 40,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -44,11 +45,12 @@ class StoreSalesStatus extends StatelessWidget {
                       Expanded(
                         child: Card(
                           child: ListTile(
-                            title: Text('시작 날짜'),
+                            title: Text('시작 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
                             subtitle: Text(
                               vmHandler.firstDate.value.isEmpty
                                   ? '선택된 날짜 없음'
                                   : vmHandler.firstDate.value,
+                                  style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                             trailing: Icon(
                               Icons.calendar_today,
@@ -80,11 +82,12 @@ class StoreSalesStatus extends StatelessWidget {
                       Expanded(
                         child: Card(
                           child: ListTile(
-                            title: Text('종료 날짜'),
+                            title: Text('종료 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
                             subtitle: Text(
                               vmHandler.firstDate.value.isEmpty
                                   ? '선택된 날짜 없음'
                                   : vmHandler.finalDate.value,
+                                  style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                             trailing: Icon(
                               Icons.calendar_today,
@@ -128,16 +131,19 @@ class StoreSalesStatus extends StatelessWidget {
                     dataRowMinHeight: 48,
                     headingRowHeight: 70,
                     columns: [
-                      DataColumn(label: Text('매출')),
-                      DataColumn(label: Text('주문건')),
-                      DataColumn(label: Text('건당 평균가')),
-                      DataColumn(label: Text('반품 금액')),
+                      DataColumn(label: Text('매출',style: TextStyle(fontWeight: FontWeight.bold),)),
+                      DataColumn(label: Text('주문건',style: TextStyle(fontWeight: FontWeight.bold)),),
+                      DataColumn(label: Text('건당 평균가',style: TextStyle(fontWeight: FontWeight.bold))),
+                      DataColumn(label: Text('반품 금액',style: TextStyle(fontWeight: FontWeight.bold))),
                     ],
                     rows: [
                       DataRow(
                         cells: [
                           DataCell(
                             TextButton.icon(
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.black
+                              ),
                               onPressed: () {
                                 vmHandler
                                     .selectedStoreReportProductIndex
@@ -147,6 +153,7 @@ class StoreSalesStatus extends StatelessWidget {
                                 children: [
                                   Text(
                                     '${vmHandler.purchaseSituationDataList[0].totalPrice}원',
+                                    style: TextStyle(fontWeight: FontWeight.w600)
                                   ),
                                   Icon(Icons.arrow_right),
                                 ],
@@ -156,6 +163,7 @@ class StoreSalesStatus extends StatelessWidget {
                           DataCell(
                             Text(
                               '${vmHandler.purchaseSituationDataList[0].quantity}',
+                              style: TextStyle(fontWeight: FontWeight.w600)
                             ),
                           ),
                           DataCell(
@@ -163,12 +171,14 @@ class StoreSalesStatus extends StatelessWidget {
                                     0
                                 ? Text(
                                   '${((vmHandler.purchaseSituationDataList[0].totalPrice)! / (vmHandler.purchaseSituationDataList[0].quantity)!)}원',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
                                 )
-                                : Text('0원'),
+                                : Text('0원',style: TextStyle(fontWeight: FontWeight.w600),),
                           ),
                           DataCell(
                             Text(
                               '${vmHandler.purchaseSituationDataList[0].maleNum}원',
+                              style: TextStyle(fontWeight: FontWeight.w600)
                             ),
                           ),
                         ],
@@ -183,7 +193,7 @@ class StoreSalesStatus extends StatelessWidget {
                     legend: Legend(isVisible: true),
                     series: [
                       ColumnSeries<Chart, String>(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: mainColor,
                         name: "지난 기간 매출",
                         dataSource: vmHandler.purchaseSituationChartPreList,
                         xValueMapper: (Chart date, index) => date.tranDate,
@@ -193,7 +203,7 @@ class StoreSalesStatus extends StatelessWidget {
                         enableTooltip: true,
                       ),
                       ColumnSeries<Chart, String>(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: mainColor,
                         name: "선택 기간 매출",
                         dataSource: vmHandler.purchaseSituationChartNowList,
                         xValueMapper: (Chart date, index) => date.tranDate,
@@ -209,7 +219,6 @@ class StoreSalesStatus extends StatelessWidget {
                         text: '매출 액',
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
                         ),
                       ),
                     ),
@@ -218,7 +227,6 @@ class StoreSalesStatus extends StatelessWidget {
                         text: '날짜(일)',
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.red,
                         ),
                       ),
                     ),

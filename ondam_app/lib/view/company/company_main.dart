@@ -32,9 +32,9 @@ class CompanyMain extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(40, 40, 20, 20),
                       child: Row(
                         children: [
-                          Text('${box.read('companyCode')}', style: TextStyle(fontSize: 40)),
+                          Text('${box.read('companyCode')}', style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold)),
                           Spacer(),
-                          Obx(() => SizedBox(width: 520, child: Text("${controller.dateTimeNow.toString().substring(0,4)}년 ${controller.dateTimeNow.toString().substring(5,7)}월 ${controller.dateTimeNow.toString().substring(8,10)}일 ${controller.dateTimeNow.toString().substring(11,19)}", style: TextStyle(fontSize: 40))),),
+                          Obx(() => SizedBox(width: 260, child: Text("${controller.dateTimeNow.toString().substring(0,4)}년 ${controller.dateTimeNow.toString().substring(5,7)}월 ${controller.dateTimeNow.toString().substring(8,10)}일 ${controller.dateTimeNow.toString().substring(11,19)}", style: TextStyle(fontSize: 20))),),
                         ],
                       ),
                     ),
@@ -59,8 +59,8 @@ class CompanyMain extends StatelessWidget {
                         ),
                         _buildContainer(
                           context,
-                          '이슈(수정 필요)',
-                          '${controller.storeCount.value}건',
+                          '진행 중인 납품',
+                          '${controller.selectorderList.where((list) => list.deliveryDate?.isEmpty ?? true).length}건',
                         ),
                       ],
                     ),
@@ -76,7 +76,7 @@ class CompanyMain extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: SfCartesianChart(
-                              title: ChartTitle(text: '금월 매출'),
+                              title: ChartTitle(text: '금월 매출', textStyle: TextStyle(fontWeight: FontWeight.bold)),
                               tooltipBehavior: tooltipBehavior,
                               legend: Legend(isVisible: true),
                               series: [
@@ -84,7 +84,7 @@ class CompanyMain extends StatelessWidget {
                                   name: '금월 매출',
                                   dataSource: controller.mainTotalPriceList,
                                   xValueMapper:
-                                      (Chart tranDate, _) => tranDate.tranDate,
+                                      (Chart tranDate, _) => tranDate.tranDate!.substring(5,10),
                                   yValueMapper:
                                       (Chart totalPrice, _) =>
                                           totalPrice.totalPrice,
@@ -93,32 +93,32 @@ class CompanyMain extends StatelessWidget {
                                     isVisible: true,
                                   ),
                                   enableTooltip: true,
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: const Color.fromRGBO(46, 61, 83, 1)
                                 ),
                                 ScatterSeries<Chart, String>(
-                    name: '금월 매출',
-                    dataSource: controller.mainTotalPriceList,
-                    xValueMapper: (Chart tranDate, _) => tranDate.tranDate, 
-                    yValueMapper: (Chart totalPrice, _) =>
-                                          totalPrice.totalPrice,
-                    dataLabelSettings: DataLabelSettings(isVisible: true),
-                    enableTooltip: true)
+                                  name: '금월 매출',
+                                  dataSource: controller.mainTotalPriceList,
+                                  xValueMapper: (Chart tranDate, _) => tranDate.tranDate!.substring(5,10), 
+                                  yValueMapper: (Chart totalPrice, _) => totalPrice.totalPrice,
+                                  dataLabelSettings: DataLabelSettings(isVisible: true),
+                                  enableTooltip: true,
+                                  color: const Color.fromRGBO(46, 61, 83, 1),
+                                  )
                               ],
                               primaryXAxis: CategoryAxis(
                                 title: AxisTitle(
                                   text: '일자',
                                   textStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
                                   ),
                                 ),
                               ),
-                              primaryYAxis: CategoryAxis(
+                              primaryYAxis: NumericAxis(
+                                plotOffset: 0,
                                 title: AxisTitle(
                                   text: '매출 액',
                                   textStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.red,
                                   ),
                                 ),
                               ),
@@ -135,13 +135,13 @@ class CompanyMain extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: SfCartesianChart(
-                              title: ChartTitle(text: '금일 매출 상위 3개 매장'),
+                              title: ChartTitle(text: '금일 매출 상위 3개 매장', textStyle: TextStyle(fontWeight: FontWeight.bold)),
                               tooltipBehavior: tooltipBehavior,
                               legend: Legend(isVisible: true),
                               series: [
                                 BarSeries<Chart, String>(
                                   width: 0.3,
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: const Color.fromRGBO(46, 61, 83, 1),
                                   name: "Admin Store year and select Store",
                                   dataSource:
                                       controller.selectDayTop3RetailerList,
@@ -160,16 +160,15 @@ class CompanyMain extends StatelessWidget {
                                   text: '매장',
                                   textStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
                                   ),
                                 ),
                               ),
-                              primaryYAxis: CategoryAxis(
+                              primaryYAxis: NumericAxis(
+                                plotOffset: 0,
                                 title: AxisTitle(
                                   text: '매출 액',
                                   textStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.red,
                                   ),
                                 ),
                               ),
@@ -191,11 +190,11 @@ class CompanyMain extends StatelessWidget {
                           scrollDirection: Axis.vertical,
                           child: DataTable(
                             columns: [
-                              DataColumn(label: Text('ID')),
-                              DataColumn(label: Text('매장명')),
-                              DataColumn(label: Text('지역')),
-                              DataColumn(label: Text('금일 결제 견수')),
-                              DataColumn(label: Text('운영상태')),
+                              DataColumn(label: Text('ID', style: TextStyle(fontWeight: FontWeight.bold),)),
+                              DataColumn(label: Text('매장명', style: TextStyle(fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text('지역', style: TextStyle(fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text('금일 결제 견수', style: TextStyle(fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text('운영상태', style: TextStyle(fontWeight: FontWeight.bold))),
                             ],
                             rows:
                                 controller.storeList1.map((store) {

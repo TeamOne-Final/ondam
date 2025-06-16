@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/model/chart.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -12,15 +13,18 @@ class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF6F7FB),
     appBar: AppBar(
       centerTitle: false,
-      title: Text('메뉴 월별 총 매출액'),
+      title: Text('메뉴 월별 총 매출액',style: TextStyle(fontWeight: FontWeight.bold),),
+      backgroundColor: backgroundColor,
       actions: [
         Obx(() => Row(
           children: [
             DropdownButton<String>(
               value: handler.selectedYear.value,
               icon: Icon(Icons.keyboard_arrow_down),
+              dropdownColor: backgroundColor,
               items: handler.yearList.map<DropdownMenuItem<String>>((String yearString){
                 return DropdownMenuItem(
                   value: yearString,
@@ -42,6 +46,7 @@ class SecondPage extends StatelessWidget {
             DropdownButton<String>(
               value: handler.selectedMonth.value,
               icon: Icon(Icons.keyboard_arrow_down),
+              dropdownColor: backgroundColor,
               items: handler.monthList.map<DropdownMenuItem<String>>((String monthString){
                 return DropdownMenuItem(
                   value: monthString,
@@ -72,13 +77,16 @@ class SecondPage extends StatelessWidget {
         return Center(
           child: SfCartesianChart(
             title: ChartTitle(
-              text: '온담 제품 년/월별 총 매출 확인'
+              text: '온담 제품 년/월별 총 매출 확인',
+              textStyle: TextStyle(
+                fontWeight: FontWeight.bold
+              ),
             ),
             tooltipBehavior: tooltipBehavior,
             legend: Legend(isVisible: true),
             series: [
               BarSeries<Chart,String>(
-                color: Theme.of(context).colorScheme.primary,
+                color: mainColor,
                 name: "Menu Year & Month Prices",
                 dataSource: handler.monthMenu,
                 xValueMapper: (Chart menus, _) => menus.menuName,
@@ -90,11 +98,11 @@ class SecondPage extends StatelessWidget {
               ),
             ],
             primaryXAxis: CategoryAxis(
-              title: AxisTitle(text: '메뉴 명',textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+              title: AxisTitle(text: '메뉴 명',textStyle: TextStyle(fontWeight: FontWeight.bold)),
             ),
             primaryYAxis: NumericAxis(
               plotOffset: 0,
-              title: AxisTitle(text: '매출 액',textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+              title: AxisTitle(text: '매출 액',textStyle: TextStyle(fontWeight: FontWeight.bold)),
             ),
           ),
         );
