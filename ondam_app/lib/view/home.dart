@@ -31,7 +31,7 @@ class Home extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 60, 0, 30),
-                      child: Text('DASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
+                      child: Text('ONDAM\nDASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),textAlign: TextAlign.center,),
                     ),
                     Expanded(
                       child: ListView(

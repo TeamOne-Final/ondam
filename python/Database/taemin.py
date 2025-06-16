@@ -493,7 +493,7 @@ async def select():
         where dv.manager_managerid = mng.managerid 
         and dv.ingredient_ingredientcode = igd.ingredientcode
         and fc.factorycode = dv.factory_factorycode
-        order by dv.contractdate;
+        order by dv.deliveryDate;
         '''
 
         curs.execute(sql)

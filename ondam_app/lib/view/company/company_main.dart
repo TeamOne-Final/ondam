@@ -59,8 +59,8 @@ class CompanyMain extends StatelessWidget {
                         ),
                         _buildContainer(
                           context,
-                          '이슈(수정 필요)',
-                          '${controller.storeCount.value}건',
+                          '진행 중인 납품',
+                          '${controller.selectorderList.where((list) => list.deliveryDate?.isEmpty ?? true).length}건',
                         ),
                       ],
                     ),
