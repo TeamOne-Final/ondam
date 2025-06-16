@@ -6,6 +6,7 @@ class Product{
   final int menuPrice;
   final Uint8List menuImage;
   final String description;
+  final String date;
 
   Product({
     required this.menuCode,
@@ -13,6 +14,7 @@ class Product{
     required this.menuPrice,
     required this.menuImage,
     required this.description,
+    required this.date,
   });
     factory Product.fromJson(Map<String, dynamic> json){
     return Product(
@@ -20,7 +22,8 @@ class Product{
       menuName: json['menuName'], 
       menuPrice: json['menuPrice'], 
       menuImage: json['menuImage'], 
-      description: json['description']
+      description: json['description'],
+      date: json['date']
     );
   }
 
@@ -30,7 +33,8 @@ class Product{
       'menuName': menuName,
       'menuPrice': menuPrice,
       'menuImage': menuImage,
-      'description': description
+      'description': description,
+      'date': date
     };
   }
 }

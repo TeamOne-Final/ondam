@@ -73,11 +73,11 @@ async def daily_purchase_count():
         conn.close()
         return{'results':row[0]}
 
-@router.get("/select/item_list")
-async def item_list():
+@router.get("/select/item_list/{category}")
+async def item_list(category: str = None):
         conn=connect()
         curs=conn.cursor()
-        sql = "SELECT * FROM product ORDER BY menuCode"
+        sql = f"SELECT * FROM product WHERE menuCode like '{category}%' ORDER BY menuCode"
         curs.execute(sql)
         rows = curs.fetchall()
         conn.close()
@@ -95,27 +95,27 @@ async def item_list():
 
 # 메뉴 추가
 @router.post("/insert/item")
-async def insert_item(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), file: UploadFile = File(...), description: str=Form(...)):
+async def insert_item(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), file: UploadFile = File(...), description: str=Form(...), date: str=Form(...)):
         menuImage = await file.read()
         conn=connect()
         curs=conn.cursor()
         sql = """
-        INSERT INTO product (menuCode, menuName, menuPrice, menuImage, description)
-        VALUES (%s, %s, %s, %s, %s)
+        INSERT INTO product (menuCode, menuName, menuPrice, menuImage, description, date)
+        VALUES (%s, %s, %s, %s, %s, %s)
         """
-        curs.execute(sql, (menuCode, menuName, menuPrice, menuImage, description))
+        curs.execute(sql, (menuCode, menuName, menuPrice, menuImage, description, date))
         conn.commit()
         conn.close()
         return{'result':'OK'}
 
 # 메뉴 수정 이미지 제외
 @router.post("/update/item")
-async def update(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), description: str=Form(...)):
+async def update(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), description: str=Form(...), date: str=Form(...)):
         try:
                 conn=connect()
                 curs=conn.cursor()
-                sql = "UPDATE product SET menuName=%s, menuPrice=%s, description=%s WHERE menuCode=%s"
-                curs.execute(sql, (menuName, menuPrice, description, menuCode))
+                sql = "UPDATE product SET menuName=%s, menuPrice=%s, description=%s, date=%s WHERE menuCode=%s"
+                curs.execute(sql, (menuName, menuPrice, description, date, menuCode))
                 conn.commit()
                 conn.close()
                 return {'result' : 'OK'}
@@ -125,13 +125,13 @@ async def update(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: st
 
 # 메뉴 수정 이미지 포함
 @router.post("/update/item_with_image")
-async def update_with_image(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), description: str=Form(...), file: UploadFile = File(...)):
+async def update_with_image(menuCode: str=Form(...), menuName: str=Form(...), menuPrice: str=Form(...), description: str=Form(...), file: UploadFile = File(...), date: str=Form(...)):
         try:
                 menuImage = await file.read()
                 conn = connect()
                 curs = conn.cursor()
-                sql = "UPDATE product SET menuName=%s, menuPrice=%s, description=%s, menuImage=%s WHERE menuCode=%s"
-                curs.execute(sql, (menuName, menuPrice, description, menuImage, menuCode))
+                sql = "UPDATE product SET menuName=%s, menuPrice=%s, description=%s, menuImage=%s, date=%s WHERE menuCode=%s"
+                curs.execute(sql, (menuName, menuPrice, description, menuImage, date, menuCode))
                 conn.commit()
                 conn.close()
                 return {'result':'OK'}
@@ -152,3 +152,14 @@ async def delete_item(code: str):
         except Exception as e:
                 print("Error:", e)
                 return {"result":"Error"}
+        
+# 남녀 카운트 for 성비
+@router.get("/select/gender_count")
+async def select_gender_count():
+        conn=connect()
+        curs=conn.cursor()
+        sql = "SELECT SUM(femaleNum), SUM(maleNum) FROM purchase WHERE SUBSTRING(tranDate, 1,7) = SUBSTRING(CURDATE(), 1,7)"
+        curs.execute(sql)
+        row = curs.fetchone()
+        conn.close()
+        return{'female':row[0]or 0, 'male':row[1]or 0}
