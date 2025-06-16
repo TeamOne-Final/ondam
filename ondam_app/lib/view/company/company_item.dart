@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 
 class CompanyItem extends StatelessWidget {
@@ -31,30 +32,33 @@ class CompanyItem extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 40, 20, 20),
-                    child: Text('메뉴관리', style: TextStyle(fontSize: 40),),
+                    child: Text('메뉴관리', style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
                   ),
                   Obx(() => 
-                  DropdownButton(
-                    value: controller.selectedMenuList.value.isEmpty ? null : controller.selectedMenuList.value,
-                    hint: Text('메뉴선택', style: TextStyle(fontSize: 25),),
-                    items: items.map((String item) {
-                      return DropdownMenuItem(
-                        value: item,
-                        child: Text(item, style: TextStyle(color: Colors.black, fontSize: 25),),
-                      );
-                    },).toList(), 
-                    onChanged: (value) {
-                      controller.valueToMenuCode1(value!);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20,15,0,0),
+                    child: DropdownButton(
+                      value: controller.selectedMenuList.value.isEmpty ? null : controller.selectedMenuList.value,
+                      hint: Text('메뉴선택', style: TextStyle(fontSize: 25),),
+                      items: items.map((String item) {
+                        return DropdownMenuItem(
+                          value: item,
+                          child: Text(item, style: TextStyle(color: Colors.black, fontSize: 25),),
+                        );
+                      },).toList(), 
+                      onChanged: (value) {
+                        controller.valueToMenuCode1(value!);
+                      },
+                    ),
                   ),
                   ),
                   Spacer(),
 
                   // ######## 메뉴 추가 ########
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 220, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 70, 0),
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 56, 122, 255)),
+                      style: ElevatedButton.styleFrom(backgroundColor:mainColor),
                       onPressed: () async{
                         // final image = controller.imageFile.value; // obx 때문에 안 쓰게 됨
                         itemCodeController.clear();
@@ -154,12 +158,12 @@ class CompanyItem extends StatelessWidget {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(0, 40, 30, 0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       ElevatedButton(
-                                        style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 56, 122, 255)),
+                                        style: ElevatedButton.styleFrom(backgroundColor: mainColor),
                                         onPressed: () {
                                           String code = itemCodeController.text;
                                           String name = itemNameController.text;
@@ -208,7 +212,7 @@ class CompanyItem extends StatelessWidget {
                     final item = controller.itemList[index];
                     return Center(
                       child: Container(
-                        width: 600,
+                        width: MediaQuery.of(context).size.width/1.5,
                         margin: EdgeInsets.only(bottom: 16),
                         padding: EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -255,7 +259,6 @@ class CompanyItem extends StatelessWidget {
                             // 버튼들
                             Row(
                               children: [
-
                                 // ######## 메뉴 수정 ########
                                 ElevatedButton(
                                   onPressed: () async{
@@ -381,12 +384,12 @@ class CompanyItem extends StatelessWidget {
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color.fromARGB(255, 98, 234, 83),
-                                    foregroundColor: Colors.black,
+                                    backgroundColor: mainColor,
+                                    foregroundColor: Colors.white,
                                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                   ),
-                                  child: Text('수정', style: TextStyle(fontSize: 20),),
+                                  child: Text('수정', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                 ),
                                 SizedBox(width: 8),
 
@@ -425,12 +428,12 @@ class CompanyItem extends StatelessWidget {
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.redAccent,
+                                    backgroundColor: Colors.red,
                                     foregroundColor: Colors.white,
                                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                   ),
-                                  child: Text('삭제', style: TextStyle(fontSize: 20),),
+                                  child: Text('삭제', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                 ),
                               ],
                             )

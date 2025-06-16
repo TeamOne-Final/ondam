@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/model/chart.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -13,13 +14,16 @@ class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    backgroundColor: Color(0xFFF6F7FB),
       appBar: AppBar(
+        backgroundColor: Color(0xFFF6F7FB),
         centerTitle: false,
-        title: Text('본사 일별 매출'),
+        title: Text('본사 일별 매출',style: TextStyle(fontWeight: FontWeight.bold),),
         actions: [
           Obx(() => Row(
             children: [
             DropdownButton<String>(
+              dropdownColor: Color(0xFFF6F7FB),
               value: handler.selectedYear.value,
               icon: Icon(Icons.keyboard_arrow_down),
               items: handler.yearList.map<DropdownMenuItem<String>>((String yearString){
@@ -41,6 +45,7 @@ class FirstPage extends StatelessWidget {
               },
             ),
             DropdownButton<String>(
+              dropdownColor: Color(0xFFF6F7FB),
               value: handler.selectedMonth.value,
               icon: Icon(Icons.keyboard_arrow_down),
               items: handler.monthList.map<DropdownMenuItem<String>>((String monthString){
@@ -62,6 +67,7 @@ class FirstPage extends StatelessWidget {
               },
             ),
             DropdownButton<String>(
+              dropdownColor: backgroundColor,
               value: handler.selectedStore.value,
               icon: Icon(Icons.keyboard_arrow_down),
               items: handler.storeList.map<DropdownMenuItem<String>>((String storeString){
@@ -93,13 +99,16 @@ class FirstPage extends StatelessWidget {
         return Center(
           child: SfCartesianChart(
             title: ChartTitle(
-              text: '본사 일별 매출 확인'
+              text: '본사 일별 매출 확인',
+              textStyle: TextStyle(
+              fontWeight: FontWeight.bold
+              ),
               ),
               tooltipBehavior: tooltipBehavior,
               legend: Legend(isVisible: true),
               series: [
                 BarSeries<Chart,String>(
-                color: Theme.of(context).colorScheme.primary,
+                color: mainColor,
                 name: "Admin Store year,month and select Store",
                 dataSource: handler.selectRetailerDayList,
                   xValueMapper: (Chart date, index) => date.tranDate,
@@ -108,14 +117,15 @@ class FirstPage extends StatelessWidget {
                     isVisible: true
                   ),
                   enableTooltip: true,
+                  
                   ),
               ],
               primaryXAxis: CategoryAxis(
-                title: AxisTitle(text: '날짜(일)',textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+                title: AxisTitle(text: '날짜(일)',textStyle: TextStyle(fontWeight: FontWeight.bold)),
               ),
               primaryYAxis: NumericAxis(
                 plotOffset: 0,
-              title: AxisTitle(text: '매출 액',textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+              title: AxisTitle(text: '매출 액',textStyle: TextStyle(fontWeight: FontWeight.bold)),
             ),
             ),
           );

@@ -1,6 +1,7 @@
 // 본사 주문/계약
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 
 class CompanyOrder extends StatelessWidget {
@@ -26,15 +27,14 @@ class CompanyOrder extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 40, 20, 20),
-                    child: Text('주문 관리', style: TextStyle(fontSize: 40),),
+                    child: Text('주문 관리', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),),
                   ),
                   Spacer(),
-
                   // ######## 메뉴 추가 ########
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 220, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 60, 0),
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 56, 122, 255)),
+                      style: ElevatedButton.styleFrom(backgroundColor: mainColor,foregroundColor: Colors.white),
                       onPressed: () async{
                         ingredientCode.clear();
                         companyCode.clear();
@@ -54,7 +54,7 @@ class CompanyOrder extends StatelessWidget {
                                               children: [
                                                 Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text('재료 코드 : ', style: TextStyle(fontSize: 20),),
+                                        child: Text('재료 코드 : ', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                       ),
                                       SizedBox(
                                         width: 200,
@@ -69,13 +69,13 @@ class CompanyOrder extends StatelessWidget {
                                               children: [
                                                 Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text('거래처 코드 : ', style: TextStyle(fontSize: 20),),
+                                        child: Text('거래처 코드 : ', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                       ),
                                       SizedBox(
                                         width: 200,
                                         child: TextField(
                                           controller: factoryCode,
-                                          style: TextStyle(fontSize: 20),
+                                          style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
                                         ),
                                       )
                                               ],
@@ -84,7 +84,7 @@ class CompanyOrder extends StatelessWidget {
                                               children: [
                                                 Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text('지점 코드 : ', style: TextStyle(fontSize: 20),),
+                                        child: Text('지점 코드 : ', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                       ),
                                       SizedBox(
                                         width: 200,
@@ -99,7 +99,7 @@ class CompanyOrder extends StatelessWidget {
                                               children: [
                                                 Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text('수량 : ', style: TextStyle(fontSize: 20),),
+                                        child: Text('수량 : ', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                       ),
                                       SizedBox(
                                         width: 200,
@@ -122,14 +122,14 @@ class CompanyOrder extends StatelessWidget {
                                                       controller.selectorder();
                                                       Get.back();
                                                     }, 
-                                                    child: Text('확인', style: TextStyle(fontSize: 24, color: Colors.black)),
+                                                    child: Text('확인', style: TextStyle(fontSize: 24, color: Colors.black,fontWeight: FontWeight.bold)),
                                                   ),
                                                   ElevatedButton( 
                                                   style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(46, 61, 83, 1)),
                                                     onPressed: () {
                                                       Get.back();
                                                     },
-                                                    child: Text('취소', style: TextStyle(fontSize: 24, color: Colors.white)),
+                                                    child: Text('취소', style: TextStyle(fontSize: 24, color: Colors.white,fontWeight: FontWeight.bold)),
                                                   ),
                                                 ],
                                               ),
@@ -137,10 +137,9 @@ class CompanyOrder extends StatelessWidget {
                                           ],
                                         ),
                                       ));},
-                          child: Text('주문'),)
+                          child: Text('주문',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),)
               )]
               ),
-
               // ######## 메뉴 리스트 뷰 ########
               Obx(() => 
               Expanded(
@@ -151,7 +150,7 @@ class CompanyOrder extends StatelessWidget {
                     final item = controller.selectorderList[index];
                     return Center(
                       child: Container(
-                        width: 600,
+                        width: MediaQuery.of(context).size.width/1.5,
                         margin: EdgeInsets.only(bottom: 16),
                         padding: EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -176,28 +175,28 @@ class CompanyOrder extends StatelessWidget {
                                 children: [
                                   Row(
                                     children: [
-                                      Text('계약번호 : ${item.contractNum}\t\t\t'),
-                                      Text('재료 이름 : ${item.ingredientName}')
+                                      Text('계약번호 : ${item.contractNum}\t\t\t',style: TextStyle(fontWeight: FontWeight.bold)),
+                                      Text('재료 이름 : ${item.ingredientName}',style: TextStyle(fontWeight: FontWeight.bold))
                                     ],
                                   ),
                                   Row(
                                     children: [
-                                      Text('주문 수량 : ${item.quantity}\t\t\t'),
-                                      Text('주문 금액 : ${item.price}원')
+                                      Text('주문 수량 : ${item.quantity}\t\t\t',style: TextStyle(fontWeight: FontWeight.w600)),
+                                      Text('주문 금액 : ${item.price}원',style: TextStyle(fontWeight: FontWeight.w600))
                                     ],
                                   )
                                   ,
                                   Row(
                                     children: [
-                                      Text('배송지 : ${item.factoryName}  =>  도착지 : ${item.companyCode}')
+                                      Text('배송지 : ${item.factoryName}  =>  도착지 : ${item.companyCode}',style: TextStyle(fontWeight: FontWeight.w600))
                                     ],
                                   ),
                                   Row(
                                     children: [
-                                      Text('주문 일자 : ${item.contractDate.toString().substring(0,10)}\t\t\t'),
+                                      Text('주문 일자 : ${item.contractDate.toString().substring(0,10)}\t\t\t',style: TextStyle(fontWeight: FontWeight.w600)),
                                       item.deliveryDate == ''
-                                      ? Text('아직 도착 하지않았습니다.')
-                                      :Text('배달 일자 : ${item.deliveryDate!.substring(0,10)}')
+                                      ? Text('아직 도착 하지않았습니다.',style: TextStyle(fontWeight: FontWeight.w600))
+                                      :Text('배달 일자 : ${item.deliveryDate!.substring(0,10)}',style: TextStyle(fontWeight: FontWeight.w600))
                                     ],
                                   )
                                 ],
@@ -211,8 +210,9 @@ class CompanyOrder extends StatelessWidget {
                                 ElevatedButton(
                                   onPressed: () async{
                                     await Get.defaultDialog(
+                                      backgroundColor: backgroundColor,
                                       title: '배송 확인',
-                                      titleStyle: TextStyle(fontSize: 30),
+                                      titleStyle: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),
                                       titlePadding: EdgeInsets.fromLTRB(40, 40, 40, 20),
                                       content: Padding(
                                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -230,16 +230,19 @@ class CompanyOrder extends StatelessWidget {
                                                       controller.selectorder();
                                                       Get.back();
                                                     }, 
-                                                    child: Text('배송 확인', style: TextStyle(fontSize: 24, color: Colors.black)),
+                                                    child: Text('배송 확인', style: TextStyle(fontSize: 24, color: Colors.white,fontWeight: FontWeight.bold)),
                                                   ),
-                                                  ElevatedButton( 
-                                                  style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(46, 61, 83, 1)),
-                                                    onPressed: () {
-                                                      controller.deleteDelivery(item.contractNum!);
-                                                      controller.selectorder();
-                                                      Get.back();
-                                                    },
-                                                    child: Text('취소', style: TextStyle(fontSize: 24, color: Colors.white)),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 20),
+                                                    child: ElevatedButton( 
+                                                    style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(46, 61, 83, 1)),
+                                                      onPressed: () {
+                                                        controller.deleteDelivery(item.contractNum!);
+                                                        controller.selectorder();
+                                                        Get.back();
+                                                      },
+                                                      child: Text('취소', style: TextStyle(fontSize: 24, color: Colors.white,fontWeight: FontWeight.bold)),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -250,12 +253,12 @@ class CompanyOrder extends StatelessWidget {
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color.fromARGB(255, 98, 234, 83),
-                                    foregroundColor: Colors.black,
+                                    backgroundColor: mainColor,
+                                    foregroundColor: Colors.white,
                                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                   ),
-                                  child: Text('배송 확인', style: TextStyle(fontSize: 20),),
+                                  child: Text('배송 확인', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                 ),
                                 SizedBox(width: 8),
 
@@ -278,7 +281,7 @@ class CompanyOrder extends StatelessWidget {
                                                 style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
-                                                  child: Text('삭제', style: TextStyle(fontSize: 24, color: Colors.white),),
+                                                  child: Text('삭제', style: TextStyle(fontSize: 24, color: Colors.white,fontWeight: FontWeight.bold),),
                                                 ),
                                               ),
                                               ElevatedButton(
@@ -286,7 +289,7 @@ class CompanyOrder extends StatelessWidget {
                                                 style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(46, 61, 83, 1)),
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
-                                                  child: Text('취소', style: TextStyle(fontSize: 24, color: Colors.white),),
+                                                  child: Text('취소', style: TextStyle(fontSize: 24, color: Colors.white,fontWeight: FontWeight.bold),),
                                                 ),
                                               ),
                                             ],
@@ -301,7 +304,7 @@ class CompanyOrder extends StatelessWidget {
                                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                   ),
-                                  child: Text('주문 삭제', style: TextStyle(fontSize: 20),),
+                                  child: Text('주문 삭제', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                 ),
                               ],
                             )
@@ -317,7 +320,7 @@ class CompanyOrder extends StatelessWidget {
                                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                   ),
-                                  child: Text('배달 완료', style: TextStyle(fontSize: 20),),
+                                  child: Text('배달 완료', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                 )
                             ],
                           )],

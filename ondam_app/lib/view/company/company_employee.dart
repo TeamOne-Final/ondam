@@ -38,7 +38,7 @@ class CompanyEmployee extends StatelessWidget {
                         final employee = controller.employeeList[index];
                         return Center(
                           child: Container(
-                            width: 600,
+                            width: MediaQuery.of(context).size.width/1.5,
                             margin: EdgeInsets.only(bottom: 16),
                             padding: EdgeInsets.all(16),
                             decoration: BoxDecoration(

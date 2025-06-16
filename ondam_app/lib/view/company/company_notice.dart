@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/view/company/company_notice2.dart';
 import 'package:ondam_app/vm/notice_controller_firebase.dart';
 
@@ -13,15 +14,18 @@ class CompanyNotice extends StatelessWidget {
   Widget build(BuildContext context) {
     noticecontroller.loadNotice();
     return Scaffold(
-      backgroundColor:   Color(0xFFEFEFEF),
+      backgroundColor:  backgroundColor,
       appBar: AppBar(
-        backgroundColor:   Color(0xFFEFEFEF),
+        backgroundColor:  backgroundColor,
         elevation: 2,
-        title:   Text(" 공지사항", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title:   Text("공지사항", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         actions: [
-          IconButton(
-            onPressed: () => addshow(),
-            icon:  Icon(Icons.add_circle_rounded, color: Colors.black, size: 28),
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: IconButton(
+              onPressed: () => addshow(),
+              icon:  Icon(Icons.add_circle_rounded, color: Colors.black, size: 28),
+            ),
           ),
         ],
       ),
@@ -59,8 +63,8 @@ class CompanyNotice extends StatelessWidget {
                 title: Text(
                   notice.state == 0 ? notice.title : " [중요] ${notice.title}",
                   style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                     color: notice.state == 0 ? Colors.black87 : Colors.redAccent,
                   ),
                 ),
@@ -72,6 +76,7 @@ class CompanyNotice extends StatelessWidget {
                   ),
                 ),
                 trailing: PopupMenuButton<String>(
+                  color: backgroundColor,
                   icon:  Icon(Icons.more_vert),
                   onSelected: (value) {
                     if (value == 'edit') {
@@ -79,7 +84,9 @@ class CompanyNotice extends StatelessWidget {
                     } else if (value == 'delete') {
                       Get.defaultDialog(
                         title: "삭제 확인",
+                        titleStyle: TextStyle(fontWeight: FontWeight.bold),
                         middleText: "정말로 삭제하시겠습니까?",
+                        middleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                         confirm: ElevatedButton(
                           onPressed: () {
                             noticecontroller.deleteNotice(notice.noticeId);
@@ -89,11 +96,15 @@ class CompanyNotice extends StatelessWidget {
                             backgroundColor: Colors.redAccent,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
-                          child:   Text("삭제", style: TextStyle(color: Colors.white)),
+                          child:   Text("삭제", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
                         ),
-                        cancel: TextButton(
+                        cancel: ElevatedButton(
                           onPressed: () => Get.back(),
-                          child:   Text("취소"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: mainColor,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child:   Text("취소",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                         ),
                       );
                     }
@@ -116,6 +127,7 @@ class CompanyNotice extends StatelessWidget {
     titleTextController.clear();
     contentTextController.clear();
     Get.defaultDialog(
+      backgroundColor: backgroundColor,
       title: "공지 추가",
       content: buildDialogContent(selectedType, isUpdate: false),
     );
@@ -126,6 +138,7 @@ class CompanyNotice extends StatelessWidget {
     titleTextController.text = notice.title;
     contentTextController.text = notice.content;
     Get.defaultDialog(
+      backgroundColor: backgroundColor,
       title: "공지 수정",
       content: buildDialogContent(selectedType, isUpdate: true, notice: notice),
     );
@@ -139,7 +152,8 @@ class CompanyNotice extends StatelessWidget {
         final double dialogWidth = 700;
         final double dialogHeight = 600;
     
-        return SizedBox(
+        return Container(
+          color: backgroundColor,
           width: dialogWidth,
           height: dialogHeight,
           child: SingleChildScrollView(
