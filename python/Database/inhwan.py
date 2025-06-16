@@ -4,7 +4,7 @@ import pymysql
 
 
 router = APIRouter()
-ip = "127.0.0.1"
+ip = "192.168.50.8"
 
 class Table(BaseModel):
      
