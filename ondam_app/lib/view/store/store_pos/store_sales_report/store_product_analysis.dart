@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/model/chart.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -14,6 +15,7 @@ class StoreProductAnalysis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: SingleChildScrollView(
         child: Obx(() {
           if (controller.productAnalysisForTotalList.isEmpty) {
@@ -40,6 +42,7 @@ class StoreProductAnalysis extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Card(
+                            color: backgroundColor,
                             child: ListTile(
                               title: Text('시작 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
                               subtitle: Text(
@@ -65,11 +68,13 @@ class StoreProductAnalysis extends StatelessWidget {
                                   controller.firstDate.value = _formatter.format(
                                     picked,
                                   );
-                                  controller.selectEachStoreFirstToFinal('강남');
-                                  controller.purchaseSituationData('강남');
-                                  controller.purchaseSituationChart('강남');
-                                  controller.productAnalysisChart('강남');
-                                  controller.productAnalysisTotal('강남');
+                                  controller.selectEachStoreFirstToFinal(controller.box.read('companyCode'));
+                                  controller.purchaseSituationData(controller.box.read('companyCode'));
+                                  controller.purchaseSituationChart(controller.box.read('companyCode'));
+                                  controller.productAnalysisChart(controller.box.read('companyCode'));
+                                  controller.productAnalysisTotal(controller.box.read('companyCode'));
+                                  controller.selectEachStoreFirstToFinal(controller.box.read('companyCode'));
+                                  controller.selectTotalSalesCountsOne(controller.box.read('companyCode'));
                                 }
                               },
                             ),
@@ -77,6 +82,7 @@ class StoreProductAnalysis extends StatelessWidget {
                         ),
                         Expanded(
                           child: Card(
+                            color: backgroundColor,
                             child: ListTile(
                               title: Text('종료 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
                               subtitle: Text(
@@ -107,11 +113,13 @@ class StoreProductAnalysis extends StatelessWidget {
                                   controller.finalDate.value = _formatter.format(
                                     picked,
                                   );
-                                  controller.selectEachStoreFirstToFinal('강남');
-                                  controller.purchaseSituationData('강남');
-                                  controller.purchaseSituationChart('강남');
-                                  controller.productAnalysisChart('강남');
-                                  controller.productAnalysisTotal('강남');
+                                  controller.selectEachStoreFirstToFinal(controller.box.read('companyCode'));
+                                  controller.purchaseSituationData(controller.box.read('companyCode'));
+                                  controller.purchaseSituationChart(controller.box.read('companyCode'));
+                                  controller.productAnalysisChart(controller.box.read('companyCode'));
+                                  controller.productAnalysisTotal(controller.box.read('companyCode'));
+                                  controller.selectEachStoreFirstToFinal(controller.box.read('companyCode'));
+                                  controller.selectTotalSalesCountsOne(controller.box.read('companyCode'));
                                 }
                               },
                             ),
@@ -125,6 +133,7 @@ class StoreProductAnalysis extends StatelessWidget {
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width/1.3,
                       child: Card(
+                        color: backgroundColor,
                         elevation: 3,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -225,10 +234,10 @@ class StoreProductAnalysis extends StatelessWidget {
                         var store = controller.productAnalysisForChartList[index];
                         return DataRow(
                           cells: [
-                            DataCell(Text('${(index + 1).toString()}위',style: TextStyle(fontWeight: FontWeight.w500),)), // 순번
-                            DataCell(Text(store.menuName!,style: TextStyle(fontWeight: FontWeight.w500),)),
-                            DataCell(Text(store.totalPrice.toString(),style: TextStyle(fontWeight: FontWeight.w500),)),
-                            DataCell(Text(store.quantity.toString(),style: TextStyle(fontWeight: FontWeight.w500),)),
+                            DataCell(Text('${(index + 1).toString()}위',style: TextStyle(fontWeight: FontWeight.w600),)), // 순번
+                            DataCell(Text(store.menuName!,style: TextStyle(fontWeight: FontWeight.w600),)),
+                            DataCell(Text(store.totalPrice.toString(),style: TextStyle(fontWeight: FontWeight.w600),)),
+                            DataCell(Text(store.quantity.toString(),style: TextStyle(fontWeight: FontWeight.w600),)),
                           ],
                         );
                       },

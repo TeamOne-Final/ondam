@@ -41,6 +41,7 @@ class CompanyItem extends StatelessWidget {
                     child: DropdownButton(
                       value: controller.selectedMenuList.value.isEmpty ? null : controller.selectedMenuList.value,
                       hint: Text('메뉴선택', style: TextStyle(fontSize: 25),),
+                      dropdownColor: backgroundColor,
                       items: items.map((String item) {
                         return DropdownMenuItem(
                           value: item,

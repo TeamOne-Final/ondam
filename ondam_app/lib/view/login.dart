@@ -9,6 +9,7 @@ import 'package:ondam_app/view/store/store_main.dart';
 import 'package:ondam_app/widget/custom_text_field.dart';
 import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class Login extends StatelessWidget {
   Login({super.key});
   final idController = TextEditingController();
@@ -48,6 +49,7 @@ class Login extends StatelessWidget {
                     child: CustomTextField(
                       label: '비밀번호를 입력해 주세요',
                       controller: passController,
+                      obscureText: true,
                     ),
                   ),
                   ElevatedButton(
@@ -105,22 +107,22 @@ class Login extends StatelessWidget {
           // 로그인 성공!
           print('로그인 성공! 회사 코드: $companyCode');
           if (companyCode == '본사') {
-            Get.snackbar('로그인 성공', '환영합니다');
+            Get.snackbar('로그인 성공', '환영합니다', backgroundColor: Colors.green,colorText: Colors.black);
             saveStorage(companyCode); // companyCode 저장 함수 호출
             Get.to(() => Home()); // 본사 화면으로 이동
           } else {
             Get.to(() => StoreMain()); // 대리점 화면으로 이동
-            Get.snackbar('로그인 성공', '환영합니다');
+            Get.snackbar('로그인 성공', '환영합니다', backgroundColor: Colors.green,colorText: Colors.black);
             saveStorage(companyCode);
           }
         } else {
-          Get.snackbar('오류', '로그인 처리 중 문제가 발생했습니다.');
+          Get.snackbar('오류', '로그인 처리 중 문제가 발생했습니다.', backgroundColor: Colors.red, colorText: Colors.white);
         }
       } else {
-        Get.snackbar('오류', 'Id 혹은 password가 일치하지 않습니다.');
+        Get.snackbar('오류', 'Id 혹은 password가 일치하지 않습니다.',backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      Get.snackbar('오류', '로그인 중 문제가 발생했습니다: ${e.toString()}');
+      Get.snackbar('오류', '로그인 중 문제가 발생했습니다: ${e.toString()}',backgroundColor: Colors.red, colorText: Colors.white);
     }
   }
 

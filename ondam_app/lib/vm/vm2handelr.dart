@@ -1,12 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:ondam_app/colors.dart';
 
 class Vm2handelr extends GetxController {
   // 메뉴 목록
   var itemList = <Map<String, dynamic>>[].obs;
   // 메뉴 목록 로딩 상태
   var isLoading = true.obs;
+
+  var maleNum = 0.obs;
+  var femaleNum = 0.obs;
 
   // 장바구니 목록
   var cartItems = <Map<String, dynamic>>[].obs;
@@ -85,6 +91,34 @@ class Vm2handelr extends GetxController {
     }
   }
 
+  void upmaleNum() {
+    maleNum++;
+    if (maleNum > 10) {
+      maleNum.value = 10;
+    }
+  }
+
+  void upfemaleNum() {
+    femaleNum++;
+    if (femaleNum > 10) {
+      femaleNum.value = 10;
+    }
+  }
+
+  void downmaleNum() {
+    maleNum--;
+    if (maleNum < 0) {
+      maleNum.value = 0;
+    }
+  }
+
+  void downfemaleNum() {
+    femaleNum--;
+    if (femaleNum < 0) {
+      femaleNum.value = 0;
+    }
+  }
+
   // Drawer 상단에 표시할 항목 선택
   void selectItemForDrawer(Map<String, dynamic> item) {
     selectedDrawerItem(item); // 이 함수 호출 시 Drawer 상단에 상세 정보가 표시됩니다.
@@ -152,9 +186,14 @@ class Vm2handelr extends GetxController {
   }
 
   // 주문하기 (장바구니 내용을 purchase 테이블에 삽입)
-  Future<void> placeOrder(String tableNumber, String companyCode) async {
+  Future<void> placeOrder(
+    String tableNumber,
+    String companyCode,
+    int maleNum,
+    int femaleNum,
+  ) async {
     if (cartItems.isEmpty) {
-      Get.snackbar('알림', '장바구니가 비어있습니다.');
+      Get.snackbar('알림', '장바구니가 비어있습니다.',colorText: Colors.white,backgroundColor: Colors.red);
       return;
     }
 
@@ -167,8 +206,8 @@ class Vm2handelr extends GetxController {
             'companyCode': companyCode,
             'menuCode': item['menuCode'],
             'tranDate': tranDate,
-            'femaleNum': 3,
-            'maleNum': 0,
+            'femaleNum': femaleNum,
+            'maleNum': maleNum,
             'quantity': item['quantity'],
             'currentState': '주문', // 초기 상태는 '주문'
             'price_at_order': item['price_at_order'],
@@ -184,7 +223,7 @@ class Vm2handelr extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        Get.snackbar('주문 완료', '주문이 성공적으로 접수되었습니다.');
+        Get.snackbar('주문 완료', '주문이 성공적으로 접수되었습니다.',colorText: backgroundColor,backgroundColor: Colors.green);
         cartItems.clear(); // 장바구니 비우기
         clearSelectedItemForDrawer(); // 주문 완료 후 Drawer 닫기 및 선택 항목 초기화
         Get.back(); // Drawer 닫기 (만약 열려있다면)

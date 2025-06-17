@@ -15,6 +15,7 @@ class FourthPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFF6F7FB),
       appBar: AppBar(
+        automaticallyImplyLeading: false,        
         centerTitle: false,
         title: Text('대리점 별 년/월별 매출',style: TextStyle(fontWeight: FontWeight.bold),),
         backgroundColor: backgroundColor,

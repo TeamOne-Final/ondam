@@ -17,6 +17,7 @@ class CompanyNotice extends StatelessWidget {
       backgroundColor:  backgroundColor,
       appBar: AppBar(
         backgroundColor:  backgroundColor,
+        automaticallyImplyLeading: false,
         elevation: 2,
         title:   Text("공지사항", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         actions: [

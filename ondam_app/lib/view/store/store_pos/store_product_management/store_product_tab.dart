@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ondam_app/view/store/store_pos/store_product_management/store_product.dart';
-import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_category.dart';
-import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_option.dart';
 import 'package:ondam_app/view/store/store_pos/store_sales_report/store_product_analysis.dart';
 import 'package:ondam_app/view/store/store_pos/store_sales_report/store_sales_detail.dart';
 import 'package:ondam_app/view/store/store_pos/store_sales_report/store_sales_status.dart';
@@ -32,18 +29,9 @@ class StoreProductTab extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 58, 0),
+                            padding: const EdgeInsets.fromLTRB(0, 0, 55, 0),
                             child: IconButton(onPressed: () => Get.back(), icon: Icon(Icons.arrow_back),color: Colors.white,),
                           ),
-                          Text('상품관리', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)]
-                        ),
-                    ),
-                    _buildTile(vmHandler, 0, Icons.store, '상품'),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
                           Text('매출 리포트', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)]
                         ),
                     ),
@@ -58,8 +46,6 @@ class StoreProductTab extends StatelessWidget {
           flex: 3,
           child: Obx(() {
             switch (vmHandler.selectedStoreReportProductIndex.value){
-              case 0:
-                return StoreProduct();
               case 1:
                 return StoreSalesStatus();
               case 2:
