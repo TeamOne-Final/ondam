@@ -95,15 +95,15 @@ class CompanyMain extends StatelessWidget {
                                   enableTooltip: true,
                                   color: const Color.fromRGBO(46, 61, 83, 1)
                                 ),
-                                ScatterSeries<Chart, String>(
-                                  name: '금월 매출',
-                                  dataSource: controller.mainTotalPriceList,
-                                  xValueMapper: (Chart tranDate, _) => tranDate.tranDate!.substring(5,10), 
-                                  yValueMapper: (Chart totalPrice, _) => totalPrice.totalPrice,
-                                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                                  enableTooltip: true,
-                                  color: const Color.fromRGBO(46, 61, 83, 1),
-                                  )
+                                // ScatterSeries<Chart, String>(
+                                //   name: '금월 매출',
+                                //   dataSource: controller.mainTotalPriceList,
+                                //   xValueMapper: (Chart tranDate, _) => tranDate.tranDate!.substring(5,10), 
+                                //   yValueMapper: (Chart totalPrice, _) => totalPrice.totalPrice,
+                                //   dataLabelSettings: DataLabelSettings(isVisible: true),
+                                //   enableTooltip: true,
+                                //   color: const Color.fromRGBO(46, 61, 83, 1),
+                                //   )
                               ],
                               primaryXAxis: CategoryAxis(
                                 title: AxisTitle(

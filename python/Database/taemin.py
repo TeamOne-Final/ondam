@@ -152,7 +152,7 @@ async def select():
     sql = f'''
     select sum(pd.menuPrice) as total_price, ph.userTable_CompanyCode as companyCode
     from product as pd, purchase as ph
-    where ph.tranDate like '2025-05%' and ph.product_MenuCode = pd.menuCode
+    where DATE(ph.tranDate) = CURDATE() and ph.product_MenuCode = pd.menuCode
     group by ph.userTable_CompanyCode;
     '''
     curs.execute(sql)
@@ -194,7 +194,8 @@ async def select(year : str = '____', month : str = '__'):
             sum(pd.menuPrice * ph.quantity) as total_price,
             ph.userTable_CompanyCode as companyCode
         from ondam.purchase as ph, ondam.product as pd 
-        where ph.product_MenuCode = pd.menuCode and ph.tranDate Like "{year}-{month}-%"
+        where ph.product_MenuCode = pd.menuCode 
+        and year(ph.tranDate) = year(curdate()) and month(ph.trandate) = month(curdate())
         GROUP BY ph.tranDate, ph.userTable_CompanyCode
         ORDER BY ph.tranDate
         ) as b 

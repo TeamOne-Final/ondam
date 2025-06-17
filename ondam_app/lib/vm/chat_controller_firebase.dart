@@ -65,6 +65,25 @@ chatroom.value = snapshot.docs
   }
 
 
+
+Future<void> deleteAllChatroomsOfMember(String memberTableName) async {
+  try {
+    final snapshot = await _firestore.collection("chatroom")
+        .where("member", arrayContains: memberTableName)
+        .get();
+
+    WriteBatch batch = _firestore.batch();//Firestore에서 여러 작업(쓰기/업데이트/삭제)을 한 번에 묶어서 처리
+
+    for (var doc in snapshot.docs) {
+      batch.delete(doc.reference); 
+    }
+
+    await batch.commit();
+  } catch (e) {
+    Get.snackbar("오류", "$e");
+  }
+}
+
 //   Future<void> hasNewMessage(String roomId, String myTableId) async {
 //   // 나에게 온 메시지 중 가장 최근 하나를 조회
 //   final snapshot = await _firestore
