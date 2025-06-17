@@ -67,7 +67,7 @@ class Home extends StatelessWidget {
               case 5:
                 return CompanySales();
               case 6:
-                Future.microtask(() => Get.offAll(() => Login(), transition: Transition.noTransition));
+                Future.microtask(() => logout());
                 return SizedBox.shrink();
               default:
                 return Center(child: Text('페이지를 선택해 주세요'),);
@@ -103,5 +103,9 @@ class Home extends StatelessWidget {
     },);
   }
 
+void logout() {
+  vmHandler.select(0); // 초기화
+  Get.offAll(() => Login(), transition: Transition.noTransition);
+}
 
 } // class
