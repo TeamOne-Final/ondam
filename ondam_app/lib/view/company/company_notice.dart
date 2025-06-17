@@ -127,10 +127,12 @@ class CompanyNotice extends StatelessWidget {
     int selectedType = 0;
     titleTextController.clear();
     contentTextController.clear();
-    Get.defaultDialog(
-      backgroundColor: backgroundColor,
-      title: "공지 추가",
-      content: buildDialogContent(selectedType, isUpdate: false),
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: backgroundColor,
+        title: Text('공지 추가',textAlign: TextAlign.center,),
+        content: buildDialogContent(selectedType, isUpdate: false),
+      )
     );
   }
 
@@ -138,10 +140,14 @@ class CompanyNotice extends StatelessWidget {
     int selectedType = notice.state;
     titleTextController.text = notice.title;
     contentTextController.text = notice.content;
-    Get.defaultDialog(
-      backgroundColor: backgroundColor,
-      title: "공지 수정",
-      content: buildDialogContent(selectedType, isUpdate: true, notice: notice),
+    Get.dialog(
+      SingleChildScrollView(
+        child: AlertDialog(
+        backgroundColor: backgroundColor,
+        title: Text("공지 수정",textAlign: TextAlign.center,),
+        content: buildDialogContent(selectedType, isUpdate: true, notice: notice),
+        ),
+      )
     );
   }
 

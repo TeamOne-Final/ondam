@@ -19,63 +19,66 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-    body: Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            decoration: BoxDecoration(color: const Color.fromRGBO(46, 61, 83, 1)),
-            child: 
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 60, 0, 30),
-                      child: Text('ONDAM\nDASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),textAlign: TextAlign.center,),
-                    ),
-                    Expanded(
-                      child: ListView(
-                        children: [
-                          _buildTile(vmHandler, 0, Icons.store, '메인'),
-                          _buildTile(vmHandler, 1, Icons.restaurant, '메뉴 관리'),
-                          _buildTile(vmHandler, 2, Icons.approval, '주문/계약'),
-                          _buildTile(vmHandler, 3, Icons.notifications, '공지 사항'),
-                          _buildTile(vmHandler, 4, Icons.manage_accounts, '가맹점 목록'),
-                          _buildTile(vmHandler, 5, Icons.bar_chart, '매출 관리'),
-                          _buildTile(vmHandler, 6, Icons.logout, '로그아웃'),
-                        ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+      body: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(color: const Color.fromRGBO(46, 61, 83, 1)),
+              child: 
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 60, 0, 30),
+                        child: Text('ONDAM\nDASHBOARD', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),textAlign: TextAlign.center,),
                       ),
-                    ),
-                  ],
-                ),
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            _buildTile(vmHandler, 0, Icons.store, '메인'),
+                            _buildTile(vmHandler, 1, Icons.restaurant, '메뉴 관리'),
+                            _buildTile(vmHandler, 2, Icons.approval, '주문/계약'),
+                            _buildTile(vmHandler, 3, Icons.notifications, '공지 사항'),
+                            _buildTile(vmHandler, 4, Icons.manage_accounts, '가맹점 목록'),
+                            _buildTile(vmHandler, 5, Icons.bar_chart, '매출 관리'),
+                            _buildTile(vmHandler, 6, Icons.logout, '로그아웃'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+            ),
           ),
-        ),
-        Expanded(
-          flex: 3,
-          child: Obx(() {
-            switch (vmHandler.selectedIndex.value){
-              case 0:
-                return CompanyMain();
-              case 1:
-                return CompanyItem();
-              case 2:
-                return CompanyOrder();
-              case 3:
-                return CompanyNotice();
-              case 4:
-                return CompanyEmployee();
-              case 5:
-                return CompanySales();
-              case 6:
-                Future.microtask(() => logout());
-                return SizedBox.shrink();
-              default:
-                return Center(child: Text('페이지를 선택해 주세요'),);
-            }
-          },),
-        )
-      ],
-    ) 
+          Expanded(
+            flex: 3,
+            child: Obx(() {
+              switch (vmHandler.selectedIndex.value){
+                case 0:
+                  return CompanyMain();
+                case 1:
+                  return CompanyItem();
+                case 2:
+                  return CompanyOrder();
+                case 3:
+                  return CompanyNotice();
+                case 4:
+                  return CompanyEmployee();
+                case 5:
+                  return CompanySales();
+                case 6:
+                  Future.microtask(() => logout());
+                  return SizedBox.shrink();
+                default:
+                  return Center(child: Text('페이지를 선택해 주세요'),);
+              }
+            },),
+          )
+        ],
+      ) 
+      ),
     );
   } // build
 
