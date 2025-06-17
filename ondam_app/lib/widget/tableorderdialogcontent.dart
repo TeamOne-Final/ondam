@@ -1,6 +1,7 @@
 // lib/view/table_order_dialog_content.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/vm/vm2handelr.dart';
 
 class TableOrderDialogContent extends StatelessWidget {
@@ -8,15 +9,15 @@ class TableOrderDialogContent extends StatelessWidget {
   final String tableNum; // 필요하다면 tableNum도 전달받을 수 있습니다.
 
   const TableOrderDialogContent({
-    Key? key,
+    super.key,
     required this.vmHandler,
     required this.tableNum, // tableNum을 받도록 추가
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     // 다이얼로그 내용의 최대 높이 제한을 위해 Container 사용
-    return Container(
+    return SizedBox(
       width: double.maxFinite, // 너비 최대로
       height: 300,
       child: Obx(() {
@@ -52,7 +53,7 @@ class TableOrderDialogContent extends StatelessWidget {
                     '${((item['price_at_order'] as num? ?? 0.0) * (item['quantity'] as int? ?? 0)).toStringAsFixed(0)} 원',
                   ), // 항목별 총 가격
                 );
-              }).toList(),
+              }),
               Divider(),
               // 총 금액 표시 (Obx 내부에 있으므로 orderItems 변경 시 함께 업데이트)
               Padding(
@@ -65,7 +66,7 @@ class TableOrderDialogContent extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueAccent,
+                    color: mainColor,
                   ),
                 ),
               ),

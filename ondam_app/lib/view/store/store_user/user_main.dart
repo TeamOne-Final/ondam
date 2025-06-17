@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/view/chatting/tableview.dart';
 import 'package:ondam_app/vm/side_menu_controller.dart';
 import 'package:ondam_app/vm/vm2handelr.dart';
@@ -29,6 +30,7 @@ class UserMain extends StatelessWidget {
       vmHandler2.fetchItemList();
     });
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: Text(tableNumber != null ? '$tableNumber 번 테이블' : '테이블 선택 오류'),
         backgroundColor: const Color.fromRGBO(22, 30, 40, 1),
@@ -37,7 +39,7 @@ class UserMain extends StatelessWidget {
           Builder(
             builder: (BuildContext context) {
               return IconButton(
-                icon: Icon(Icons.shopping_cart),
+                icon: Icon(Icons.shopping_cart,color: backgroundColor,),
                 onPressed: () {
                   // 장바구니 아이콘 탭 시: 선택 항목 초기화하고 Drawer 열기 (장바구니 목록 모드)
                   vmHandler2
@@ -84,65 +86,75 @@ class UserMain extends StatelessWidget {
               child: ListView(
                 children: [
                   Image.asset('images/ondamlogo.png', height: 295),
-                  Text(
-                    '$tableNumber 번 테이블',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      '             $tableNumber번 테이블',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
                     ),
                   ),
-                  _buildTile(vmHandler, 0, '주 메뉴'),
+                  _buildTile(vmHandler, 0, '메인 메뉴'),
                   _buildTile(vmHandler, 1, '사이드 메뉴'),
-                  _buildTile(vmHandler, 2, '주류'),
+                  _buildTile(vmHandler, 2, '주류/음료'),
                   _buildTile(vmHandler, 3, '추가 메뉴'),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
                         onPressed: () => vmHandler2.upmaleNum(),
-                        icon: Icon(Icons.add),
+                        icon: Icon(Icons.add,color: backgroundColor,size: 35),
                       ),
                       Obx(() {
                         final String maleNumString =
                             vmHandler2.maleNum.value.toString();
-                        return Text(
-                          '남성 \n $maleNumString',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 28,
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            ' 남성 \n   $maleNumString',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28,
+                            ),
                           ),
                         );
                       }),
                       IconButton(
                         onPressed: () => vmHandler2.downmaleNum(),
-                        icon: Icon(Icons.remove),
+                        icon: Icon(Icons.remove,color: backgroundColor,size: 35),
                       ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       IconButton(
                         onPressed: () => vmHandler2.upfemaleNum(),
-                        icon: Icon(Icons.add),
+                        icon: Icon(Icons.add,color: backgroundColor,size: 35),
                       ),
                       Obx(() {
                         final String femaleNumString =
                             vmHandler2.femaleNum.value.toString();
-                        return Text(
-                          '여성 \n $femaleNumString',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 28,
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            ' 여성 \n   $femaleNumString',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28,
+                            ),
                           ),
                         );
                       }),
                       IconButton(
                         onPressed: () => vmHandler2.downfemaleNum(),
-                        icon: Icon(Icons.remove),
+                        icon: Icon(Icons.remove,color: backgroundColor,size: 35),
                       ),
                     ],
                   ),
@@ -152,7 +164,7 @@ class UserMain extends StatelessWidget {
                         alignment: Alignment.center, // 왼쪽 정렬
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            minimumSize: Size(200, 80), // 최소 가로 120, 세로 50
+                            minimumSize: Size(200, 70), // 최소 가로 120, 세로 50
                             backgroundColor: Colors.blue,
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -162,7 +174,14 @@ class UserMain extends StatelessWidget {
                           onPressed: () {
                             Get.to(()=> Tableview(),arguments: tableNumberInt); 
                           },
-                          child: Text('채팅'),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.chat),
+                              Text('      채팅',style: TextStyle(fontWeight: FontWeight.bold, color: backgroundColor),)
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 20,),
@@ -170,7 +189,7 @@ class UserMain extends StatelessWidget {
                     alignment: Alignment.center, // 왼쪽 정렬
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        minimumSize: Size(200, 80), // 최소 가로 120, 세로 50
+                        minimumSize: Size(200, 70), // 최소 가로 120, 세로 50
                         backgroundColor: const Color.fromARGB(255, 243, 33, 33),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
@@ -178,7 +197,15 @@ class UserMain extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {},
-                      child: Text('직원호출'),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.notifications_active),
+                              SizedBox(width: 20),
+                              Text('직원호출',style: TextStyle(fontWeight: FontWeight.bold,color: backgroundColor))
+                            ],
+                          ),
                     ),
                   ),
                   ],
@@ -191,7 +218,7 @@ class UserMain extends StatelessWidget {
             flex: 3,
             child: Obx(() {
               List filteredListbyMainMenu = [];
-              if (vmHandler.selectedIndex == 0) {
+              if (vmHandler.selectedIndex.value == 0) {
                 filteredListbyMainMenu =
                     vmHandler.itemList
                         .where(
@@ -200,7 +227,7 @@ class UserMain extends StatelessWidget {
                               item['menuCode'].toString().startsWith('M'),
                         )
                         .toList();
-              } else if (vmHandler.selectedIndex == 1) {
+              } else if (vmHandler.selectedIndex.value == 1) {
                 filteredListbyMainMenu =
                     vmHandler.itemList
                         .where(
@@ -209,7 +236,7 @@ class UserMain extends StatelessWidget {
                               item['menuCode'].toString().startsWith('S'),
                         )
                         .toList();
-              } else if (vmHandler.selectedIndex == 2) {
+              } else if (vmHandler.selectedIndex.value == 2) {
                 filteredListbyMainMenu =
                     vmHandler.itemList
                         .where(
@@ -218,7 +245,7 @@ class UserMain extends StatelessWidget {
                               item['menuCode'].toString().startsWith('B'),
                         )
                         .toList();
-              } else if (vmHandler.selectedIndex == 3) {
+              } else if (vmHandler.selectedIndex.value == 3) {
                 filteredListbyMainMenu =
                     vmHandler.itemList
                         .where(
@@ -273,6 +300,7 @@ class UserMain extends StatelessWidget {
                         Scaffold.of(context).openEndDrawer(); // Drawer 열기
                       },
                       child: Card(
+                        color: backgroundColor,
                         elevation: 2.0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
@@ -309,8 +337,9 @@ class UserMain extends StatelessWidget {
                                     Text(
                                       menuName,
                                       style: TextStyle(
+                                        color: mainColor,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                        fontSize: 24,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -319,8 +348,9 @@ class UserMain extends StatelessWidget {
                                     Text(
                                       '${menuPrice.toStringAsFixed(0)} 원', // 가격 표시 (소수점 제거)
                                       style: TextStyle(
-                                        color: Colors.grey[700],
-                                        fontSize: 14,
+                                        color: mainColor,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold
                                       ),
                                     ),
                                   ],
@@ -393,7 +423,7 @@ class UserMain extends StatelessWidget {
       children: [
         DrawerHeader(
           // 헤더 부분
-          decoration: BoxDecoration(color: Colors.teal),
+          decoration: BoxDecoration(color: mainColor),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -439,13 +469,15 @@ class UserMain extends StatelessWidget {
         ListTile(
           // '장바구니에 담기' 버튼
           leading: Icon(Icons.add_shopping_cart),
-          title: Text('담기'),
+          title: Text('담기',style: TextStyle(fontWeight: FontWeight.bold),),
           onTap: () {
             vmHandler2.addToCart(item); // 장바구니에 추가
             Get.snackbar(
               '장바구니 추가',
               '$menuName이(가) 장바구니에 담겼습니다.',
               snackPosition: SnackPosition.BOTTOM,
+              colorText: Colors.white,
+              backgroundColor: mainColor
             );
           },
         ),
@@ -486,7 +518,7 @@ class UserMain extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+                color: mainColor,
               ),
             ),
           ),
@@ -544,7 +576,7 @@ class UserMain extends StatelessWidget {
                   // 항목별 총 가격 표시
                   Text(
                     '${((item['price_at_order'] as num? ?? 0.0) * (item['quantity'] as int? ?? 0)).toStringAsFixed(0)} 원',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
                   ),
                 ],
               ),
@@ -554,7 +586,7 @@ class UserMain extends StatelessWidget {
         ListTile(
           // 주문하기 버튼
           leading: Icon(Icons.payment),
-          title: Text('주문하기'),
+          title: Text('주문하기',style: TextStyle(fontWeight: FontWeight.bold),),
           onTap: () {
             if (tableNumber != null) {
               vmHandler2.placeOrder(
@@ -565,7 +597,7 @@ class UserMain extends StatelessWidget {
               ); // VmHandlerTemp의 주문 함수 호출
               // placeOrder 함수 내에서 Drawer 닫기 및 장바구니 비우기 처리
             } else {
-              Get.snackbar('오류', '테이블 번호를 알 수 없습니다.');
+              Get.snackbar('오류', '테이블 번호를 알 수 없습니다.',colorText: Colors.white,backgroundColor: Colors.red);
             }
           },
         ),

@@ -442,6 +442,7 @@ async def select(storeCode: str = None, firstDate: str = None, finalDate: str = 
 		    and ph.usertable_companyCode = '{storeCode}'
             and ph.trandate < '{finalDate}'
             and ph.trandate >= '{firstDate}'
+            and ph.quantity > 0
             group by Date(ph.trandate)
 	    ) as b;
         '''
@@ -459,6 +460,7 @@ async def select(storeCode: str = None, firstDate: str = None, finalDate: str = 
 	        FROM purchase AS ph
 	        JOIN product AS pd ON ph.product_menucode = pd.menucode
 	        WHERE ph.usertable_companyCode = '{storeCode}'
+            and ph.quantity > 0
 	        and ph.trandate < '{firstDate}' - interval 1 day
 	        and ph.trandate >= ('{firstDate}' - interval 1 day) - INTERVAL datediff('{finalDate}', '{firstDate}') day
             GROUP BY DATE(ph.trandate)

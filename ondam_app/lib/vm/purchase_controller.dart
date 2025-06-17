@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ondam_app/model/purchase.dart';
 import 'package:ondam_app/model/purchase_poduct.dart';
@@ -28,6 +29,7 @@ class PurchaseController extends ProductController{
   var storeCode = "".obs;
 
   final DateFormat _formatter = DateFormat('yyyy-MM-dd');
+  final GetStorage box = GetStorage();
 
   @override
   void onInit() {
@@ -36,13 +38,6 @@ class PurchaseController extends ProductController{
     final today = DateTime.now();
     finalDate.value = _formatter.format(today);
     firstDate.value = _formatter.format(today.subtract(Duration(days: 29)));
-    productAnalysisChart('강남');
-    productAnalysisTotal('강남');
-
-    // 초기 조회
-    selectEachStoreFirstToFinal('강남');
-    selectTotalSalesCountsOne('강남');
-    loadPurchase('강남','%%');
   }
 
   // -- cartNum 최댓값

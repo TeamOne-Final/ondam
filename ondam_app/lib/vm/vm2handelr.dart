@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:ondam_app/colors.dart';
 
 class Vm2handelr extends GetxController {
   // 메뉴 목록
@@ -190,7 +193,7 @@ class Vm2handelr extends GetxController {
     int femaleNum,
   ) async {
     if (cartItems.isEmpty) {
-      Get.snackbar('알림', '장바구니가 비어있습니다.');
+      Get.snackbar('알림', '장바구니가 비어있습니다.',colorText: Colors.white,backgroundColor: Colors.red);
       return;
     }
 
@@ -220,7 +223,7 @@ class Vm2handelr extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        Get.snackbar('주문 완료', '주문이 성공적으로 접수되었습니다.');
+        Get.snackbar('주문 완료', '주문이 성공적으로 접수되었습니다.',colorText: backgroundColor,backgroundColor: Colors.green);
         cartItems.clear(); // 장바구니 비우기
         clearSelectedItemForDrawer(); // 주문 완료 후 Drawer 닫기 및 선택 항목 초기화
         Get.back(); // Drawer 닫기 (만약 열려있다면)
