@@ -41,7 +41,7 @@ class ProductController extends ManagerController{
     }
   }
 
-  void updateItem(code, name, description, price, imageFile, firstDisp) async{
+  void updateItem(code, name, description, price, [imageFile, firstDisp]) async{
     final uri = firstDisp == 0
       ? Uri.parse("http://$globalIP/hakhyun/update/item")
       : Uri.parse("http://$globalIP/hakhyun/update/item_with_image");
@@ -59,7 +59,6 @@ class ProductController extends ManagerController{
     }
     var res = await request.send();
     if(res.statusCode == 200){
-      fetchItemList('');
       showDialog('수정이');
     }else{
       errorSnackBar();

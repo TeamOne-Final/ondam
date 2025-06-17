@@ -360,8 +360,9 @@ class CompanyItem extends StatelessWidget {
                                                       String description = itemDescriptionController.text;
                                                       String price = itemPriceController.text;
                                                       if(name.isNotEmpty&&description.isNotEmpty&&price.isNotEmpty&&int.tryParse(price)!=null){
-                                                        controller.updateItem(code, name, description, price, controller.imageFile.value!.path, controller.firstDisp.value);
+                                                        controller.updateItem(code, name, description, price, controller.imageFile.value?.path, controller.firstDisp.value);
                                                         controller.firstDisp.value = 0;
+                                                        controller.valueToMenuCode1(controller.selectedMenuList.value);
                                                       }else{
                                                         Get.snackbar('수정 실패', '입력한 내용을 다시 확인해 주세요', titleText: Text('수정 실패',style: TextStyle(fontSize: 30, color: Colors.white),), messageText: Text('입력한 내용을 다시 확인해 주세요', style: TextStyle(fontSize: 24, color: Colors.white),), backgroundColor: Colors.redAccent, colorText: Colors.white, maxWidth: MediaQuery.sizeOf(context).width/2, duration: Duration(seconds: 1));
                                                       }
