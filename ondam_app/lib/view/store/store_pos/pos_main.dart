@@ -163,12 +163,7 @@ class PosMain extends StatelessWidget {
           style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
           onPressed: () async{
             vmHandler.updateOrderStateToCompleted(tableNum, companyCode);
-            List<String> members = ['카운터', tableNum];
-              members.sort();
-              String roomId = members.join("과");
-
-              await message.deleteAllMessages(roomId);  // 채팅 메시지 전부 삭제
-              await chatroom.deletechatroom(roomId);    // 채팅방 삭제 
+            await chatroom.deleteAllChatroomsOfMember(tableNum);    // 채팅방 삭제 
             Get.back();
           },
         ),

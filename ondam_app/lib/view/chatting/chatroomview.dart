@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/view/chatting/messageview.dart';
 import 'package:ondam_app/vm/chat_controller_firebase.dart';
 import 'package:ondam_app/vm/message_controller_firebase.dart';
@@ -29,6 +30,7 @@ class Chatroomview extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 252, 254, 255),
       appBar: AppBar(
+        backgroundColor: backgroundColor,
         title: Text("채팅방 목록", style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0,
       ),
