@@ -16,6 +16,7 @@ class SixthPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFF6F7FB),
       appBar: AppBar(
+        automaticallyImplyLeading: false,        
         centerTitle: false,
         title: Text('본사 년/월별 매출',style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: backgroundColor,

@@ -16,6 +16,7 @@ class FirstPage extends StatelessWidget {
     return Scaffold(
     backgroundColor: Color(0xFFF6F7FB),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFF6F7FB),
         centerTitle: false,
         title: Text('본사 일별 매출',style: TextStyle(fontWeight: FontWeight.bold),),

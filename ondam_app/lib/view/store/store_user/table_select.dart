@@ -1,6 +1,7 @@
 // 테이블 선택해주는 페이지
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/model/movingobject.dart';
 import 'package:ondam_app/view/store/store_user/user_main.dart';
 import 'package:ondam_app/vm/vm_handler_temp.dart';
@@ -13,7 +14,8 @@ class TableSelect extends StatelessWidget {
     final controller = Get.put(VmHandlerTemp());
 
     return Scaffold(
-      appBar: AppBar(title: Text('테이블 선택')),
+      backgroundColor: backgroundColor,
+      appBar: AppBar(title: Text('테이블 선택',style: TextStyle(color: backgroundColor,fontWeight: FontWeight.bold),),backgroundColor: mainColor,iconTheme: IconThemeData(color: backgroundColor),),
       body: Obx(() {
         // 로딩 중일 때 로딩 인디케이터 표시
         if (controller.isLoading.value) {
@@ -44,7 +46,7 @@ class TableSelect extends StatelessWidget {
                         width: MovingObject.objectWidth,
                         height: MovingObject.objectHeight,
                         decoration: BoxDecoration(
-                          color: Colors.teal,
+                          color: mainColor,
                           border: Border.all(color: Colors.black, width: 1),
                         ),//image 
                         child: Center(

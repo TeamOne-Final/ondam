@@ -16,6 +16,7 @@ class ThirdPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFF6F7FB),
       appBar: AppBar(
+        automaticallyImplyLeading: false,        
         title: Text('제품 별 매출 보기',style: TextStyle(fontWeight: FontWeight.bold),),
         backgroundColor: backgroundColor,
         centerTitle: false,

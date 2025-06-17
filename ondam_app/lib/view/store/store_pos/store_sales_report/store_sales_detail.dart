@@ -14,7 +14,9 @@ class StoreSalesDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    handler.selectTotalSalesCountsOne(handler.box.read('companyCode'));
     return Scaffold(
+      backgroundColor: backgroundColor,
       body:Obx(
         () => Padding(
           padding: const EdgeInsets.all(50.0),
@@ -41,57 +43,71 @@ class StoreSalesDetail extends StatelessWidget {
                   child: Row(
                     children: [
                         Expanded(
-                          child: ListTile(
-                          title: Text('시작 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
-                          subtitle: Text(
-                            handler.firstDate.value.isEmpty
-                              ? '선택된 날짜 없음'
-                              : handler.firstDate.value, style: TextStyle(fontWeight: FontWeight.w600),
+                          child: Card(
+                            color: backgroundColor,
+                            child: ListTile(
+                            title: Text('시작 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
+                            subtitle: Text(
+                              handler.firstDate.value.isEmpty
+                                ? '선택된 날짜 없음'
+                                : handler.firstDate.value, style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            trailing: Icon(Icons.calendar_today,color: Colors.blue),
+                            onTap: () async{
+                              final now = DateTime.now();
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: now,
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime.now(),
+                                locale: Locale('ko','KR'),
+                                );
+                                if(picked != null){
+                                  handler.firstDate.value = _formatter.format(picked);
+                                  handler.selectEachStoreFirstToFinal(handler.box.read('companyCode'));
+                                  handler.purchaseSituationData(handler.box.read('companyCode'));
+                                  handler.purchaseSituationChart(handler.box.read('companyCode'));
+                                  handler.productAnalysisChart(handler.box.read('companyCode'));
+                                  handler.productAnalysisTotal(handler.box.read('companyCode'));
+                                  handler.selectTotalSalesCountsOne(handler.box.read('companyCode'));
+                                }
+                            },
+                                                    ),
                           ),
-                          trailing: Icon(Icons.calendar_today,color: Colors.blue),
-                          onTap: () async{
-                            final now = DateTime.now();
-                            final picked = await showDatePicker(
-                              context: context,
-                              initialDate: now,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime.now(),
-                              locale: Locale('ko','KR'),
-                              );
-                              if(picked != null){
-                                handler.firstDate.value = _formatter.format(picked);
-                                handler.selectEachStoreFirstToFinal('강남');
-                                handler.selectTotalSalesCountsOne('강남');
-                              }
-                          },
-                        ),
                       ),
                         Expanded(
-                        child: ListTile(
-                          title: Text('종료 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
-                          subtitle: Text(
-                            handler.finalDate.value.isEmpty
-                              ? '선택된 날짜 없음'
-                              : handler.finalDate.value, style: TextStyle(fontWeight: FontWeight.w600),
+                        child: Card(
+                          color: backgroundColor,
+                          child: ListTile(
+                            title: Text('종료 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
+                            subtitle: Text(
+                              handler.finalDate.value.isEmpty
+                                ? '선택된 날짜 없음'
+                                : handler.finalDate.value, style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            trailing: Icon(Icons.calendar_today,color: Colors.red,),
+                            onTap: () async{
+                              final initial = handler.firstDate.value.isNotEmpty
+                              ? _formatter.parse(handler.firstDate.value)
+                              : DateTime.now();
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: initial,
+                                firstDate: initial,
+                                lastDate: DateTime.now(),
+                                locale: Locale('ko','KR'),
+                                );
+                                if(picked != null){
+                                  handler.finalDate.value = _formatter.format(picked);
+                                  handler.selectEachStoreFirstToFinal(handler.box.read('companyCode'));
+                                  handler.purchaseSituationData(handler.box.read('companyCode'));
+                                  handler.purchaseSituationChart(handler.box.read('companyCode'));
+                                  handler.productAnalysisChart(handler.box.read('companyCode'));
+                                  handler.productAnalysisTotal(handler.box.read('companyCode'));
+                                  handler.selectTotalSalesCountsOne(handler.box.read('companyCode'));
+                                }
+                            },
                           ),
-                          trailing: Icon(Icons.calendar_today,color: Colors.red,),
-                          onTap: () async{
-                            final initial = handler.firstDate.value.isNotEmpty
-                            ? _formatter.parse(handler.firstDate.value)
-                            : DateTime.now();
-                            final picked = await showDatePicker(
-                              context: context,
-                              initialDate: initial,
-                              firstDate: initial,
-                              lastDate: DateTime.now(),
-                              locale: Locale('ko','KR'),
-                              );
-                              if(picked != null){
-                                handler.finalDate.value = _formatter.format(picked);
-                                handler.selectEachStoreFirstToFinal('강남');
-                                handler.selectTotalSalesCountsOne('강남');
-                              }
-                          },
                         ),
                       ),
                   ],

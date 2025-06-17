@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/model/movingobject.dart';
 import 'package:ondam_app/view/chatting/chatroomview.dart';
 import 'package:ondam_app/view/chatting/messageview.dart';
@@ -26,16 +27,16 @@ class Tableview extends StatelessWidget {
     controller.fetchObjects(storeCode);
   });
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor:backgroundColor,
       appBar: AppBar(
-        backgroundColor:  Color.fromARGB(255, 255, 255, 255),
+        backgroundColor:  backgroundColor,
         title: Text(
           "$mytableName번 테이블",
           style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
-            icon:  Icon(Icons.chat_bubble_outline, color: Colors.white),
+            icon:  Icon(Icons.chat_bubble, color: Colors.black),
             onPressed: () {
               Get.to(() => Chatroomview(), arguments: [
                 mytableName,

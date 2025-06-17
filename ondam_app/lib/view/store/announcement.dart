@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/view/store/announcement2.dart';
 import 'package:ondam_app/vm/notice_controller_firebase.dart';
 
@@ -16,9 +17,10 @@ Announcement({super.key});
     return Scaffold(
       backgroundColor:  Color(0xFFF7F7F9),
       appBar: AppBar(
-        backgroundColor:  Color.fromARGB(255, 234, 234, 234),
+        backgroundColor: mainColor,
         elevation: 0.5,
-        title:  Text("공지사항", style: TextStyle(color: Colors.black)),
+        title:  Text("공지사항", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        iconTheme: IconThemeData(color: backgroundColor),
       ),
       body: Obx(
         () => ListView.builder(
@@ -27,6 +29,7 @@ Announcement({super.key});
           itemBuilder: (context, index) {
             final notice = noticecontroller.notice[index];
             return Card(
+              color: backgroundColor,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               elevation: 2,
               margin:  EdgeInsets.symmetric(vertical: 8),

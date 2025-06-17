@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ondam_app/colors.dart';
 import 'package:ondam_app/view/store/pos_orderhistory.dart';
 import 'package:ondam_app/view/store/store_main.dart';
 import 'package:ondam_app/view/store/store_pos/store_product_management/store_product_tab.dart';
@@ -30,8 +31,9 @@ class PosMain extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: Text('카운터 화면'),
-        backgroundColor: Colors.teal,
+        title: Text('카운터 화면',style: TextStyle(fontWeight: FontWeight.bold),),
+        backgroundColor: mainColor,
+        foregroundColor: backgroundColor,
         centerTitle: true,
         elevation: 4,
       ),
@@ -43,7 +45,7 @@ class PosMain extends StatelessWidget {
             DrawerHeader(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.teal, Colors.teal.shade200],
+                  colors: [mainColor,mainColor.withAlpha(150)],
                 ),
               ),
               child: Column(
@@ -69,10 +71,10 @@ class PosMain extends StatelessWidget {
               controller.selectedStoreReportProductIndex.value = 1;
               Get.to(() => StoreProductTab());
             }),
-            _buildDrawerItem(Icons.production_quantity_limits, '상품 관리', () {
-              controller.selectedStoreReportProductIndex.value = 0;
-              Get.to(() => StoreProductTab());
-            }),
+            // _buildDrawerItem(Icons.production_quantity_limits, '상품 관리', () {
+            //   controller.selectedStoreReportProductIndex.value = 0;
+            //   Get.to(() => StoreProductTab());
+            // }),
             _buildDrawerItem(
               Icons.logout,
               '메인 화면',
@@ -114,7 +116,7 @@ class PosMain extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      color: Colors.teal,
+                      color: mainColor,
                       elevation: 4,
                       child: Container(
                         width: 60,
@@ -156,8 +158,8 @@ class PosMain extends StatelessWidget {
       radius: 8,
       actions: [
         ElevatedButton.icon(
-          icon: Icon(Icons.payment),
-          label: Text('결제하기'),
+          icon: Icon(Icons.payment,color: Colors.white,),
+          label: Text('결제하기',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
           onPressed: () async{
             vmHandler.updateOrderStateToCompleted(tableNum, companyCode);
@@ -171,7 +173,7 @@ class PosMain extends StatelessWidget {
           },
         ),
         OutlinedButton(
-          child: Text('닫기'),
+          child: Text('닫기',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
           onPressed: () {
             Get.back();
             vmHandler.clearTableOrderItems();
@@ -187,7 +189,7 @@ class PosMain extends StatelessWidget {
 
   Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: Colors.teal),
+      leading: Icon(icon, color: mainColor),
       title: Text(title),
       onTap: onTap,
     );

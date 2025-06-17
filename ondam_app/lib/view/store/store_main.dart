@@ -19,6 +19,16 @@ class StoreMain extends StatelessWidget {
   Widget build(BuildContext context) {
     String managerId = box.read('mid') ?? 'Unknown';
     String companyCode = box.read('companyCode') ?? 'Unknown';
+    final VmHandlerTemp handler = Get.find<VmHandlerTemp>();
+    handler.productAnalysisChart(box.read('companyCode'));
+    handler.productAnalysisTotal(box.read('companyCode'));
+
+    // 초기 조회
+    handler.purchaseSituationData(box.read('companyCode'));
+    handler.purchaseSituationChart(box.read('companyCode'));
+    handler.selectEachStoreFirstToFinal(box.read('companyCode'));
+    handler.selectTotalSalesCountsOne(box.read('companyCode'));
+    handler.loadPurchase(box.read('companyCode'),'%%');
 
     return Scaffold(
       backgroundColor: const Color(0xFF161E28),
@@ -27,7 +37,7 @@ class StoreMain extends StatelessWidget {
         title: Text(
           '안녕하세요, $companyCode 대리점 $managerId 님!',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 23,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),

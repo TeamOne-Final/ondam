@@ -15,6 +15,7 @@ class StoreSalesStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: Obx(() {
         if (vmHandler.purchaseSituationDataList.isEmpty) {
           return Center(child: Text('data is empty'));
@@ -44,6 +45,7 @@ class StoreSalesStatus extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Card(
+                          color: backgroundColor,
                           child: ListTile(
                             title: Text('시작 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
                             subtitle: Text(
@@ -69,11 +71,13 @@ class StoreSalesStatus extends StatelessWidget {
                                 vmHandler.firstDate.value = _formatter.format(
                                   picked
                                 );
-                                vmHandler.selectEachStoreFirstToFinal('강남');
-                                vmHandler.purchaseSituationData('강남');
-                                vmHandler.purchaseSituationChart('강남');
-                                vmHandler.productAnalysisChart('강남');
-                                vmHandler.productAnalysisTotal('강남');
+                                  vmHandler.selectEachStoreFirstToFinal(vmHandler.box.read('companyCode'));
+                                  vmHandler.purchaseSituationData(vmHandler.box.read('companyCode'));
+                                  vmHandler.purchaseSituationChart(vmHandler.box.read('companyCode'));
+                                  vmHandler.productAnalysisChart(vmHandler.box.read('companyCode'));
+                                  vmHandler.productAnalysisTotal(vmHandler.box.read('companyCode'));
+                                  vmHandler.selectEachStoreFirstToFinal(vmHandler.box.read('companyCode'));
+                                  vmHandler.selectTotalSalesCountsOne(vmHandler.box.read('companyCode'));
                               }
                             },
                           ),
@@ -81,6 +85,7 @@ class StoreSalesStatus extends StatelessWidget {
                       ),
                       Expanded(
                         child: Card(
+                          color: backgroundColor,
                           child: ListTile(
                             title: Text('종료 날짜',style: TextStyle(fontWeight: FontWeight.bold),),
                             subtitle: Text(
@@ -111,11 +116,13 @@ class StoreSalesStatus extends StatelessWidget {
                                 vmHandler.finalDate.value = _formatter.format(
                                   picked,
                                 );
-                                vmHandler.selectEachStoreFirstToFinal('강남');
-                                vmHandler.purchaseSituationData('강남');
-                                vmHandler.purchaseSituationChart('강남');
-                                vmHandler.productAnalysisChart('강남');
-                                vmHandler.productAnalysisTotal('강남');
+                                  vmHandler.selectEachStoreFirstToFinal(vmHandler.box.read('companyCode'));
+                                  vmHandler.purchaseSituationData(vmHandler.box.read('companyCode'));
+                                  vmHandler.purchaseSituationChart(vmHandler.box.read('companyCode'));
+                                  vmHandler.productAnalysisChart(vmHandler.box.read('companyCode'));
+                                  vmHandler.productAnalysisTotal(vmHandler.box.read('companyCode'));
+                                  vmHandler.selectEachStoreFirstToFinal(vmHandler.box.read('companyCode'));
+                                  vmHandler.selectTotalSalesCountsOne(vmHandler.box.read('companyCode'));
                               }
                             },
                           ),
@@ -170,7 +177,7 @@ class StoreSalesStatus extends StatelessWidget {
                             vmHandler.purchaseSituationDataList[0].quantity! !=
                                     0
                                 ? Text(
-                                  '${((vmHandler.purchaseSituationDataList[0].totalPrice)! / (vmHandler.purchaseSituationDataList[0].quantity)!)}원',
+                                  '${((vmHandler.purchaseSituationDataList[0].totalPrice)! / (vmHandler.purchaseSituationDataList[0].quantity)!).toStringAsFixed(2)}원',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 )
                                 : Text('0원',style: TextStyle(fontWeight: FontWeight.w600),),
